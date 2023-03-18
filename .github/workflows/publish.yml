@@ -1,0 +1,35 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 18
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - run: npm install
+      - run: npm run prepack
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          access: public
+          package: ./dist/package.json
+          token: ${{ secrets.NPM_TOKEN }}
+      - name: Deploy notification
+        if: always()
+        uses: adamkdean/simple-slack-notify@master
+        with:
+          channel: '#deployments'
+          status: ${{ job.status }}
+          success_text: 'Version (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde erfolgreich released.'
+          failure_text: 'Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base ist fehlgeschlagen.'
+          cancelled_text: 'Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde abgebrochen.'
