@@ -1,58 +1,48 @@
-<!--
-Get your module up and running quickly.
-
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
-
-# My Module
+# @lenne.tech/nuxt-base
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
+@lenne.tech/nuxt-base had some amazing features for easy initialize nuxt applications.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
+<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/@lenne.tech/nuxt-base?file=playground%2Fapp.vue) -->
 <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- &nbsp;GraphQL codegen
+- &nbsp;Easy graphql syntax
 
 ## Quick Setup
 
-1. Add `my-module` dependency to your project
+1. Add `@lenne.tech/nuxt-base` dependency to your project
 
 ```bash
 # Using pnpm
-pnpm add -D my-module
+pnpm add -D @lenne.tech/nuxt-base
 
 # Using yarn
-yarn add --dev my-module
+yarn add --dev @lenne.tech/nuxt-base
 
 # Using npm
-npm install --save-dev my-module
+npm install --save-dev @lenne.tech/nuxt-base
 ```
 
-2. Add `my-module` to the `modules` section of `nuxt.config.ts`
+2. Add `@lenne.tech/nuxt-base` to the `modules` section of `nuxt.config.ts`
 
 ```js
 export default defineNuxtConfig({
   modules: [
-    'my-module'
+    '@lenne.tech/nuxt-base'
   ]
 })
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+That's it! You can now use @lenne.tech/nuxt-base in your Nuxt app ✨
 
 ## Development
 
@@ -81,14 +71,14 @@ npm run release
 ```
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-version-href]: https://npmjs.com/package/my-module
+[npm-version-src]: https://img.shields.io/npm/v/@lenne.tech/nuxt-base/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-version-href]: https://npmjs.com/package/@lenne.tech/nuxt-base
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=18181B&colorB=28CF8D
-[npm-downloads-href]: https://npmjs.com/package/my-module
+[npm-downloads-src]: https://img.shields.io/npm/dm/@lenne.tech/nuxt-base.svg?style=flat&colorA=18181B&colorB=28CF8D
+[npm-downloads-href]: https://npmjs.com/package/@lenne.tech/nuxt-base
 
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=18181B&colorB=28CF8D
-[license-href]: https://npmjs.com/package/my-module
+[license-src]: https://img.shields.io/npm/l/@lenne.tech/nuxt-base.svg?style=flat&colorA=18181B&colorB=28CF8D
+[license-href]: https://npmjs.com/package/@lenne.tech/nuxt-base
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-18181B?logo=nuxt.js
 [nuxt-href]: https://nuxt.com

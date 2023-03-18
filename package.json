@@ -2,7 +2,7 @@
   "name": "@lenne.tech/nuxt-base",
   "version": "1.0.0",
   "description": "Nuxt base module of @lenne.tech",
-  "repository": "your-org/my-module",
+  "repository": "https://github.com/lenneTech/nuxt-base",
   "license": "MIT",
   "type": "module",
   "author": "lenne.Tech <info@lenne.tech> (https://lenne.tech)",
