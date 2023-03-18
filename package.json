@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "npm run dev:build && nuxt-module-build && cp package.json ./dist/package.json",
+    "prebuild": "npm run dev:build && nuxt-module-build && cp package.json ./dist/package.json",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
