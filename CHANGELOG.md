@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/lenneTech/nuxt-base/compare/v1.1.2...v1.1.3) (2023-03-18)
+
+
+### Bug Fixes
+
+* Add readme to dist folder ([47403e1](https://github.com/lenneTech/nuxt-base/commit/47403e14901f84796ab1f43a72e52141abb02074))
+
 ### [1.1.2](https://github.com/lenneTech/nuxt-base/compare/v1.1.1...v1.1.2) (2023-03-18)
 
 
