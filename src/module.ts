@@ -42,7 +42,7 @@ export default defineNuxtModule<ModuleOptions>({
         },
     });
 
-    logger.log(await getSchema());
+    logger.log(await getSchema(options.host));
 
     if (options.watch) {
       nuxt.hook('builder:watch', async (event, path) => {
