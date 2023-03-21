@@ -3,20 +3,21 @@ import {
   getIntrospectionQuery,
   GraphQLSchema,
 } from "graphql";
-import gql from "graphql-tag";
+import { ofetch } from 'ofetch'
 import { GraphQLMeta } from "../classes/graphql-meta.class";
-import { useAsyncQuery } from "#imports";
 
 /**
  * Get schema for API
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
  */
-export async function getSchema(): Promise<GraphQLSchema> {
-  const { data } = await useAsyncQuery(
-    gql(getIntrospectionQuery({ descriptions: false }))
-  );
-
-  return buildClientSchema(data.value as any);
+export async function getSchema(uri: string): Promise<GraphQLSchema> {
+  const { data } = await ofetch(uri, {
+    method: 'POST', body: JSON.stringify({
+      query: getIntrospectionQuery({ descriptions: false }),
+      variables: {},
+    })
+  })
+  return buildClientSchema(data as any);
 }
 
 /**
