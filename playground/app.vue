@@ -4,5 +4,6 @@
   </div>
 </template>
 
-<script setup>
+<script async setup>
+await useFindTodoListsQuery()
 </script>

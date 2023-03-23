@@ -5,12 +5,12 @@ import {
   GraphQLNamedType,
   GraphQLNonNull,
   GraphQLScalarType,
-  GraphQLSchema,
+  GraphQLSchema
 } from 'graphql';
 import { GraphQLRequestType } from '../enums/graphql-request-type.enum';
-import { Helper } from './helper.class';
-import { GraphQLType } from './graphql-type.class';
 import { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
+import { GraphQLType } from './graphql-type.class';
+import { Helper } from './helper.class';
 
 /**
  * GraphQL meta
@@ -38,6 +38,43 @@ export class GraphQLMeta {
       mutation: Object.keys(this.schema.getMutationType()?.getFields() || {}),
       subscription: Object.keys(this.schema.getSubscriptionType()?.getFields() || {}),
     };
+  }
+
+  getTypesForMethod(method: string, type: 'Query' | 'Mutation' | 'Subscription') {
+    let returnType: string = null;
+    let argType: string = null;
+    const customTypes: string[] = [];
+    const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method]['type'], {}, true);
+    const argsDeepType = this.getArgs(method);
+    
+
+    if (returnDeepType) {
+      returnType = returnDeepType.type + (returnDeepType.isList ? '[]' : '');
+      returnType = returnType.replace(/Boolean/g, 'boolean');
+      if (this.checkCustomTyp(returnDeepType.type)) {
+        customTypes.push(returnDeepType.type);
+      }
+    }
+
+    if (argsDeepType) {
+      const result = [];
+      for (const [key, value] of Object.entries(argsDeepType.fields)) {
+        result.push(key + ': ' + argsDeepType.fields[key].type + (argsDeepType.fields[key].isList ? '[]' : ''))
+        if (this.checkCustomTyp(argsDeepType.fields[key].type)) {
+          customTypes.push(argsDeepType.fields[key].type);
+        }
+      }
+
+      argType = result.join(', ');
+      argType = argType.replace(/String/g, 'string').replace(/Boolean/g, 'string').toString().replace(/Int/g, 'number').replace(/Float/g, 'number');
+    }
+  
+    return { argType, returnType, customTypes }
+  }
+
+  checkCustomTyp(type: string): boolean {
+    const defaultTypes = ['boolean', 'string', 'date', 'int', 'number', 'float'];
+    return !defaultTypes.includes(type.toLocaleLowerCase());
   }
 
   /**

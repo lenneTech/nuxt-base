@@ -1,7 +1,16 @@
-import { addTemplate, createResolver, defineNuxtModule, installModule } from "@nuxt/kit";
+import {
+  addImportsDir,
+  addTemplate,
+  createResolver,
+  defineNuxtModule,
+  installModule
+} from "@nuxt/kit";
 import consola from "consola";
-import { getSchema } from "./functions/graphql-meta";
-import generateGraphQLTypes from './generate';
+import generateGraphQLTypes, {
+  generateComposables,
+  generateFunctions,
+  getAllMethods
+} from "./generate";
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -16,53 +25,91 @@ export default defineNuxtModule<ModuleOptions>({
     name: "@lenne.tech/nuxt-base",
     configKey: "nuxtBase",
     compatibility: {
-      nuxt: '^3.3.1'
-    }
+      nuxt: "^3.3.1",
+    },
   },
   // Default configuration options of the Nuxt module
-  defaults: _nuxt => ({
-    host: 'http://localhost:3000/graphql',
-    watch: true
+  defaults: (_nuxt) => ({
+    host: "",
+    watch: true,
   }),
   async setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
+    nuxt.options.build.transpile.push(resolver.resolve("runtime"));
 
     logger.info("Init @lenne.tech/nuxt-base");
+    addImportsDir(resolver.resolve("runtime/composables"));
 
-    await installModule('@nuxtjs/apollo', {
-      autoImports: true,
-      authType: 'Bearer',
-      authHeader: 'Authorization',
-      tokenStorage: 'cookie',
+    if (!options.host) {
+      return;
+    }
+
+    await installModule("@nuxtjs/apollo", {
+      autoImports: false,
+      authType: "Bearer",
+      authHeader: "Authorization",
+      tokenStorage: "cookie",
       proxyCookies: true,
-        clients: {
-          default: {
-            httpEndpoint: options.host,
-          }
+      clients: {
+        default: {
+          httpEndpoint: options.host,
         },
+      },
     });
 
-    logger.log(await getSchema(options.host));
-
     if (options.watch) {
-      nuxt.hook('builder:watch', async (event, path) => {
-        const start = Date.now()
-        await generateGraphQLTypes(options.host)
-        await nuxt.callHook('builder:generateApp')
+      nuxt.hook("builder:watch", async (event, path) => {
+        const start = Date.now();
+        await generateGraphQLTypes(options.host);
+        await nuxt.callHook("builder:generateApp");
 
-        const time = Date.now() - start
-        logger.success(`Generation completed in ${time}ms`)
-      })
+        const time = Date.now() - start;
+        logger.success(`Generation completed in ${time}ms`);
+      });
     }
+
+    nuxt.options.runtimeConfig["graphqlHost"] = options.host;
 
     // Generate graphql types
     const generatedTypes = await generateGraphQLTypes(options.host);
     addTemplate({
       write: true,
-      filename: `gql/schema-types.ts`,
-      getContents: () => generatedTypes.content || ''
-    })
+      filename: `base/default.ts`,
+      getContents: () => generatedTypes[0].content || "",
+    });
 
-    logger.info("Outputs generated!", generatedTypes);
+    // Generate composable types
+    const composables = await generateComposables(options.host);
+    addTemplate({
+      write: true,
+      filename: `base/index.d.ts`,
+      getContents: () => composables || "",
+    });
+
+    // Generate composable functions
+    const functions = await generateFunctions(options.host);
+    addTemplate({
+      write: true,
+      filename: "gql.mjs",
+      getContents: () => functions || "",
+    });
+
+    // Generate imports
+    const methods = await getAllMethods(options.host);
+    nuxt.hook("imports:extend", (imports) => {
+      imports.push(...(methods || []));
+    });
+
+    nuxt.options.alias["#base"] = resolver.resolve(
+      nuxt.options.buildDir,
+      "base"
+    );
+    nuxt.options.alias["#base/*"] = resolver.resolve(
+      nuxt.options.buildDir,
+      "base",
+      "*"
+    );
+
+    logger.info("Outputs generated!");
   },
 });

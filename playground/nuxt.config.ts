@@ -1,4 +1,6 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
-  myModule: {}
+  nuxtBase: {
+    host: 'http://localhost:3000/graphql'
+  }
 })
