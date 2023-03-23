@@ -22,7 +22,7 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Build
-        run: npm run prebuild
+        run: npm run build:ci
       - name: Save build
         uses: actions/upload-artifact@v1
         with:
