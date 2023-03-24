@@ -90,7 +90,7 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
 
         // Process value
         result.push(
-          await prepareArguments(item, {
+          (await prepareArguments(item, {
             allowed: key ? allowed.fields[key] : null,
             levelKey: key,
             level: level + 1,
@@ -98,7 +98,7 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
             schemaArgs,
             usedArgs,
             variables,
-          }).argsString
+          })).argsString
         );
       }
 
@@ -169,23 +169,19 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
 
         // Process array
         else if (Array.isArray(value)) {
-          result.push(
-            key +
-              ': [' +
-              value.map(
-                async (item) =>
-                  await prepareArguments(item, {
-                    allowed: allowed.fields[key],
-                    levelKey: key,
-                    level: level + 1,
-                    parent: currentKey + '.',
-                    schemaArgs,
-                    usedArgs,
-                    variables,
-                  }).argsString
-              ) +
-              ']'
-          );
+          let argumentsString: string = '';
+          for (const val of value) {
+            argumentsString += key + ': [' + (await prepareArguments(val, {
+              allowed: allowed.fields[key],
+              levelKey: key,
+              level: level + 1,
+              parent: currentKey + '.',
+              schemaArgs,
+              usedArgs,
+              variables,
+            })).argsString + ']'
+          }
+          result.push(argumentsString);
           continue;
         }
 
@@ -227,7 +223,7 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
             variables,
           };
           try {
-            additionalResult += await prepareArguments(value, prepareOptions).argsString;
+            additionalResult += (await prepareArguments(value, prepareOptions)).argsString;
           } catch (e) {
             console.error('Error during preparing arguments', value, prepareOptions);
             throw e;
@@ -305,14 +301,14 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
         if (typeof item === 'object') {
           fieldsString =
             fieldsString +
-            await prepareFields(item, {
+            (await prepareFields(item, {
               allowed, // item is object or array
               parent,
               spaces,
               schemaFields,
               tab: tab + 1,
               usedFields,
-            }).fieldsString;
+            })).fieldsString;
           continue;
         }
         const currentPath = parent + item;
@@ -323,14 +319,14 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
         usedFields.push(currentPath);
         fieldsString =
           fieldsString +
-          await prepareFields(item, {
+          (await prepareFields(item, {
             allowed: null, // item is string
             parent: currentPath + '.',
             spaces,
             schemaFields,
             tab: tab + 1,
             usedFields,
-          }).fieldsString;
+          })).fieldsString;
       }
     }
 
@@ -353,14 +349,14 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
             key +
             ' ' +
             '{' +
-            await prepareFields(val, {
+            (await prepareFields(val, {
               allowed: allowed.fields[key], // val is object or array
               parent: currentPath + '.',
               spaces,
               schemaFields,
               tab: tab + 1,
               usedFields,
-            }).fieldsString +
+            })).fieldsString +
             '\n' +
             ' '.repeat(spaces).repeat(tab) +
             '}';
