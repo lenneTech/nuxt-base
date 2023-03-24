@@ -90,10 +90,7 @@ export async function generateFunctions(host: string) {
       const types = schemaMeta.getTypesForMethod(query, "Query");
 
       template.push(
-        `export const use${capitalizeFirstLetter(query)}Query = (${
-          types.argType ? "args," : ""
-        // } fields) => useGraphQL()('${query}', {args, fields})`
-        } fields) => useGraphQL('${query}', {fields})`
+        `export const use${capitalizeFirstLetter(query)}Query = (${types.argType ? "args," : ""} fields) => useGraphQL('${query}', {args, fields})`
       );
     }
   }
