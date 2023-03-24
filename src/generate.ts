@@ -71,7 +71,7 @@ export async function generateComposables(host: string): Promise<string> {
   template.push(`}`);
 
   customTypes = [...new Set([].concat(...customTypes))];
-  
+
   if (customTypes.length) {
     template.unshift(`import {${customTypes.join(', ')}} from "#base/default"\n`)
   }
@@ -92,7 +92,8 @@ export async function generateFunctions(host: string) {
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? "args," : ""
-        } fields) => useGraphQL()('${query}', {args, fields})`
+        // } fields) => useGraphQL()('${query}', {args, fields})`
+        } fields) => useGraphQL('${query}', {fields})`
       );
     }
   }

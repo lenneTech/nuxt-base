@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
   nuxtBase: {
-    host: 'http://localhost:3000/graphql'
+    host: 'https://swapi-graphql.netlify.app/.netlify/functions/index'
   }
 })
