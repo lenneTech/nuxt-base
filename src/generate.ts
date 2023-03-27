@@ -22,7 +22,7 @@ export async function generateComposables(host: string): Promise<string> {
   const methods = schemaMeta.getMethodNames();
   const template = [];
   let customTypes = [];
-  template.push(`declare module '#base' {`);
+  template.push('import { useGraphQL } from \'#imports\'\n')
 
   if (methods?.query) {
     for (const query of methods.query) {
@@ -30,9 +30,9 @@ export async function generateComposables(host: string): Promise<string> {
       customTypes.push(types.customTypes);
 
       template.push(
-        `  export const use${capitalizeFirstLetter(query)}Query: (${
+        `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]) => ${types.returnType}`
+        } fields: any[]): Promise<${types.returnType}> => useGraphQL<${types.returnType}>('${query}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
@@ -45,11 +45,9 @@ export async function generateComposables(host: string): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(
           mutation
-        )}Mutation: (${
+        )}Mutation = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]) => ${
-          types.returnType
-        }`
+        } fields: any[]): Promise<${types.returnType}> => useGraphQL<${types.returnType}>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
@@ -62,40 +60,20 @@ export async function generateComposables(host: string): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(
           subscription
-        )}Subscription: (${
+        )}Subscription = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]) => ${types.returnType}`
+        } fields: any[]): Promise<${types.returnType}> => useGraphQL<${types.returnType}>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
-  template.push(`}`);
 
   customTypes = [...new Set([].concat(...customTypes))];
 
   if (customTypes.length) {
-    template.unshift(`import {${customTypes.join(', ')}} from "#base/default"\n`)
+    template.unshift(`import {${customTypes.join(', ')}} from "#base/default"`)
   }
 
   return template.join("\n");
-}
-
-export async function generateFunctions(host: string) {
-  const schemaMeta = await getMeta(host);
-  const methods = schemaMeta.getMethodNames();
-  const template = [];
-  template.push('import { useGraphQL } from \'#imports\'\n')
-
-  if (methods?.query) {
-    for (const query of methods.query) {
-      const types = schemaMeta.getTypesForMethod(query, "Query");
-
-      template.push(
-        `export const use${capitalizeFirstLetter(query)}Query = (${types.argType ? "args," : ""} fields) => useGraphQL('${query}', {args, fields})`
-      );
-    }
-  }
-
-  return template.join('\n');
 }
 
 export async function getAllMethods(host: string) {

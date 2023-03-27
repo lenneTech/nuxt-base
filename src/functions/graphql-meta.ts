@@ -162,7 +162,7 @@ export async function getMeta(uri: string): Promise<GraphQLMeta> {
           continue;
         }
 
-        if (this.moduleConfig.securePasswordTransfer && key === 'password') {
+        if (key === 'password') {
           result.push(key + ':' + `"${sha256(value as string)}"`);
           continue;
         }

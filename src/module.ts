@@ -8,7 +8,6 @@ import {
 import consola from "consola";
 import generateGraphQLTypes, {
   generateComposables,
-  generateFunctions,
   getAllMethods
 } from "./generate";
 
@@ -82,16 +81,8 @@ export default defineNuxtModule<ModuleOptions>({
     const composables = await generateComposables(options.host);
     addTemplate({
       write: true,
-      filename: `base/index.d.ts`,
+      filename: `base/index.ts`,
       getContents: () => composables || "",
-    });
-
-    // Generate composable functions
-    const functions = await generateFunctions(options.host);
-    addTemplate({
-      write: true,
-      filename: "gql.mjs",
-      getContents: () => functions || "",
     });
 
     // Generate imports

@@ -1,15 +1,16 @@
-import { useMutation, useSubscription, useQuery } from '@apollo/client';
-
+import { useRuntimeConfig } from "#app";
+import { useAsyncQuery } from "#imports";
 import gql from "graphql-tag";
 import { GraphQLRequestType } from "../../enums/graphql-request-type.enum";
-import { getMeta, prepareArguments } from "../../functions/graphql-meta";
+import { getMeta, prepareArguments, prepareFields } from "../../functions/graphql-meta";
 import { IGraphQLOptions } from "../../interfaces/graphql-options.interface";
 
-export async function useGraphQL(
+export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
-) {
+): Promise<T> {
   const runtimeConfig = useRuntimeConfig();
+
   // Check parameters
   if (!method) {
     return;
@@ -48,11 +49,13 @@ export async function useGraphQL(
       console.log("No GraphQLRequestType detected");
       return;
     }
+
     config.type = types[0] as GraphQLRequestType;
-    if (config.type) {
+    if (!config.type) {
       console.log("No GraphQLRequestType detected");
       return;
     }
+
     if (types.length > 1) {
       // eslint-disable-next-line no-console
       console.debug(
@@ -79,7 +82,7 @@ export async function useGraphQL(
       console.log({ allowedFields });
     }
 
-    const fieldsData = this.prepareFields(config.fields, {
+    const fieldsData = await prepareFields(config.fields, {
       allowed: allowedFields,
     });
 
@@ -191,15 +194,16 @@ export async function useGraphQL(
   }
 
   let data;
+  console.log(request, config, useAsyncQuery);
   switch (config.type) {
     case GraphQLRequestType.MUTATION:
-      data = await useMutation(request.mutate, request.variables);
+      data = await useAsyncQuery(request.mutate, request.variables);
       break;
     case GraphQLRequestType.SUBSCRIPTION:
-      data = await useSubscription(request.query, request.variables);
+      data = await useAsyncQuery(request.query, request.variables);
       break;
     case GraphQLRequestType.QUERY:
-      data = await useQuery(request.query, request.variables);
+      data = await useAsyncQuery(request.query, request.variables);
       break;
   }
 

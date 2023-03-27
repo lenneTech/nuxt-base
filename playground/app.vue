@@ -1,14 +1,13 @@
 <template>
   <div>
-    Nuxt module playground!1
-    <pre>useGraphQL {{ data }}</pre>
-    <pre>useFindAllOffersQuery {{ data2 }}</pre>
+    Nuxt module playground!
+    
+    <h3>useFindAllOffersQuery</h3>
+    <pre> {{ data }}</pre>
   </div>
 </template>
 
 <script async setup>
-import { useFindAllOffersQuery } from "#base";
-import { useGraphQL } from "#imports";
-const data2 = await useFindAllOffersQuery({}, ['id']);
-const data = await useGraphQL("findAllOffers");
+import { useFindAllOffersQuery } from '#base';
+const data = await useFindAllOffersQuery({limit: 25}, ['id']);
 </script>
