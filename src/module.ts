@@ -15,6 +15,20 @@ import generateGraphQLTypes, {
 export interface ModuleOptions {
   host: string;
   watch: boolean;
+  apollo?: {
+    browserHttpEndpoint?: string;
+    wsEndpoint?: string;
+    httpLinkOptions?: any;
+    wsLinkOptions?: any;
+    websocketsOnly?: boolean;
+    connectToDevTools?: boolean;
+    defaultOptions?: any;
+    inMemoryCacheOptions?: any;
+    tokenName?: string;
+    tokenStorage?: string;
+    authType?: string;
+    authHeader?: string;
+  };
 }
 
 const logger = consola.withScope("[@lenne.tech/nuxt-base] ");
@@ -31,19 +45,22 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: (_nuxt) => ({
     host: "",
     watch: true,
+    apollo: {
+      authType: "Bearer",
+      authHeader: "Authorization",
+      tokenStorage: "cookie",
+      proxyCookies: true,
+    },
   }),
   async setup(options, nuxt) {
     logger.info("Init @lenne.tech/nuxt-base");
 
     await installModule("@nuxtjs/apollo", {
       autoImports: true,
-      authType: "Bearer",
-      authHeader: "Authorization",
-      tokenStorage: "cookie",
-      proxyCookies: true,
       clients: {
         default: {
           httpEndpoint: options.host || null,
+          ...options.apollo
         },
       },
     });
