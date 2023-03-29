@@ -32,7 +32,7 @@ export async function generateComposables(host: string): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<${types.returnType}> => useGraphQL<${types.returnType}>('${query}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[]): Promise<UseQueryReturn<${types.returnType}>> => useGraphQL<${types.returnType}>('${query}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
@@ -47,7 +47,7 @@ export async function generateComposables(host: string): Promise<string> {
           mutation
         )}Mutation = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<${types.returnType}> => useGraphQL<${types.returnType}>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[]): Promise<UseMutationReturn<${types.returnType}>> => useGraphQL<${types.returnType}>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
@@ -62,7 +62,7 @@ export async function generateComposables(host: string): Promise<string> {
           subscription
         )}Subscription = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<${types.returnType}> => useGraphQL<${types.returnType}>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[]): Promise<UseSubscriptionReturn<${types.returnType}>> => useGraphQL<${types.returnType}>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }

@@ -1,6 +1,9 @@
 {
   "extends": "./playground/.nuxt/tsconfig.json",
   "compilerOptions": {
-    "strict": false
-  }
+    "strict": false,
+    "resolveJsonModule": true,
+		"noImplicitAny": false
+  },
+  "exclude": ["node_modules", "cypress"]
 }

@@ -1,13 +1,14 @@
 <template>
   <div>
     Nuxt module playground!
-    
-    <h3>useFindAllOffersQuery</h3>
-    <pre> {{ data }}</pre>
+
+    <h3>useFindCategorysQuery</h3>
+    <pre> {{ loading }}</pre>
+    <pre> {{ result }}</pre>
   </div>
 </template>
 
 <script async setup>
-import { useFindAllOffersQuery } from '#base';
-const data = await useFindAllOffersQuery({limit: 25}, ['id']);
+import { useFindCategorysQuery } from "#base";
+const { result, loading } = await useFindCategorysQuery({ limit: 25 }, ["id"]);
 </script>

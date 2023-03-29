@@ -1,27 +1,29 @@
 import {
   buildClientSchema,
-  getIntrospectionQuery,
-  GraphQLSchema,
+  getIntrospectionQuery
 } from "graphql";
 import { sha256 } from "js-sha256";
-import { ofetch } from 'ofetch'
+import { ofetch } from 'ofetch';
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
 import { Helper } from "../classes/helper.class";
 import { GraphQLEnum } from "../enums/graphql-enum.class";
+import { useSchemaStore } from "../runtime/stores/schema";
+
 
 /**
  * Get schema for API
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
  */
-export async function getSchema(uri: string): Promise<GraphQLSchema> {
+export async function getSchema(uri: string): Promise<any> {
   const { data } = await ofetch(uri, {
     method: 'POST', body: JSON.stringify({
       query: getIntrospectionQuery({ descriptions: false }),
       variables: {},
-    })
+    }),
   })
-  return buildClientSchema(data as any);
+  
+  return data;
 }
 
 /**
@@ -29,7 +31,16 @@ export async function getSchema(uri: string): Promise<GraphQLSchema> {
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
  */
 export async function getMeta(uri: string): Promise<GraphQLMeta> {
-  const schema = await getSchema(uri);
+  const store = useSchemaStore();
+  let schema;
+  
+  if (!store.schema) {
+    const result = await getSchema(uri);
+    store.setValue(result);
+    schema = buildClientSchema(result);
+  } else {
+    schema = buildClientSchema(store.schema);
+  }
 
   // Return result
   return new GraphQLMeta(schema);

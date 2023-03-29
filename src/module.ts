@@ -3,12 +3,12 @@ import {
   addTemplate,
   createResolver,
   defineNuxtModule,
-  installModule
+  installModule,
 } from "@nuxt/kit";
 import consola from "consola";
 import generateGraphQLTypes, {
   generateComposables,
-  getAllMethods
+  getAllMethods,
 } from "./generate";
 
 // Module options TypeScript interface definition
@@ -33,33 +33,51 @@ export default defineNuxtModule<ModuleOptions>({
     watch: true,
   }),
   async setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url);
-    nuxt.options.build.transpile.push(resolver.resolve("runtime"));
-
     logger.info("Init @lenne.tech/nuxt-base");
-    addImportsDir(resolver.resolve("runtime/composables"));
-
-    if (!options.host) {
-      return;
-    }
 
     await installModule("@nuxtjs/apollo", {
-      autoImports: false,
+      autoImports: true,
       authType: "Bearer",
       authHeader: "Authorization",
       tokenStorage: "cookie",
       proxyCookies: true,
       clients: {
         default: {
-          httpEndpoint: options.host,
+          httpEndpoint: options.host || null,
         },
       },
     });
 
+    await installModule("@pinia/nuxt", {
+      autoImports: ["defineStore"],
+    });
+
+    const resolver = createResolver(import.meta.url);
+    nuxt.options.build.transpile.push(resolver.resolve("runtime"));
+
+    addImportsDir(resolver.resolve("runtime/composables"));
+    addImportsDir(resolver.resolve("runtime/stores"));
+
     if (options.watch) {
       nuxt.hook("builder:watch", async (event, path) => {
         const start = Date.now();
-        await generateGraphQLTypes(options.host);
+
+        // Generate graphql types
+        const generatedTypes = await generateGraphQLTypes(options.host);
+        addTemplate({
+          write: true,
+          filename: `base/default.ts`,
+          getContents: () => generatedTypes[0].content || "",
+        });
+
+        // Generate composable types
+        const composables = await generateComposables(options.host);
+        addTemplate({
+          write: true,
+          filename: `base/index.ts`,
+          getContents: () => composables || "",
+        });
+
         await nuxt.callHook("builder:generateApp");
 
         const time = Date.now() - start;
@@ -95,6 +113,7 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.options.buildDir,
       "base"
     );
+
     nuxt.options.alias["#base/*"] = resolver.resolve(
       nuxt.options.buildDir,
       "base",

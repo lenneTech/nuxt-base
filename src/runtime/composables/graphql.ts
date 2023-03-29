@@ -1,8 +1,12 @@
 import { useRuntimeConfig } from "#app";
-import { useAsyncQuery } from "#imports";
+import { useMutation, useQuery, useSubscription } from "#imports";
 import gql from "graphql-tag";
 import { GraphQLRequestType } from "../../enums/graphql-request-type.enum";
-import { getMeta, prepareArguments, prepareFields } from "../../functions/graphql-meta";
+import {
+  getMeta,
+  prepareArguments,
+  prepareFields
+} from "../../functions/graphql-meta";
 import { IGraphQLOptions } from "../../interfaces/graphql-options.interface";
 
 export async function useGraphQL<T = any>(
@@ -42,9 +46,11 @@ export async function useGraphQL<T = any>(
 
   // Get meta
   const meta = await getMeta(runtimeConfig.graphqlHost);
+  
   // Set GraphQLRequestType automatically
   if (!config.type) {
     const types = meta.getRequestTypesViaMethod(method);
+
     if (!types?.length) {
       console.log("No GraphQLRequestType detected");
       return;
@@ -181,30 +187,28 @@ export async function useGraphQL<T = any>(
     console.log({ request });
   }
 
-  let func;
   if (config.type === GraphQLRequestType.MUTATION) {
-    func = "mutate";
     request[config.type] = documentNode;
   } else if (config.type === GraphQLRequestType.SUBSCRIPTION) {
-    func = "subscribe";
     request.query = documentNode;
   } else {
-    func = config.type;
     request[config.type] = documentNode;
   }
 
   let data;
-  console.log(request, config, useAsyncQuery);
   switch (config.type) {
-    case GraphQLRequestType.MUTATION:
-      data = await useAsyncQuery(request.mutate, request.variables);
+    case GraphQLRequestType.MUTATION: {
+      data = useMutation<T>(request.mutate, request.variables);
       break;
-    case GraphQLRequestType.SUBSCRIPTION:
-      data = await useAsyncQuery(request.query, request.variables);
+    }
+    case GraphQLRequestType.SUBSCRIPTION: {
+      data = useSubscription<T>(request.query, request.variables);
       break;
-    case GraphQLRequestType.QUERY:
-      data = await useAsyncQuery(request.query, request.variables);
+    }
+    case GraphQLRequestType.QUERY: {
+      data = useQuery<T>(request.query, request.variables);
       break;
+    }
   }
 
   return data;
