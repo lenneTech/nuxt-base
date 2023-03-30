@@ -1,15 +1,10 @@
-import {
-  buildClientSchema,
-  getIntrospectionQuery
-} from "graphql";
+import { buildClientSchema, getIntrospectionQuery } from "graphql";
 import { sha256 } from "js-sha256";
-import { ofetch } from 'ofetch';
+import { ofetch } from "ofetch";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
 import { Helper } from "../classes/helper.class";
 import { GraphQLEnum } from "../enums/graphql-enum.class";
-import { useSchemaStore } from "../runtime/stores/schema";
-
 
 /**
  * Get schema for API
@@ -17,12 +12,13 @@ import { useSchemaStore } from "../runtime/stores/schema";
  */
 export async function getSchema(uri: string): Promise<any> {
   const { data } = await ofetch(uri, {
-    method: 'POST', body: JSON.stringify({
+    method: "POST",
+    body: JSON.stringify({
       query: getIntrospectionQuery({ descriptions: false }),
       variables: {},
     }),
-  })
-  
+  });
+
   return data;
 }
 
@@ -31,350 +27,408 @@ export async function getSchema(uri: string): Promise<any> {
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
  */
 export async function getMeta(uri: string): Promise<GraphQLMeta> {
-  const store = useSchemaStore();
-  let schema;
-  
-  if (!store.schema) {
-    const result = await getSchema(uri);
-    store.setValue(result);
-    schema = buildClientSchema(result);
-  } else {
-    schema = buildClientSchema(store.schema);
-  }
+  const result = await getSchema(uri);
+  // TODO: Cache for only client
+  const schema = buildClientSchema(result);
 
   // Return result
   return new GraphQLMeta(schema);
 }
 
-
-  /**
-   * Prepare arguments for GraphQL request
-   */
-  export async function prepareArguments(
-    args: any,
-    options: {
-      allowed?: GraphQLType;
-      level?: number;
-      levelKey?: string;
-      parent?: string;
-      schemaArgs?: string[];
-      usedArgs?: string[];
-      variables?: { [key: string]: { type: string; value: any } };
-    } = {}
-  ): Promise<{
-    argsString: string;
-    schemaArgs: string[];
-    usedArgs: string[];
-    variables: { [key: string]: { type: string; value: any } };
-  }> {
-    // Init config variables
-    const { allowed, levelKey, level, parent, schemaArgs, usedArgs, variables } = {
+/**
+ * Prepare arguments for GraphQL request
+ */
+export async function prepareArguments(
+  args: any,
+  options: {
+    allowed?: GraphQLType;
+    level?: number;
+    levelKey?: string;
+    parent?: string;
+    schemaArgs?: string[];
+    usedArgs?: string[];
+    variables?: { [key: string]: { type: string; value: any } };
+  } = {}
+): Promise<{
+  argsString: string;
+  schemaArgs: string[];
+  usedArgs: string[];
+  variables: { [key: string]: { type: string; value: any } };
+}> {
+  // Init config variables
+  const { allowed, levelKey, level, parent, schemaArgs, usedArgs, variables } =
+    {
       allowed: null,
-      levelKey: '',
+      levelKey: "",
       level: 1,
-      parent: '',
+      parent: "",
       schemaArgs: [],
       usedArgs: [],
       variables: {},
       ...options,
     };
 
-    // Check args
-    if (args === undefined || args === null) {
-      return { argsString: '', schemaArgs, usedArgs, variables };
-    }
+  // Check args
+  if (args === undefined || args === null) {
+    return { argsString: "", schemaArgs, usedArgs, variables };
+  }
 
-    // Init args
-    const result = [];
+  // Init args
+  const result = [];
 
-    // Process array
-    if (Array.isArray(args)) {
-      const allowedKeys = allowed ? Object.keys(allowed.fields) : null;
-      for (const item of args) {
-        let key = null;
-        if (allowed) {
-          if (!allowedKeys || allowedKeys.length < 1) {
-            break;
-          }
-          key = allowedKeys.shift();
+  // Process array
+  if (Array.isArray(args)) {
+    const allowedKeys = allowed ? Object.keys(allowed.fields) : null;
+    for (const item of args) {
+      let key = null;
+      if (allowed) {
+        if (!allowedKeys || allowedKeys.length < 1) {
+          break;
         }
+        key = allowedKeys.shift();
+      }
 
-        // Process value
-        result.push(
-          (await prepareArguments(item, {
+      // Process value
+      result.push(
+        (
+          await prepareArguments(item, {
             allowed: key ? allowed.fields[key] : null,
             levelKey: key,
             level: level + 1,
-            parent: parent + key + '.',
+            parent: parent + key + ".",
             schemaArgs,
             usedArgs,
             variables,
-          })).argsString
-        );
-      }
-
-      // Encapsulation of the array result
-      if (result.length) {
-        // Complete result, encapsulated via round brackets
-        if (level === 1) {
-          return { argsString: '(' + result.join(', ') + ')', schemaArgs, usedArgs, variables };
-        }
-
-        // Deeper result part, encapsulated via square brackets
-        else {
-          return { argsString: '[' + result.join(', ') + ']', schemaArgs, usedArgs, variables };
-        }
-      }
+          })
+        ).argsString
+      );
     }
 
-    // Process object
-    else if (typeof args === 'object') {
-      // Check for Upload type for variable handling
-      if (allowed?.type === 'Upload') {
-        const name = levelKey + '_' + Helper.getUID(6);
-        variables[name] = { type: allowed.type + (allowed.isRequired ? '!' : ''), value: args };
-        return { argsString: '$' + name, schemaArgs, usedArgs, variables };
+    // Encapsulation of the array result
+    if (result.length) {
+      // Complete result, encapsulated via round brackets
+      if (level === 1) {
+        return {
+          argsString: "(" + result.join(", ") + ")",
+          schemaArgs,
+          usedArgs,
+          variables,
+        };
       }
 
-      // Check object is empty
-      if (args && Object.keys(args).length === 0 && Object.getPrototypeOf(args) === Object.prototype) {
-        return { argsString: '{}', schemaArgs, usedArgs, variables };
+      // Deeper result part, encapsulated via square brackets
+      else {
+        return {
+          argsString: "[" + result.join(", ") + "]",
+          schemaArgs,
+          usedArgs,
+          variables,
+        };
       }
-
-      // Process all object entries
-      for (const [key, value] of Object.entries(args)) {
-        // Init data for current entry
-        const currentKey = parent + key;
-        schemaArgs.push(currentKey);
-
-        // If the allowed key handling is enabled and the current key is not included in the list of allowed keys,
-        // the current key will be skipped
-        if (allowed && !allowed.fields[key]) {
-          continue;
-        }
-
-        // Skip value if not exists
-        if (value === undefined) {
-          continue;
-        }
-
-        // Set null e.g. for resetting
-        if (value === null) {
-          result.push(key + ':' + null);
-          continue;
-        }
-
-        // Add current key to metadata
-        usedArgs.push(currentKey);
-
-        // Process GraphQLEnum
-        if (value instanceof GraphQLEnum) {
-          result.push(key + ':' + value.value);
-          continue;
-        }
-
-        if (key === 'password') {
-          result.push(key + ':' + `"${sha256(value as string)}"`);
-          continue;
-        }
-
-        // Process array
-        else if (Array.isArray(value)) {
-          let argumentsString: string = '';
-          for (const val of value) {
-            argumentsString += key + ': [' + (await prepareArguments(val, {
-              allowed: allowed.fields[key],
-              levelKey: key,
-              level: level + 1,
-              parent: currentKey + '.',
-              schemaArgs,
-              usedArgs,
-              variables,
-            })).argsString + ']'
-          }
-          result.push(argumentsString);
-          continue;
-        }
-
-        // Prepare additional result string
-        let additionalResult = key + ': ';
-
-        // Value is a date object
-        if (typeof value === 'object' && Object.prototype.toString.call(value) === '[object Date]') {
-          additionalResult += `"""${(value as Date).toString()}"""`;
-        }
-
-        // Value is a string
-        else if (typeof value === 'string') {
-          // Enum (doesn't need quotation marks)
-          if (allowed.fields[key].isEnum) {
-            additionalResult += value;
-          }
-
-          // String
-          else {
-            additionalResult += `"${value.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"`;
-          }
-        }
-
-        // Value is a simple boolean or a number
-        else if (typeof value === 'boolean' || typeof value === 'number') {
-          additionalResult += value;
-        }
-
-        // Others
-        else {
-          const prepareOptions = {
-            allowed: allowed.fields[key],
-            levelKey: key,
-            level: level + 1,
-            parent: currentKey + '.',
-            schemaArgs,
-            usedArgs,
-            variables,
-          };
-          try {
-            additionalResult += (await prepareArguments(value, prepareOptions)).argsString;
-          } catch (e) {
-            console.error('Error during preparing arguments', value, prepareOptions);
-            throw e;
-          }
-        }
-
-        // Push deeper part into result array
-        result.push(additionalResult);
-      }
-
-      // Encapsulation of the object result
-      if (result.length) {
-        // Complete result, encapsulated via round brackets
-        if (level === 1) {
-          return { argsString: '(' + result.join(', ') + ')', schemaArgs, usedArgs, variables };
-        }
-
-        // Deeper result part, encapsulated via curly brackets
-        else {
-          return { argsString: '{' + result.join(', ') + '}', schemaArgs, usedArgs, variables };
-        }
-      }
-    }
-
-    // Prepare and process other / unknown values as JSON
-    else {
-      return { argsString: JSON.stringify(args), schemaArgs, usedArgs, variables };
     }
   }
 
-  /**
-   * Prepare fields for GraphQL request
-   */
-  export async function prepareFields(
-    fields: any,
-    options: {
-      allowed?: GraphQLType;
-      schemaFields?: string[];
-      usedFields?: string[];
-      parent?: string;
-      spaces?: number;
-      tab?: number;
-    } = {}
-  ): Promise<{ schemaFields: string[]; fieldsString: string; usedFields: string[] }> {
-    // Config
-    const { allowed, parent, schemaFields, spaces, tab, usedFields } = {
-      allowed: null,
-      parent: '',
-      schemaFields: [],
-      spaces: 2,
-      tab: 1,
-      usedFields: [],
-      ...options,
+  // Process object
+  else if (typeof args === "object") {
+    // Check for Upload type for variable handling
+    if (allowed?.type === "Upload") {
+      const name = levelKey + "_" + Helper.getUID(6);
+      variables[name] = {
+        type: allowed.type + (allowed.isRequired ? "!" : ""),
+        value: args,
+      };
+      return { argsString: "$" + name, schemaArgs, usedArgs, variables };
+    }
+
+    // Check object is empty
+    if (
+      args &&
+      Object.keys(args).length === 0 &&
+      Object.getPrototypeOf(args) === Object.prototype
+    ) {
+      return { argsString: "{}", schemaArgs, usedArgs, variables };
+    }
+
+    // Process all object entries
+    for (const [key, value] of Object.entries(args)) {
+      // Init data for current entry
+      const currentKey = parent + key;
+      schemaArgs.push(currentKey);
+
+      // If the allowed key handling is enabled and the current key is not included in the list of allowed keys,
+      // the current key will be skipped
+      if (allowed && !allowed.fields[key]) {
+        continue;
+      }
+
+      // Skip value if not exists
+      if (value === undefined) {
+        continue;
+      }
+
+      // Set null e.g. for resetting
+      if (value === null) {
+        result.push(key + ":" + null);
+        continue;
+      }
+
+      // Add current key to metadata
+      usedArgs.push(currentKey);
+
+      // Process GraphQLEnum
+      if (value instanceof GraphQLEnum) {
+        result.push(key + ":" + value.value);
+        continue;
+      }
+
+      if (key === "password") {
+        result.push(key + ":" + `"${sha256(value as string)}"`);
+        continue;
+      }
+
+      // Process array
+      else if (Array.isArray(value)) {
+        let argumentsString: string = "";
+        for (const val of value) {
+          argumentsString +=
+            key +
+            ": [" +
+            (
+              await prepareArguments(val, {
+                allowed: allowed.fields[key],
+                levelKey: key,
+                level: level + 1,
+                parent: currentKey + ".",
+                schemaArgs,
+                usedArgs,
+                variables,
+              })
+            ).argsString +
+            "]";
+        }
+        result.push(argumentsString);
+        continue;
+      }
+
+      // Prepare additional result string
+      let additionalResult = key + ": ";
+
+      // Value is a date object
+      if (
+        typeof value === "object" &&
+        Object.prototype.toString.call(value) === "[object Date]"
+      ) {
+        additionalResult += `"""${(value as Date).toString()}"""`;
+      }
+
+      // Value is a string
+      else if (typeof value === "string") {
+        // Enum (doesn't need quotation marks)
+        if (allowed.fields[key].isEnum) {
+          additionalResult += value;
+        }
+
+        // String
+        else {
+          additionalResult += `"${value
+            .replace(/"/g, '\\"')
+            .replace(/\n/g, "\\n")}"`;
+        }
+      }
+
+      // Value is a simple boolean or a number
+      else if (typeof value === "boolean" || typeof value === "number") {
+        additionalResult += value;
+      }
+
+      // Others
+      else {
+        const prepareOptions = {
+          allowed: allowed.fields[key],
+          levelKey: key,
+          level: level + 1,
+          parent: currentKey + ".",
+          schemaArgs,
+          usedArgs,
+          variables,
+        };
+        try {
+          additionalResult += (await prepareArguments(value, prepareOptions))
+            .argsString;
+        } catch (e) {
+          console.error(
+            "Error during preparing arguments",
+            value,
+            prepareOptions
+          );
+          throw e;
+        }
+      }
+
+      // Push deeper part into result array
+      result.push(additionalResult);
+    }
+
+    // Encapsulation of the object result
+    if (result.length) {
+      // Complete result, encapsulated via round brackets
+      if (level === 1) {
+        return {
+          argsString: "(" + result.join(", ") + ")",
+          schemaArgs,
+          usedArgs,
+          variables,
+        };
+      }
+
+      // Deeper result part, encapsulated via curly brackets
+      else {
+        return {
+          argsString: "{" + result.join(", ") + "}",
+          schemaArgs,
+          usedArgs,
+          variables,
+        };
+      }
+    }
+  }
+
+  // Prepare and process other / unknown values as JSON
+  else {
+    return {
+      argsString: JSON.stringify(args),
+      schemaArgs,
+      usedArgs,
+      variables,
     };
+  }
+}
 
-    // Init fields string
-    let fieldsString = '';
+/**
+ * Prepare fields for GraphQL request
+ */
+export async function prepareFields(
+  fields: any,
+  options: {
+    allowed?: GraphQLType;
+    schemaFields?: string[];
+    usedFields?: string[];
+    parent?: string;
+    spaces?: number;
+    tab?: number;
+  } = {}
+): Promise<{
+  schemaFields: string[];
+  fieldsString: string;
+  usedFields: string[];
+}> {
+  // Config
+  const { allowed, parent, schemaFields, spaces, tab, usedFields } = {
+    allowed: null,
+    parent: "",
+    schemaFields: [],
+    spaces: 2,
+    tab: 1,
+    usedFields: [],
+    ...options,
+  };
 
-    // Check fields
-    if (!fields) {
+  // Init fields string
+  let fieldsString = "";
+
+  // Check fields
+  if (!fields) {
+    return { fieldsString, schemaFields, usedFields };
+  }
+
+  // Process string
+  if (typeof fields === "string") {
+    if (allowed && !allowed.fields[fields]) {
       return { fieldsString, schemaFields, usedFields };
     }
+    return {
+      fieldsString: "\n" + " ".repeat(spaces).repeat(tab) + fields,
+      schemaFields,
+      usedFields,
+    };
+  }
 
-    // Process string
-    if (typeof fields === 'string') {
-      if (allowed && !allowed.fields[fields]) {
-        return { fieldsString, schemaFields, usedFields };
-      }
-      return { fieldsString: '\n' + ' '.repeat(spaces).repeat(tab) + fields, schemaFields, usedFields };
-    }
-
-    // Process array
-    else if (Array.isArray(fields)) {
-      for (const item of fields) {
-        if (typeof item === 'object') {
-          fieldsString =
-            fieldsString +
-            (await prepareFields(item, {
+  // Process array
+  else if (Array.isArray(fields)) {
+    for (const item of fields) {
+      if (typeof item === "object") {
+        fieldsString =
+          fieldsString +
+          (
+            await prepareFields(item, {
               allowed, // item is object or array
               parent,
               spaces,
               schemaFields,
               tab: tab + 1,
               usedFields,
-            })).fieldsString;
-          continue;
-        }
-        const currentPath = parent + item;
-        schemaFields.push(currentPath);
-        if (allowed && !allowed.fields[item]) {
-          continue;
-        }
-        usedFields.push(currentPath);
-        fieldsString =
-          fieldsString +
-          (await prepareFields(item, {
+            })
+          ).fieldsString;
+        continue;
+      }
+      const currentPath = parent + item;
+      schemaFields.push(currentPath);
+      if (allowed && !allowed.fields[item]) {
+        continue;
+      }
+      usedFields.push(currentPath);
+      fieldsString =
+        fieldsString +
+        (
+          await prepareFields(item, {
             allowed: null, // item is string
-            parent: currentPath + '.',
+            parent: currentPath + ".",
             spaces,
             schemaFields,
             tab: tab + 1,
             usedFields,
-          })).fieldsString;
-      }
+          })
+        ).fieldsString;
     }
+  }
 
-    // Process object
-    else if (typeof fields === 'object') {
-      for (const [key, val] of Object.entries(fields)) {
-        const currentPath = parent + key;
-        schemaFields.push(currentPath);
-        if (allowed && !allowed.fields[key]) {
-          continue;
-        }
-        usedFields.push(currentPath);
-        if (typeof val !== 'object' || !Object.keys(val).length) {
-          fieldsString = fieldsString + '\n' + ' '.repeat(spaces).repeat(tab) + key;
-        } else {
-          fieldsString =
-            fieldsString +
-            '\n' +
-            ' '.repeat(spaces).repeat(tab) +
-            key +
-            ' ' +
-            '{' +
-            (await prepareFields(val, {
+  // Process object
+  else if (typeof fields === "object") {
+    for (const [key, val] of Object.entries(fields)) {
+      const currentPath = parent + key;
+      schemaFields.push(currentPath);
+      if (allowed && !allowed.fields[key]) {
+        continue;
+      }
+      usedFields.push(currentPath);
+      if (typeof val !== "object" || !Object.keys(val).length) {
+        fieldsString =
+          fieldsString + "\n" + " ".repeat(spaces).repeat(tab) + key;
+      } else {
+        fieldsString =
+          fieldsString +
+          "\n" +
+          " ".repeat(spaces).repeat(tab) +
+          key +
+          " " +
+          "{" +
+          (
+            await prepareFields(val, {
               allowed: allowed.fields[key], // val is object or array
-              parent: currentPath + '.',
+              parent: currentPath + ".",
               spaces,
               schemaFields,
               tab: tab + 1,
               usedFields,
-            })).fieldsString +
-            '\n' +
-            ' '.repeat(spaces).repeat(tab) +
-            '}';
-        }
+            })
+          ).fieldsString +
+          "\n" +
+          " ".repeat(spaces).repeat(tab) +
+          "}";
       }
     }
-
-    // Return result
-    return { fieldsString, schemaFields, usedFields };
   }
+
+  // Return result
+  return { fieldsString, schemaFields, usedFields };
+}

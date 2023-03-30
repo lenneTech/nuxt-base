@@ -3,12 +3,12 @@ import {
   addTemplate,
   createResolver,
   defineNuxtModule,
-  installModule,
+  installModule
 } from "@nuxt/kit";
 import consola from "consola";
 import generateGraphQLTypes, {
   generateComposables,
-  getAllMethods,
+  getAllMethods
 } from "./generate";
 
 // Module options TypeScript interface definition
@@ -53,8 +53,7 @@ export default defineNuxtModule<ModuleOptions>({
     },
   }),
   async setup(options, nuxt) {
-    logger.info("Init @lenne.tech/nuxt-base");
-
+    logger.info("[@lenne.tech/nuxt-base] Init @lenne.tech/nuxt-base");
     await installModule("@nuxtjs/apollo", {
       autoImports: true,
       clients: {
@@ -64,16 +63,18 @@ export default defineNuxtModule<ModuleOptions>({
         },
       },
     });
+    logger.success("[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo");
 
     await installModule("@pinia/nuxt", {
       autoImports: ["defineStore"],
     });
+    logger.success("[@lenne.tech/nuxt-base] Installed @pinia/nuxt");
 
     const resolver = createResolver(import.meta.url);
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
-
     addImportsDir(resolver.resolve("runtime/composables"));
     addImportsDir(resolver.resolve("runtime/stores"));
+    logger.success("[@lenne.tech/nuxt-base] Added imports");
 
     if (options.watch) {
       nuxt.hook("builder:watch", async (event, path) => {
@@ -86,6 +87,7 @@ export default defineNuxtModule<ModuleOptions>({
           filename: `base/default.ts`,
           getContents: () => generatedTypes[0].content || "",
         });
+        logger.success("[@lenne.tech/nuxt-base] Generated base/default.ts");
 
         // Generate composable types
         const composables = await generateComposables(options.host);
@@ -94,15 +96,16 @@ export default defineNuxtModule<ModuleOptions>({
           filename: `base/index.ts`,
           getContents: () => composables || "",
         });
+        logger.success("[@lenne.tech/nuxt-base] Generated base/index.ts");
 
         await nuxt.callHook("builder:generateApp");
 
         const time = Date.now() - start;
-        logger.success(`Generation completed in ${time}ms`);
+        logger.success(`[@lenne.tech/nuxt-base] Generation completed in ${time}ms`);
       });
     }
 
-    nuxt.options.runtimeConfig["graphqlHost"] = options.host;
+    nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;
 
     // Generate graphql types
     const generatedTypes = await generateGraphQLTypes(options.host);
@@ -111,6 +114,7 @@ export default defineNuxtModule<ModuleOptions>({
       filename: `base/default.ts`,
       getContents: () => generatedTypes[0].content || "",
     });
+    logger.success("[@lenne.tech/nuxt-base] Generated base/default.ts");
 
     // Generate composable types
     const composables = await generateComposables(options.host);
@@ -119,6 +123,7 @@ export default defineNuxtModule<ModuleOptions>({
       filename: `base/index.ts`,
       getContents: () => composables || "",
     });
+    logger.success("[@lenne.tech/nuxt-base] Generated base/index.ts");
 
     // Generate imports
     const methods = await getAllMethods(options.host);
@@ -137,6 +142,6 @@ export default defineNuxtModule<ModuleOptions>({
       "*"
     );
 
-    logger.info("Outputs generated!");
+    logger.info("[@lenne.tech/nuxt-base] Initialize done!");
   },
 });

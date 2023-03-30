@@ -12,7 +12,7 @@ import { IGraphQLOptions } from "../../interfaces/graphql-options.interface";
 export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
-): Promise<T> {
+): Promise<any> {
   const runtimeConfig = useRuntimeConfig();
 
   // Check parameters
@@ -45,7 +45,7 @@ export async function useGraphQL<T = any>(
   }
 
   // Get meta
-  const meta = await getMeta(runtimeConfig.graphqlHost);
+  const meta = await getMeta(runtimeConfig.public.graphqlHost);
   
   // Set GraphQLRequestType automatically
   if (!config.type) {

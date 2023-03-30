@@ -12,19 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, 'chore(release)') }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Use Node.js 18
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 18.14.1
       - name: Install dependencies
         run: npm install
       - name: Lint
         run: npm run lint
+      - name: debug
+        run: ls -al
       - name: Build
         run: npm run build:ci
       - name: Save build
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: ./dist
