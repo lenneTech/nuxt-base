@@ -23,7 +23,6 @@
     "reinit": "rm -rf node_modules && rm -rf package-lock.json && npx nuxt cleanup && npm cache clean --force && npm i",
     "copy": "cp package.json ./dist/package.json && cp README.md ./dist/README.md",
     "dev:build": "nuxi build playground",
-    "build:ci": "nuxt build && npm run copy",
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
     "release": "standard-version && git push --follow-tags origin main",
     "release:minor": "standard-version --release-as minor && git push --follow-tags origin main",
@@ -36,12 +35,12 @@
     "@graphql-codegen/typescript": "3.0.2",
     "@nuxt/kit": "3.3.1",
     "@nuxtjs/apollo": "5.0.0-alpha.6",
-    "@pinia/nuxt": "^0.4.7",
+    "@pinia/nuxt": "0.4.7",
     "@vue/apollo-composable": "^4.0.0-beta.4",
     "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
     "js-sha256": "0.9.0",
-    "pinia": "^2.0.33"
+    "pinia": "2.0.33"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "3.2.2",
@@ -55,5 +54,8 @@
     "standard-version": "9.5.0",
     "typescript": "5.0.2",
     "vitest": "0.29.3"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }

@@ -23,6 +23,7 @@ export async function generateComposables(host: string): Promise<string> {
   const template = [];
   let customTypes = [];
   template.push('import { useGraphQL } from \'#imports\'\n')
+  template.push('import { UseMutationReturn, UseQueryReturn, UseSubscriptionReturn } from "@vue/apollo-composable"\n')
 
   if (methods?.query) {
     for (const query of methods.query) {
@@ -32,7 +33,7 @@ export async function generateComposables(host: string): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<UseQueryReturn<${types.returnType}>> => useGraphQL<${types.returnType}>('${query}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[]): Promise<UseQueryReturn<${types.returnType}, any>> => useGraphQL<UseQueryReturn<${types.returnType}, any>>('${query}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
@@ -47,7 +48,7 @@ export async function generateComposables(host: string): Promise<string> {
           mutation
         )}Mutation = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<UseMutationReturn<${types.returnType}>> => useGraphQL<${types.returnType}>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[]): Promise<UseMutationReturn<${types.returnType}, any>> => useGraphQL<UseMutationReturn<${types.returnType}, any>>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }
@@ -62,7 +63,7 @@ export async function generateComposables(host: string): Promise<string> {
           subscription
         )}Subscription = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<UseSubscriptionReturn<${types.returnType}>> => useGraphQL<${types.returnType}>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[]): Promise<UseSubscriptionReturn<${types.returnType}, any>> => useGraphQL<UseSubscriptionReturn<${types.returnType}, any>>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields})`
       );
     }
   }

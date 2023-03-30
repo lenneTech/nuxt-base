@@ -24,7 +24,7 @@ jobs:
       - name: debug
         run: ls -al
       - name: Build
-        run: npm run build:ci
+        run: npm run prebuild
       - name: Save build
         uses: actions/upload-artifact@v3
         with:

@@ -12,7 +12,7 @@ import { IGraphQLOptions } from "../../interfaces/graphql-options.interface";
 export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
-): Promise<any> {
+): Promise<T> {
   const runtimeConfig = useRuntimeConfig();
 
   // Check parameters
