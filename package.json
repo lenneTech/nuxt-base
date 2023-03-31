@@ -33,6 +33,8 @@
   },
   "dependencies": {
     "@graphql-codegen/typescript": "3.0.2",
+    "@graphql-codegen/cli": "3.2.2",
+    "@graphql-codegen/client-preset": "2.1.1",
     "@nuxt/kit": "3.3.2",
     "@nuxtjs/apollo": "5.0.0-alpha.6",
     "@pinia/nuxt": "0.4.7",
@@ -43,8 +45,6 @@
     "pinia": "2.0.33"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "3.2.2",
-    "@graphql-codegen/client-preset": "2.1.1",
     "@nuxt/eslint-config": "0.1.1",
     "@nuxt/module-builder": "0.2.1",
     "@nuxt/schema": "3.3.2",
