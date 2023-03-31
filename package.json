@@ -33,10 +33,10 @@
   },
   "dependencies": {
     "@graphql-codegen/typescript": "3.0.2",
-    "@nuxt/kit": "3.3.1",
+    "@nuxt/kit": "3.3.2",
     "@nuxtjs/apollo": "5.0.0-alpha.6",
     "@pinia/nuxt": "0.4.7",
-    "@vue/apollo-composable": "^4.0.0-beta.4",
+    "@vue/apollo-composable": "4.0.0-beta.4",
     "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
     "js-sha256": "0.9.0",
@@ -47,13 +47,13 @@
     "@graphql-codegen/client-preset": "2.1.1",
     "@nuxt/eslint-config": "0.1.1",
     "@nuxt/module-builder": "0.2.1",
-    "@nuxt/schema": "3.3.1",
-    "@nuxt/test-utils": "3.3.1",
-    "eslint": "8.36.0",
-    "nuxt": "3.3.1",
+    "@nuxt/schema": "3.3.2",
+    "@nuxt/test-utils": "3.3.2",
+    "eslint": "8.37.0",
+    "nuxt": "3.3.2",
     "standard-version": "9.5.0",
-    "typescript": "5.0.2",
-    "vitest": "0.29.3"
+    "typescript": "5.0.3",
+    "vitest": "0.29.8"
   },
   "overrides": {
     "vue": "latest"
