@@ -12,7 +12,7 @@ export class Helper {
       for (const [key, value] of Object.entries(filter)) {
         if (Array.isArray(element[key])) {
           for (const item of element[key]) {
-            if (!element[key].includs(value)) {
+            if (!element[key].includes(value)) {
               return false;
             }
           }

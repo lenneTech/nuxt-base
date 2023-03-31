@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "npm run dev:build && nuxt-module-build && npm run copy",
+    "prebuild": "npm run dev:build && nuxt-module-build --stub && npm run copy",
     "dev": "nuxi dev playground",
     "reinit": "rm -rf node_modules && rm -rf package-lock.json && npx nuxt cleanup && npm cache clean --force && npm i",
     "copy": "cp package.json ./dist/package.json && cp README.md ./dist/README.md",
