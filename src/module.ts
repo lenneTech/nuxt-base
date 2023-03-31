@@ -6,6 +6,7 @@ import {
   installModule,
   useLogger,
 } from "@nuxt/kit";
+import { getSchema } from "./functions/graphql-meta";
 import generateGraphQLTypes, {
   generateComposables,
   getAllMethods,
@@ -83,46 +84,9 @@ export default defineNuxtModule<ModuleOptions>({
       addImportsDir(resolver.resolve("runtime/stores"));
       logger.success("[@lenne.tech/nuxt-base] Added imports");
 
-      // Generate graphql types
-      const generatedTypes = await generateGraphQLTypes(options.host);
-      addTemplate({
-        write: true,
-        filename: `base/default.ts`,
-        getContents: () => generatedTypes[0].content || "",
-      });
-      logger.success("[@lenne.tech/nuxt-base] Generated base/default.ts");
-
-      // Generate composable types
-      const composables = await generateComposables(options.host);
-      addTemplate({
-        write: true,
-        filename: `base/index.ts`,
-        getContents: () => composables || "",
-      });
-      logger.success("[@lenne.tech/nuxt-base] Generated base/index.ts");
-
-      // Generate imports
-      nuxt.hook("imports:extend", async (imports) => {
-        const methods = await getAllMethods(options.host);
-        imports.push(...(methods || []));
-      });
-
-      nuxt.options.alias["#base"] = resolver.resolve(
-        nuxt.options.buildDir,
-        "base"
-      );
-
-      nuxt.options.alias["#base/*"] = resolver.resolve(
-        nuxt.options.buildDir,
-        "base",
-        "*"
-      );
-    }
-
-    if (options.watch) {
-      nuxt.hook("builder:watch", async (event, path) => {
-        const start = Date.now();
-
+      try {
+        await getSchema(options.host);
+      
         // Generate graphql types
         const generatedTypes = await generateGraphQLTypes(options.host);
         addTemplate({
@@ -141,8 +105,66 @@ export default defineNuxtModule<ModuleOptions>({
         });
         logger.success("[@lenne.tech/nuxt-base] Generated base/index.ts");
 
-        await nuxt.callHook("builder:generateApp");
+        // Generate imports
+        nuxt.hook("imports:extend", async (imports) => {
+          const methods = await getAllMethods(options.host);
+          imports.push(...(methods || []));
+        });
 
+        nuxt.options.alias["#base"] = resolver.resolve(
+          nuxt.options.buildDir,
+          "base"
+        );
+
+        nuxt.options.alias["#base/*"] = resolver.resolve(
+          nuxt.options.buildDir,
+          "base",
+          "*"
+        );
+      } catch (e) {
+        logger.warn("[@lenne.tech/nuxt-base] Generated failed. Please check your host.");
+      }
+    }
+
+    if (options.watch) {
+      nuxt.hook("builder:watch", async (event, path) => {
+        const start = Date.now();
+        try {
+          await getSchema(options.host);
+
+          // Generate graphql types
+          const generatedTypes = await generateGraphQLTypes(options.host);
+          addTemplate({
+            write: true,
+            filename: `base/default.ts`,
+            getContents: () => generatedTypes[0].content || "",
+          });
+          logger.success("[@lenne.tech/nuxt-base] Generated base/default.ts");
+
+          // Generate composable types
+          const composables = await generateComposables(options.host);
+          addTemplate({
+            write: true,
+            filename: `base/index.ts`,
+            getContents: () => composables || "",
+          });
+          logger.success("[@lenne.tech/nuxt-base] Generated base/index.ts");
+
+          nuxt.options.alias["#base"] = resolver.resolve(
+            nuxt.options.buildDir,
+            "base"
+          );
+
+          nuxt.options.alias["#base/*"] = resolver.resolve(
+            nuxt.options.buildDir,
+            "base",
+            "*"
+          );
+
+          await nuxt.callHook("builder:generateApp");
+        } catch (e) {
+          logger.warn("[@lenne.tech/nuxt-base] Generated failed. Please check your host.");
+        }
         const time = Date.now() - start;
         logger.success(
           `[@lenne.tech/nuxt-base] Generation completed in ${time}ms`

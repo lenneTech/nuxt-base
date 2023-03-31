@@ -9,7 +9,7 @@
 </template>
 
 <script async setup>
-import { useFindCategorysQuery } from "#base";
+// import { useFindCategorysQuery } from "#base";
 
-const { result, loading } = await useFindCategorysQuery({ limit: 25 }, ["id"]);
+// const { result, loading } = await useFindCategorysQuery({ limit: 25 }, ["id"]);
 </script>
