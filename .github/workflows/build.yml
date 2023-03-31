@@ -5,28 +5,36 @@ on:
     branches:
       - '*/*'
       - '*'
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, 'chore(release)') }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [16]
+        os: [ubuntu-latest]
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 18
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - run: corepack enable
+
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14.1
+          cache: 'pnpm'
+          node-version: ${{ matrix.node }}
+
       - name: Install dependencies
-        run: npm install
-      - name: Lint
-        run: npm run lint
-      - name: debug
-        run: ls -al
+        run: pnpm install
+
+      - run: pnpm dev:prepare
+
       - name: Build
-        run: npm run prebuild
-      - name: Save build
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: ./dist
+        run: pnpm build
+
+      - name: Build Playground
+        run: pnpm dev:build

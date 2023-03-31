@@ -18,10 +18,10 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build --stub",
-    "prebuild": "npm run dev:build && nuxt-module-build --stub",
-    "dev": "nuxi dev playground",
     "reinit": "rm -rf node_modules && rm -rf package-lock.json && npx nuxt cleanup && npm cache clean --force && npm i",
+    "build": "nuxt-module-build",
+    "prepack": "pnpm build",
+    "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
     "release": "standard-version && git push --follow-tags origin main",
@@ -57,5 +57,6 @@
   },
   "overrides": {
     "vue": "latest"
-  }
+  },
+  "packageManager": "pnpm@7.29.1"
 }
