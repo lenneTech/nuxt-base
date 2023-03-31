@@ -18,11 +18,10 @@ jobs:
         with:
           node-version: 18.14.1
       - run: npm install
-      - run: npm run prebuild
       - uses: JS-DevTools/npm-publish@v1
         with:
           access: public
-          package: ./dist/package.json
+          package: ./package.json
           token: ${{ secrets.NPM_TOKEN }}
       - name: Deploy notification
         if: always()
