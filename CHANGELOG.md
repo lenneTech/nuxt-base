@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/lenneTech/nuxt-base/compare/v1.4.0...v1.5.0) (2023-03-31)
+
+
+### Features
+
+* Change dependencies ([534cc34](https://github.com/lenneTech/nuxt-base/commit/534cc3475f6e50eb8417788697940170d613f1bb))
+
 ## [1.4.0](https://github.com/lenneTech/nuxt-base/compare/v1.3.0...v1.4.0) (2023-03-31)
 
 
