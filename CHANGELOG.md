@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/lenneTech/nuxt-base/compare/v1.1.4...v1.2.0) (2023-03-31)
+
+
+### Features
+
+* Add auth store and apollo options ([ead8c6d](https://github.com/lenneTech/nuxt-base/commit/ead8c6d592b0d87818e11db3892b5f0f0c1f6d76))
+* Add first generated steps ([112146c](https://github.com/lenneTech/nuxt-base/commit/112146ceb9befe4c07036a6e2ef2d965f166dc84))
+* add first steps ([c26ef07](https://github.com/lenneTech/nuxt-base/commit/c26ef07a5101ef01a2737edf02bb369b51ce0436))
+* Add functions for request ([75ea7e2](https://github.com/lenneTech/nuxt-base/commit/75ea7e2e05a4166ce66b45efa5ed17b2244f1a0f))
+* Add some logic ([6cfad97](https://github.com/lenneTech/nuxt-base/commit/6cfad9732644ce8ed7bf2c1477de929f5a562f53))
+* first runnable version ([b25eb1a](https://github.com/lenneTech/nuxt-base/commit/b25eb1a640215c63e4163001b4cc3e1f41dcb0e4))
+* Update packages and clean module.ts ([f85f50c](https://github.com/lenneTech/nuxt-base/commit/f85f50c56f2f731e8ca55192d11c05e2168261dd))
+
+
+### Bug Fixes
+
+* Add new build command for ci ([6afb875](https://github.com/lenneTech/nuxt-base/commit/6afb875cccd001098eb672f57a23652c9e0795ad))
+* Change build command in action ([0cebc7e](https://github.com/lenneTech/nuxt-base/commit/0cebc7eafdb664e32c6075c33d3155f2aa7c46f6))
+* replace useAsyncQuery with native fetch ([066c8d7](https://github.com/lenneTech/nuxt-base/commit/066c8d7b28a1e38f8727187d96855d7f3d36b6ec))
+* typo and prebuild script ([0641adc](https://github.com/lenneTech/nuxt-base/commit/0641adc78ce1cc4bdb0766b649155cce344a4cb4))
+* useGraphQL ([3fbad2a](https://github.com/lenneTech/nuxt-base/commit/3fbad2a880a67250eb4d3c94e64e3bfe12360266))
+
 ### [1.1.4](https://github.com/lenneTech/nuxt-base/compare/v1.1.3...v1.1.4) (2023-03-18)
 
 
