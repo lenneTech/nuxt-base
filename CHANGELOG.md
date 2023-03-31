@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/lenneTech/nuxt-base/compare/v1.3.0...v1.4.0) (2023-03-31)
+
+
+### Features
+
+* Change npm publish handling ([0237c40](https://github.com/lenneTech/nuxt-base/commit/0237c406473302cef63c73401d9d73e26c920a6c))
+
+
+### Bug Fixes
+
+* Change version ([ae2447f](https://github.com/lenneTech/nuxt-base/commit/ae2447faf12b185da4fc21c142270365e24c7773))
+
 ## [1.3.0](https://github.com/lenneTech/nuxt-base/compare/v1.2.0...v1.3.0) (2023-03-31)
 
 
