@@ -30,10 +30,6 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: npx changelogithub
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -47,7 +43,7 @@ jobs:
         run: pnpm install
 
       - name: Publish Package
-        run: pnpm publish --access public
+        run: pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Deploy notification
