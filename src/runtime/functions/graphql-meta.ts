@@ -1,5 +1,5 @@
 import { buildClientSchema, getIntrospectionQuery } from "graphql";
-import { sha256 } from "js-sha256";
+import sha256 from "js-sha256";
 import { ofetch } from "ofetch";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
