@@ -18,7 +18,6 @@ importers:
       eslint: 8.37.0
       graphql: 16.6.0
       graphql-tag: 2.12.6
-      js-sha256: 0.9.0
       nuxt: 3.3.2
       pinia: 2.0.33
       standard-version: 9.5.0
@@ -34,7 +33,6 @@ importers:
       '@vue/apollo-composable': 4.0.0-beta.4_2hfkbddxez2dobp7fkofo2gqrm
       graphql: 16.6.0
       graphql-tag: 2.12.6_graphql@16.6.0
-      js-sha256: 0.9.0
       pinia: 2.0.33_typescript@5.0.3
     devDependencies:
       '@nuxt/eslint-config': 0.1.1_eslint@8.37.0
@@ -5218,10 +5216,6 @@ packages:
   /js-sdsl/4.4.0:
     resolution: {integrity: sha512-FfVSdx6pJ41Oa+CF7RDaFmTnCaFhua+SNYQX74riGOpl96x+2jQCqEfQ2bnXu/5DPCqlRuiqyvTJM0Qjz26IVg==}
     dev: true
-
-  /js-sha256/0.9.0:
-    resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
-    dev: false
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
