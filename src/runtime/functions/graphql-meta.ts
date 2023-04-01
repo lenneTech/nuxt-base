@@ -1,5 +1,4 @@
 import { buildClientSchema, getIntrospectionQuery } from "graphql";
-import sha256 from "js-sha256";
 import { ofetch } from "ofetch";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
@@ -182,7 +181,7 @@ export async function prepareArguments(
       }
 
       if (key === "password") {
-        result.push(key + ":" + `"${sha256(value as string)}"`);
+        result.push(key + ":" + `"${await hash(value as string)}"`);
         continue;
       }
 
@@ -431,4 +430,14 @@ export async function prepareFields(
 
   // Return result
   return { fieldsString, schemaFields, usedFields };
+}
+
+export async function hash(string) {
+  const utf8 = new TextEncoder().encode(string);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((bytes) => bytes.toString(16).padStart(2, '0'))
+    .join('');
+  return hashHex;
 }

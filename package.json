@@ -41,7 +41,6 @@
     "@vue/apollo-composable": "4.0.0-beta.4",
     "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
-    "js-sha256": "0.9.0",
     "pinia": "2.0.33"
   },
   "devDependencies": {
