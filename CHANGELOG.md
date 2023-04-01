@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.6](https://github.com/lenneTech/nuxt-base/compare/v1.6.5...v1.6.6) (2023-04-01)
+
+
+### Bug Fixes
+
+* Fix sha256 import ([c3c9390](https://github.com/lenneTech/nuxt-base/commit/c3c9390e75794ffc055e35c93f6470f965f6951a))
+
 ### [1.6.5](https://github.com/lenneTech/nuxt-base/compare/v1.6.4...v1.6.5) (2023-04-01)
 
 
