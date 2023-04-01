@@ -1,13 +1,15 @@
 import { useRuntimeConfig } from "#app";
-import { useMutation, useQuery, useSubscription } from "#imports";
-import gql from "graphql-tag";
-import { GraphQLRequestType } from "../../enums/graphql-request-type.enum";
 import {
+  GraphQLRequestType,
+  IGraphQLOptions,
   getMeta,
   prepareArguments,
-  prepareFields
-} from "../../functions/graphql-meta";
-import { IGraphQLOptions } from "../../interfaces/graphql-options.interface";
+  prepareFields,
+  useMutation,
+  useQuery,
+  useSubscription,
+} from "#imports";
+import gql from "graphql-tag";
 
 export async function useGraphQL<T = any>(
   method: string,

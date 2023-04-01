@@ -82,6 +82,9 @@ export default defineNuxtModule<ModuleOptions>({
     if (options.autoImport) {
       addImportsDir(resolver.resolve("runtime/composables"));
       addImportsDir(resolver.resolve("runtime/stores"));
+      addImportsDir(resolver.resolve("interfaces"));
+      addImportsDir(resolver.resolve("enums"));
+      addImportsDir(resolver.resolve("functions"));
       logger.success("[@lenne.tech/nuxt-base] Added imports");
 
       try {
