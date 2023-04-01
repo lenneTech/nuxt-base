@@ -59,7 +59,7 @@ export class GraphQLMeta {
     if (argsDeepType) {
       const result = [];
       for (const [key, value] of Object.entries(argsDeepType.fields)) {
-        result.push(key + ': ' + argsDeepType.fields[key].type + (argsDeepType.fields[key].isList ? '[]' : ''))
+        result.push(key + (argsDeepType.fields[key].isRequired ? '' : '?') + ': ' + argsDeepType.fields[key].type + (argsDeepType.fields[key].isList ? '[]' : ''))
         if (this.checkCustomTyp(argsDeepType.fields[key].type)) {
           customTypes.push(argsDeepType.fields[key].type);
         }
