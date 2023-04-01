@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/lenneTech/nuxt-base/compare/v1.5.0...v1.6.0) (2023-04-01)
+
+
+### Features
+
+* Add externals ([02a423a](https://github.com/lenneTech/nuxt-base/commit/02a423aa3128dcab80c347df8ac7860085c507b4))
+* Add new publish handling ([7ed906a](https://github.com/lenneTech/nuxt-base/commit/7ed906a120fe7bbb668351615ed44d1c83e2ffd3))
+
+
+### Bug Fixes
+
+* Fix build ([8c66976](https://github.com/lenneTech/nuxt-base/commit/8c66976746936f2f536c82d033d1a9e0d97185af))
+* Fix pipeline ([5d7f0f5](https://github.com/lenneTech/nuxt-base/commit/5d7f0f5abf6c29e7dd7bd1c2990d557a1d04b3e1))
+
 ## [1.5.0](https://github.com/lenneTech/nuxt-base/compare/v1.4.0...v1.5.0) (2023-03-31)
 
 
