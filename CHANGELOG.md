@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.3](https://github.com/lenneTech/nuxt-base/compare/v1.6.2...v1.6.3) (2023-04-01)
+
+
+### Bug Fixes
+
+* Fix graphql composable ([e2b66f4](https://github.com/lenneTech/nuxt-base/commit/e2b66f4218e7168fc7cffbb357a360347fe6ac1c))
+
 ### [1.6.2](https://github.com/lenneTech/nuxt-base/compare/v1.6.1...v1.6.2) (2023-04-01)
 
 
