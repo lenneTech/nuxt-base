@@ -58,5 +58,12 @@
   "overrides": {
     "vue": "latest"
   },
-  "packageManager": "pnpm@7.29.1"
+  "packageManager": "pnpm@7.29.1",
+  "build": {
+    "externals": [
+      "ofetch",
+      "destr",
+      "ufo"
+    ]
+  }
 }
