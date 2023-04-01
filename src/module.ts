@@ -126,6 +126,14 @@ export default defineNuxtModule<ModuleOptions>({
       }
     }
 
+    nuxt.hook('nitro:config', (nitro) => {
+      if (nitro.imports === false) { return }
+
+      nitro.externals = nitro.externals || {}
+      nitro.externals.inline = nitro.externals.inline || []
+      nitro.externals.inline.push(resolver.resolve('runtime'))
+    });
+
     if (options.watch) {
       nuxt.hook("builder:watch", async (event, path) => {
         const start = Date.now();
