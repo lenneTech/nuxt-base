@@ -24,6 +24,7 @@ export interface ModuleOptions {
     wsLinkOptions?: any;
     websocketsOnly?: boolean;
     connectToDevTools?: boolean;
+    proxyCookies?: boolean;
     defaultOptions?: any;
     inMemoryCacheOptions?: any;
     tokenName?: string;
