@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 3
       - name: Install dependencies
         run: pnpm install
-
+      - run: pnpm dev:prepare
       - name: Publish Package
         run: pnpm publish --access public --no-git-checks
         env:
