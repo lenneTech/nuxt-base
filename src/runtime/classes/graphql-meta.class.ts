@@ -1,11 +1,11 @@
 import {
-  GraphQLEnumType,
-  GraphQLInputObjectType,
-  GraphQLList,
-  GraphQLNamedType,
-  GraphQLNonNull,
-  GraphQLScalarType,
-  GraphQLSchema
+    GraphQLEnumType,
+    GraphQLInputObjectType,
+    GraphQLList,
+    GraphQLNamedType,
+    GraphQLNonNull,
+    GraphQLScalarType,
+    GraphQLSchema
 } from 'graphql';
 import { GraphQLRequestType } from '../enums/graphql-request-type.enum';
 import { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';

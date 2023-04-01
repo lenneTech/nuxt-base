@@ -6,11 +6,11 @@ import {
   installModule,
   useLogger,
 } from "@nuxt/kit";
-import { getSchema } from "./functions/graphql-meta";
 import generateGraphQLTypes, {
   generateComposables,
   getAllMethods,
 } from "./generate";
+import { getSchema } from "./runtime/functions/graphql-meta";
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -83,9 +83,10 @@ export default defineNuxtModule<ModuleOptions>({
     if (options.autoImport) {
       addImportsDir(resolver.resolve("runtime/composables"));
       addImportsDir(resolver.resolve("runtime/stores"));
-      addImportsDir(resolver.resolve("interfaces"));
-      addImportsDir(resolver.resolve("enums"));
-      addImportsDir(resolver.resolve("functions"));
+      addImportsDir(resolver.resolve("runtime/interfaces"));
+      addImportsDir(resolver.resolve("runtime/enums"));
+      addImportsDir(resolver.resolve("runtime/classes"));
+      addImportsDir(resolver.resolve("runtime/functions"));
       logger.success("[@lenne.tech/nuxt-base] Added imports");
 
       try {

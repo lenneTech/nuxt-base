@@ -1,7 +1,7 @@
 import { generate } from "@graphql-codegen/cli";
 import { Types } from "@graphql-codegen/plugin-helpers";
 import type { Import } from "unimport";
-import { getMeta } from "./functions/graphql-meta";
+import { getMeta } from "./runtime/functions/graphql-meta";
 
 export default async function generateGraphQLTypes(schemaUrl: string) {
   const config: Types.Config = {
