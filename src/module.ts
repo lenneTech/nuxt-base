@@ -1,5 +1,6 @@
 import {
   addImportsDir,
+  addPlugin,
   addTemplate,
   createResolver,
   defineNuxtModule,
@@ -69,16 +70,17 @@ export default defineNuxtModule<ModuleOptions>({
       },
     });
     logger.success("[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo");
-
+    
     await installModule("@pinia/nuxt", {
       autoImports: ["defineStore"],
     });
     logger.success("[@lenne.tech/nuxt-base] Installed @pinia/nuxt");
-
+    
     const resolver = createResolver(import.meta.url);
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
-
+  
     nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;
+    addPlugin(resolver.resolve('runtime/plugins/apollo'))
 
     if (options.autoImport) {
       addImportsDir(resolver.resolve("runtime/composables"));
