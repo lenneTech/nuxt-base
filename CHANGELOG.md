@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/lenneTech/nuxt-base/compare/v1.7.0...v1.7.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* Fix return type of generated composables ([1a503d8](https://github.com/lenneTech/nuxt-base/commit/1a503d8fd23d2ebb28e0f2c0e4fb5463ea270e0d))
+
 ## [1.7.0](https://github.com/lenneTech/nuxt-base/compare/v1.6.8...v1.7.0) (2023-04-01)
 
 
