@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/lenneTech/nuxt-base/compare/v1.7.1...v1.8.0) (2023-04-03)
+
+
+### Features
+
+* Add session handling to apollo ([662776b](https://github.com/lenneTech/nuxt-base/commit/662776b2c2caeff4ced2d0e97d5bf8edf40ab238))
+
 ### [1.7.1](https://github.com/lenneTech/nuxt-base/compare/v1.7.0...v1.7.1) (2023-04-03)
 
 
