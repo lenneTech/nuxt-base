@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://github.com/lenneTech/nuxt-base/compare/v1.8.0...v1.8.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* Fix import error ([ab35825](https://github.com/lenneTech/nuxt-base/commit/ab35825129972175d1781f9d3a31b54900d58978))
+
 ## [1.8.0](https://github.com/lenneTech/nuxt-base/compare/v1.7.1...v1.8.0) (2023-04-03)
 
 
