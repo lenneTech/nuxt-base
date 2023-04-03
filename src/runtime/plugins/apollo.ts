@@ -2,6 +2,7 @@ import { createHttpLink, from, ApolloLink } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { provideApolloClient } from '@vue/apollo-composable'
 import { defineNuxtPlugin } from '#imports'
+import { useRuntimeConfig } from "#app";
 import { useAuthStore } from '../stores/auth'
 
 /**
