@@ -159,9 +159,9 @@ export async function useGraphQL<T = any>(
     // Add surrounding
     gQlBody = config.type + " Request(";
     for (const [key, item] of Object.entries(argsData.variables)) {
-      gQlBody += "\n$" + key + ":" + item.type + ",";
-      request.variables[key] = item.value;
-      if (item.type.startsWith("Upload")) {
+      gQlBody += "\n$" + key + ":" + (item as any).type + ",";
+      request.variables[key] = (item as any).value;
+      if ((item as any).type.startsWith("Upload")) {
         multipart = true;
       }
     }

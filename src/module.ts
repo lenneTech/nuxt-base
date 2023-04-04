@@ -62,8 +62,6 @@ export default defineNuxtModule<ModuleOptions>({
 
     logger.info("[@lenne.tech/nuxt-base] Init @lenne.tech/nuxt-base");
 
-
-
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
 
     nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;

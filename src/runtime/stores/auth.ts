@@ -1,5 +1,4 @@
-import { defineStore, ref, useCookie } from "#imports";
-import { useGraphQL } from "../composables/graphql";
+import { defineStore, ref, useCookie, useGraphQL } from "#imports";
 
 export const useAuthStore = defineStore("auth", () => {
     const token = ref<string>(null);

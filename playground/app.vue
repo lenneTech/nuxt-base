@@ -3,15 +3,15 @@
     Nuxt module playground!
 
     <h3>useCountriesQuery</h3>
-    <pre> {{ { loading } }}</pre>
-    <pre> {{ { result } }}</pre>
+    <!-- <pre> {{ { loading } }}</pre>
+    <pre> {{ { result } }}</pre> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { useCountriesQuery } from "./.nuxt/imports";
+// import { useCountriesQuery } from "./.nuxt/imports";
 
-const { result, loading } = await useCountriesQuery({}, ['name', 'capital', 'code']);
+// const { result, loading } = await useCountriesQuery({}, ['name', 'capital', 'code']);
 </script>
 
 <style>
