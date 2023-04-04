@@ -87,8 +87,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     defaultClient.link,
   ]))
 
-  console.log('defaultClient', defaultClient)
-
   // For using useQuery in `@vue/apollo-composable`
   provideApolloClient(defaultClient)
 })
