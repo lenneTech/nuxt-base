@@ -15,6 +15,11 @@ export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
+
+  // TODO: delete when solved
+  console.log('useGraphQL:method', method);
+  console.log('useGraphQL:options', options);
+
   const runtimeConfig = useRuntimeConfig();
 
   // Check parameters
@@ -48,7 +53,7 @@ export async function useGraphQL<T = any>(
 
   // Get meta
   const meta = await getMeta(runtimeConfig.public.graphqlHost);
-  
+
   // Set GraphQLRequestType automatically
   if (!config.type) {
     const types = meta.getRequestTypesViaMethod(method);
@@ -151,7 +156,7 @@ export async function useGraphQL<T = any>(
   let gQlBody = config.type + gQlFuncBody;
 
   // Handling for variables (e.g. for file uploads)
-  if (Object.keys(argsData.variables).length) {
+  if (Object.keys(argsData?.variables).length) {
     // Preparations
     request.variables = {};
     let multipart = false;

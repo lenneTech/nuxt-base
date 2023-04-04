@@ -1,22 +1,26 @@
 import { createHttpLink, from, ApolloLink } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { provideApolloClient } from '@vue/apollo-composable'
-import { defineNuxtPlugin } from '#imports'
-import { useRuntimeConfig } from "#app";
+import { defineNuxtPlugin } from 'nuxt/app'
 import { useAuthStore } from '../stores/auth'
-
+import { useRuntimeConfig } from 'nuxt/app'
+import type { ApolloClient } from '@apollo/client/core'
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
+
 export default defineNuxtPlugin((nuxtApp) => {
   const envVars = useRuntimeConfig()
   const { $apollo } = nuxtApp
+  // TODO: '$apollo' is typeof unknown
+  const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>
 
-    // trigger the error hook on an error
+  // trigger the error hook on an error
   const errorLink = onError((err) => {
+    // @ts-expect-error - '$apollo' is typeof unknown
     nuxtApp.callHook('apollo:error', err) // must be called bc `@nuxtjs/apollo` will not do it anymore
     const store = useAuthStore()
-    
+
     if (err.graphQLErrors) {
       for (const error of err.graphQLErrors) {
         switch (error.extensions.code) {
@@ -34,7 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
               return;
             }
 
-            
+
             return store.requestNewToken()
               .filter((value) => Boolean(value))
               .flatMap((response) => {
@@ -87,12 +91,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   // Set custom links in the apollo client.
   // This is the link chain. Will be walked through from top to bottom. It can only contain 1 terminating
   // Apollo link, see: https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link
-  $apollo.defaultClient.setLink(from([
+  defaultClient.setLink(from([
     authMiddleware,
     errorLink,
     httpLink,
   ]))
 
   // For using useQuery in `@vue/apollo-composable`
-  provideApolloClient($apollo.defaultClient)
+  provideApolloClient(defaultClient)
 })
