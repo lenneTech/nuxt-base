@@ -1,9 +1,8 @@
-import { from, ApolloLink } from '@apollo/client/core'
+import { defineNuxtPlugin, useAuthStore } from '#app'
+import type { ApolloClient } from '@apollo/client/core'
+import { ApolloLink, from } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { provideApolloClient } from '@vue/apollo-composable'
-import { defineNuxtPlugin } from 'nuxt/app'
-import { useAuthStore } from '../stores/auth'
-import type { ApolloClient } from '@apollo/client/core'
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
@@ -14,8 +13,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // trigger the error hook on an error
   const errorLink = onError((err) => {
-    // @ts-expect-error - '$apollo' is typeof unknown
-    nuxtApp.callHook('apollo:error', err) // must be called bc `@nuxtjs/apollo` will not do it anymore
     const store = useAuthStore()
 
     if (err.graphQLErrors) {
@@ -66,9 +63,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       let token: string;
 
       if (operationName === 'refreshToken') {
-        token = store.refreshToken.value || null;
+        token = store.refreshToken || null;
       } else {
-        token = store.token.value || null;
+        token = store.token || null;
       }
 
       if (token) {
@@ -88,6 +85,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     errorLink,
     defaultClient.link,
   ]))
+
+  console.log('defaultClient', defaultClient)
 
   // For using useQuery in `@vue/apollo-composable`
   provideApolloClient(defaultClient)
