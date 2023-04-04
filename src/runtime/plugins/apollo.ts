@@ -1,18 +1,15 @@
-import { createHttpLink, from, ApolloLink } from '@apollo/client/core'
+import { from, ApolloLink } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { provideApolloClient } from '@vue/apollo-composable'
 import { defineNuxtPlugin } from 'nuxt/app'
 import { useAuthStore } from '../stores/auth'
-import { useRuntimeConfig } from 'nuxt/app'
 import type { ApolloClient } from '@apollo/client/core'
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const envVars = useRuntimeConfig()
   const { $apollo } = nuxtApp
-  // TODO: '$apollo' is typeof unknown
   const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>
 
   // trigger the error hook on an error
@@ -83,18 +80,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     return forward(operation);
   });
 
-  // Default httpLink (main communication for apollo)
-  const httpLink = createHttpLink({
-    uri: envVars.public.graphqlHost,
-  })
-
   // Set custom links in the apollo client.
   // This is the link chain. Will be walked through from top to bottom. It can only contain 1 terminating
   // Apollo link, see: https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link
   defaultClient.setLink(from([
     authMiddleware,
     errorLink,
-    httpLink,
+    defaultClient.link,
   ]))
 
   // For using useQuery in `@vue/apollo-composable`
