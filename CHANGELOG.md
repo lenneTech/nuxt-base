@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/lenneTech/nuxt-base/compare/v1.8.1...v1.9.0) (2023-04-04)
+
+
+### Features
+
+* Try changes ([3dfc9c6](https://github.com/lenneTech/nuxt-base/commit/3dfc9c6d5eaf21411e71de195cc2779294f354c2))
+
+
+### Bug Fixes
+
+* Fix http link ([d6ad947](https://github.com/lenneTech/nuxt-base/commit/d6ad9475ec38385680e8c120de5374b715ba3ac2))
+* Fix playground query ([0ac6687](https://github.com/lenneTech/nuxt-base/commit/0ac6687f1584420e138e461d8832e3705d6fe1e3))
+* module installation ([6277f94](https://github.com/lenneTech/nuxt-base/commit/6277f94ed1733600033395aa6096251eaab8c539))
+* Remove debug logs ([16941a1](https://github.com/lenneTech/nuxt-base/commit/16941a13234ee400660d7e04f11e337dccee1999))
+
 ### [1.8.1](https://github.com/lenneTech/nuxt-base/compare/v1.8.0...v1.8.1) (2023-04-03)
 
 
