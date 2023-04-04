@@ -15,11 +15,6 @@ export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
-
-  // TODO: delete when solved
-  console.log('useGraphQL:method', method);
-  console.log('useGraphQL:options', options);
-
   const runtimeConfig = useRuntimeConfig();
 
   // Check parameters
