@@ -58,27 +58,14 @@ export default defineNuxtModule<ModuleOptions>({
     },
   }),
   async setup(options, nuxt) {
+    const resolver = createResolver(import.meta.url)
+
     logger.info("[@lenne.tech/nuxt-base] Init @lenne.tech/nuxt-base");
 
-    await installModule("@nuxtjs/apollo", {
-      autoImports: true,
-      clients: {
-        default: {
-          httpEndpoint: options.host || null,
-          ...options.apollo,
-        },
-      },
-    });
-    logger.success("[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo");
-    
-    await installModule("@pinia/nuxt", {
-      autoImports: ["defineStore"],
-    });
-    logger.success("[@lenne.tech/nuxt-base] Installed @pinia/nuxt");
-    
-    const resolver = createResolver(import.meta.url);
+
+
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
-  
+
     nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;
     addPlugin(resolver.resolve('runtime/plugins/apollo'))
 
@@ -93,7 +80,7 @@ export default defineNuxtModule<ModuleOptions>({
 
       try {
         await getSchema(options.host);
-      
+
         // Generate graphql types
         const generatedTypes = await generateGraphQLTypes(options.host);
         addTemplate({
@@ -186,6 +173,22 @@ export default defineNuxtModule<ModuleOptions>({
         );
       });
     }
+
+    await installModule(await resolver.resolvePath("@nuxtjs/apollo"), {
+      autoImports: true,
+      clients: {
+        default: {
+          httpEndpoint: options.host || null,
+          ...options.apollo,
+        },
+      },
+    });
+    logger.success("[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo");
+
+    await installModule(await resolver.resolvePath("@pinia/nuxt"), {
+      autoImports: ["defineStore"],
+    });
+    logger.success("[@lenne.tech/nuxt-base] Installed @pinia/nuxt");
 
     logger.info("[@lenne.tech/nuxt-base] Initialize done!");
   },

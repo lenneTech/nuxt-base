@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
   nuxtBase: {
-    host: 'http://localhost:3100/api'
+    host: 'https://countries.trevorblades.com' // 'http://localhost:3100/api'
   }
 })
