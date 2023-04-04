@@ -1,8 +1,9 @@
-import { defineNuxtPlugin, useAuthStore } from '#app'
+import { defineNuxtPlugin } from '#app'
 import type { ApolloClient } from '@apollo/client/core'
 import { ApolloLink, from } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { provideApolloClient } from '@vue/apollo-composable'
+import { useAuthStore } from '#imports'
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
