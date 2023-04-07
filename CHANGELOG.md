@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.5](https://github.com/lenneTech/nuxt-base/compare/v1.10.4...v1.10.5) (2023-04-07)
+
+
+### Bug Fixes
+
+* Fix auth store current user reset ([0ccce03](https://github.com/lenneTech/nuxt-base/commit/0ccce03c7159d7e9bc24f79cadbb58920e794470))
+
 ### [1.10.4](https://github.com/lenneTech/nuxt-base/compare/v1.10.3...v1.10.4) (2023-04-07)
 
 
