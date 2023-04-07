@@ -33,7 +33,7 @@ export async function generateComposables(host: string): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<UseQueryReturn<{${query}: ${types.returnType}}, any>> => useGraphQL<UseQueryReturn<{${query}: ${types.returnType}}, any>>('${query}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[], log?: boolean): Promise<UseQueryReturn<{${query}: ${types.returnType}}, any>> => useGraphQL<UseQueryReturn<{${query}: ${types.returnType}}, any>>('${query}', {${types.argType ? 'arguments: args,' : ''} fields, log})`
       );
     }
   }
@@ -48,7 +48,7 @@ export async function generateComposables(host: string): Promise<string> {
           mutation
         )}Mutation = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<UseMutationReturn<{${mutation}: ${types.returnType}}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${types.returnType}}, any>>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${types.returnType}}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${types.returnType}}, any>>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields, log})`
       );
     }
   }
@@ -63,7 +63,7 @@ export async function generateComposables(host: string): Promise<string> {
           subscription
         )}Subscription = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[]): Promise<UseSubscriptionReturn<{${subscription}: ${types.returnType}}, any>> => useGraphQL<UseSubscriptionReturn<{${subscription}: ${types.returnType}}, any>>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields})`
+        } fields: any[], log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${types.returnType}}, any>> => useGraphQL<UseSubscriptionReturn<{${subscription}: ${types.returnType}}, any>>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields, log})`
       );
     }
   }
