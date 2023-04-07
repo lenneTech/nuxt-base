@@ -441,3 +441,21 @@ export async function hash(string) {
     .join('');
   return hashHex;
 }
+
+export async function graphQLTypeToStringArray(graphQLType: GraphQLType, current = '', result = [], cacheNode = []) {
+    if (!graphQLType) {
+      return result;
+    }
+    if (current?.includes('.')) {
+      cacheNode.push(current.split('.')[1]);
+    } else if (current) {
+      cacheNode.push(current);
+    }
+    for (const key of Object.keys(graphQLType.fields)) {
+      if (current === key || cacheNode.includes(key)) {
+        continue;
+      }
+      graphQLTypeToStringArray(graphQLType.fields[key], current ? current + '.' + key : key, result, cacheNode);
+    }
+    return result;
+}

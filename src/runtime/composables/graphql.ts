@@ -8,6 +8,7 @@ import {
   useMutation,
   useQuery,
   useSubscription,
+  graphQLTypeToStringArray
 } from "#imports";
 import gql from "graphql-tag";
 
@@ -125,7 +126,7 @@ export async function useGraphQL<T = any>(
     const filtered = argsData.schemaArgs.filter(
       (field) => !argsData.usedArgs.includes(field)
     );
-    const unused = this.graphQLTypeToStringArray(allowedArgs)
+    const unused = graphQLTypeToStringArray(allowedArgs)
       .sort()
       .filter((field) => !argsData.usedArgs.includes(field));
     console.log({ argsData, filtered, unused });
