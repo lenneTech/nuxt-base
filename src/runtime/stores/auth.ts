@@ -1,9 +1,15 @@
 import { defineStore, ref, useCookie, useGraphQL } from "#imports";
 
 export const useAuthStore = defineStore("auth", () => {
-    const token = ref<string>(null);
-    const refreshToken = ref<string>(null);
-    const currentUser = ref<any>(null);
+    // Cookies
+    const tokenCookie = useCookie('token');
+    const refreshTokenCookie = useCookie('refreshToken');
+    const currentUserCookie = useCookie('currentUser');
+
+    // Refs
+    const token = ref<string>(tokenCookie?.value || null);
+    const refreshToken = ref<string>(refreshTokenCookie?.value || null);
+    const currentUser = ref<any>(currentUserCookie?.value || null);
 
     async function requestNewToken(): Promise<{ token: string; refreshToken: string }> {
         const { result } = await useGraphQL('refreshToken', {
@@ -18,25 +24,22 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     function setTokens(newToken: string, newRefreshToken: string) {
-        const tokenCookie = useCookie('token');
         tokenCookie.value = newToken;
         token.value = newToken;
 
-        const refreshTokenCookie = useCookie('refreshToken');
         refreshTokenCookie.value = newRefreshToken;
         refreshToken.value = newRefreshToken;
     }
 
     function setCurrentUser(user: any) {
+        currentUserCookie.value = user;
         currentUser.value = user;
     }
 
-    function clearSession() {
-        const tokenCookie = useCookie('token');
+    function clearSession() {        
         tokenCookie.value = null;
         token.value = null;
 
-        const refreshTokenCookie = useCookie('refreshToken');
         refreshTokenCookie.value = null;
         refreshToken.value = null;
 
