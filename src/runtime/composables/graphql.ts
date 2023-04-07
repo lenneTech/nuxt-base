@@ -198,10 +198,10 @@ export async function useGraphQL<T = any>(
   switch (config.type) {
     case GraphQLRequestType.MUTATION: {
       if (config.log) {
-        console.log(request.mutate, request.variables, config.type);
+        console.log(request.mutation, request.variables, config.type);
       }
 
-      data = useMutation<T>(request.mutate, request.variables);
+      data = useMutation<T>(request.mutation, request.variables);
       break;
     }
     case GraphQLRequestType.SUBSCRIPTION: {
