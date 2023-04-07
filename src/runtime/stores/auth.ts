@@ -43,6 +43,7 @@ export const useAuthStore = defineStore("auth", () => {
         refreshTokenCookie.value = null;
         refreshToken.value = null;
 
+        currentUserCookie.value = null;
         currentUser.value = null;
     }
   
