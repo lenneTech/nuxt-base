@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/lenneTech/nuxt-base/compare/v1.9.3...v1.10.0) (2023-04-07)
+
+
+### Features
+
+* Add log option to generated composables ([d7a7862](https://github.com/lenneTech/nuxt-base/commit/d7a78629ea4aff75a2d2e447b5b42e8a61861d6f))
+
 ### [1.9.3](https://github.com/lenneTech/nuxt-base/compare/v1.9.2...v1.9.3) (2023-04-04)
 
 
