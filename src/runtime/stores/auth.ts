@@ -15,7 +15,8 @@ export const useAuthStore = defineStore("auth", () => {
         console.log('requestNewToken');
         
         const { result } = await useGraphQL('refreshToken', {
-            fields: ['token', 'refreshToken']
+            fields: ['token', 'refreshToken'],
+            log: true
         })
 
         if (result.refreshToken) {
