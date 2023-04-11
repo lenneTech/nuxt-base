@@ -1,6 +1,6 @@
 import { defineNuxtPlugin } from '#app'
 import type { ApolloClient } from '@apollo/client/core'
-import { ApolloLink, from } from '@apollo/client/core'
+import { ApolloLink, from, fromPromise } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { provideApolloClient } from '@vue/apollo-composable'
 import { useAuthStore } from '#imports'
@@ -34,9 +34,9 @@ export default defineNuxtPlugin((nuxtApp) => {
             }
 
 
-            return store.requestNewToken()
+            return fromPromise(store.requestNewToken())
               .filter((value) => Boolean(value))
-              .flatMap((response) => {
+              .flatMap((response: any) => {
                 const oldHeaders = err.operation.getContext().headers;
                 // modify the operation context with a new token
                 err.operation.setContext({
