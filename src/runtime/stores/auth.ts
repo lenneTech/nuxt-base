@@ -12,6 +12,8 @@ export const useAuthStore = defineStore("auth", () => {
     const currentUser = ref<any>(currentUserCookie?.value || null);
 
     async function requestNewToken(): Promise<{ token: string; refreshToken: string }> {
+        console.log('requestNewToken');
+        
         const { result } = await useGraphQL('refreshToken', {
             fields: ['token', 'refreshToken']
         })
@@ -19,6 +21,8 @@ export const useAuthStore = defineStore("auth", () => {
         if (result.refreshToken) {
             setTokens(result.refreshToken.token, result.refreshToken.refreshToken);
         }
+
+        console.log('tokens', result.refreshToken);
 
         return { token: result.refreshToken.token, refreshToken: result.refreshToken.refreshToken }
     }
