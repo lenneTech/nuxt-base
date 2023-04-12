@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.9](https://github.com/lenneTech/nuxt-base/compare/v1.10.8...v1.10.9) (2023-04-12)
+
+
+### Bug Fixes
+
+* fix refresh token mutation ([fa4a910](https://github.com/lenneTech/nuxt-base/commit/fa4a9102f11f3de9b866a5928a3572a5234ead75))
+
 ### [1.10.8](https://github.com/lenneTech/nuxt-base/compare/v1.10.7...v1.10.8) (2023-04-11)
 
 ### [1.10.7](https://github.com/lenneTech/nuxt-base/compare/v1.10.6...v1.10.7) (2023-04-11)
