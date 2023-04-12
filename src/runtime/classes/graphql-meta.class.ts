@@ -44,7 +44,7 @@ export class GraphQLMeta {
     let returnType: string = null;
     let argType: string = null;
     const customTypes: string[] = [];
-    const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method]['type'], {}, true);
+    const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method], {}, true);
     const argsDeepType = this.getArgs(method);
     
 
