@@ -37,7 +37,6 @@ export default defineNuxtPlugin((nuxtApp) => {
             return fromPromise(store.requestNewToken())
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
-                console.log('flatMap', response);
                 const oldHeaders = err.operation.getContext().headers;
                 // modify the operation context with a new token
                 err.operation.setContext({

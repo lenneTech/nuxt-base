@@ -205,10 +205,18 @@ export async function useGraphQL<T = any>(
       break;
     }
     case GraphQLRequestType.SUBSCRIPTION: {
+      if (config.log) {
+        console.log(request.query, request.variables, config.type);
+      }
+
       data = useSubscription<T>(request.query, request.variables);
       break;
     }
     case GraphQLRequestType.QUERY: {
+      if (config.log) {
+        console.log(request.query, request.variables, config.type);
+      }
+
       data = useQuery<T>(request.query, request.variables);
       break;
     }

@@ -14,7 +14,6 @@ export const useAuthStore = defineStore("auth", () => {
     async function requestNewToken(): Promise<{ token: string; refreshToken: string }> {    
         const { mutate } = await useGraphQL('refreshToken', {
             fields: ['token', 'refreshToken'],
-            log: true
         })
 
         const result = await mutate();
@@ -22,8 +21,6 @@ export const useAuthStore = defineStore("auth", () => {
         if (result?.data?.refreshToken) {
             setTokens(result.data.refreshToken.token, result.data.refreshToken.refreshToken);
         }
-
-        console.log('tokens', result.data.refreshToken);
 
         return { token: result.data.refreshToken.token, refreshToken: result.data.refreshToken.refreshToken }
     }
