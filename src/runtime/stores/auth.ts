@@ -11,21 +11,21 @@ export const useAuthStore = defineStore("auth", () => {
     const refreshToken = ref<string>(refreshTokenCookie?.value || null);
     const currentUser = ref<any>(currentUserCookie?.value || null);
 
-    async function requestNewToken(): Promise<{ token: string; refreshToken: string }> {
-        console.log('requestNewToken');
-        
-        const { result } = await useGraphQL('refreshToken', {
+    async function requestNewToken(): Promise<{ token: string; refreshToken: string }> {    
+        const { mutate } = await useGraphQL('refreshToken', {
             fields: ['token', 'refreshToken'],
             log: true
         })
 
-        if (result.refreshToken) {
-            setTokens(result.refreshToken.token, result.refreshToken.refreshToken);
+        const result = await mutate();
+
+        if (result?.data?.refreshToken) {
+            setTokens(result.data.refreshToken.token, result.data.refreshToken.refreshToken);
         }
 
-        console.log('tokens', result.refreshToken);
+        console.log('tokens', result.data.refreshToken);
 
-        return { token: result.refreshToken.token, refreshToken: result.refreshToken.refreshToken }
+        return { token: result.data.refreshToken.token, refreshToken: result.data.refreshToken.refreshToken }
     }
 
     function setTokens(newToken: string, newRefreshToken: string) {
