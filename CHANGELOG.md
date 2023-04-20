@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.12](https://github.com/lenneTech/nuxt-base/compare/v1.10.11...v1.10.12) (2023-04-20)
+
 ### [1.10.11](https://github.com/lenneTech/nuxt-base/compare/v1.10.10...v1.10.11) (2023-04-12)
 
 ### [1.10.10](https://github.com/lenneTech/nuxt-base/compare/v1.10.9...v1.10.10) (2023-04-12)
