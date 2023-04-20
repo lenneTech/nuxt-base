@@ -187,13 +187,9 @@ export async function prepareArguments(
 
       // Process array
       else if (Array.isArray(value)) {
-        let argumentsString: string = "";
+        let argumentsString: string = key + ': [';
         for (const val of value) {
-          argumentsString +=
-            key +
-            ": [" +
-            (
-              await prepareArguments(val, {
+            argumentsString += (await prepareArguments(val, {
                 allowed: allowed.fields[key],
                 levelKey: key,
                 level: level + 1,
@@ -201,10 +197,9 @@ export async function prepareArguments(
                 schemaArgs,
                 usedArgs,
                 variables,
-              })
-            ).argsString +
-            "]";
+              })).argsString;
         }
+        argumentsString += ']';
         result.push(argumentsString);
         continue;
       }
