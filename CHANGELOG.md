@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/lenneTech/nuxt-base/compare/v1.10.12...v1.11.0) (2023-06-12)
+
+
+### Features
+
+* update packages ([6a45bcb](https://github.com/lenneTech/nuxt-base/commit/6a45bcbfb4818d9480da6dc8238d84b3560cff35))
+
 ### [1.10.12](https://github.com/lenneTech/nuxt-base/compare/v1.10.11...v1.10.12) (2023-04-20)
 
 ### [1.10.11](https://github.com/lenneTech/nuxt-base/compare/v1.10.10...v1.10.11) (2023-04-12)
