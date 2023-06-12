@@ -42,7 +42,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: "@lenne.tech/nuxt-base",
     configKey: "nuxtBase",
     compatibility: {
-      nuxt: "3.3.2",
+      nuxt: "3.5.3",
     },
   },
   // Default configuration options of the Nuxt module
@@ -58,14 +58,14 @@ export default defineNuxtModule<ModuleOptions>({
     },
   }),
   async setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url)
+    const resolver = createResolver(import.meta.url);
 
     logger.info("[@lenne.tech/nuxt-base] Init @lenne.tech/nuxt-base");
 
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
 
     nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;
-    addPlugin(resolver.resolve('runtime/plugins/apollo'))
+    addPlugin(resolver.resolve("runtime/plugins/apollo"));
 
     if (options.autoImport) {
       addImportsDir(resolver.resolve("runtime/composables"));
@@ -115,16 +115,20 @@ export default defineNuxtModule<ModuleOptions>({
           "*"
         );
       } catch (e) {
-        logger.warn("[@lenne.tech/nuxt-base] Generated failed. Please check your host.");
+        logger.warn(
+          "[@lenne.tech/nuxt-base] Generated failed. Please check your host."
+        );
       }
     }
 
-    nuxt.hook('nitro:config', (nitro) => {
-      if (nitro.imports === false) { return }
+    nuxt.hook("nitro:config", (nitro) => {
+      if (nitro.imports === false) {
+        return;
+      }
 
-      nitro.externals = nitro.externals || {}
-      nitro.externals.inline = nitro.externals.inline || []
-      nitro.externals.inline.push(resolver.resolve('runtime'))
+      nitro.externals = nitro.externals || {};
+      nitro.externals.inline = nitro.externals.inline || [];
+      nitro.externals.inline.push(resolver.resolve("runtime"));
     });
 
     if (options.watch) {
@@ -164,7 +168,9 @@ export default defineNuxtModule<ModuleOptions>({
 
           await nuxt.callHook("builder:generateApp");
         } catch (e) {
-          logger.warn("[@lenne.tech/nuxt-base] Generated failed. Please check your host.");
+          logger.warn(
+            "[@lenne.tech/nuxt-base] Generated failed. Please check your host."
+          );
         }
         const time = Date.now() - start;
         logger.success(
@@ -191,6 +197,6 @@ export default defineNuxtModule<ModuleOptions>({
 
     logger.info("[@lenne.tech/nuxt-base] Initialize done!");
 
-    nuxt.hook('ready', (nitro) => {});
+    nuxt.hook("ready", (nitro) => {});
   },
 });
