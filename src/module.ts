@@ -100,6 +100,7 @@ export default defineNuxtModule<ModuleOptions>({
         // Generate imports
         nuxt.hook("imports:extend", async (imports) => {
           const methods = await getAllMethods(options.host);
+          console.log(methods);
           imports.push(...(methods || []));
         });
 
@@ -189,5 +190,7 @@ export default defineNuxtModule<ModuleOptions>({
     logger.success("[@lenne.tech/nuxt-base] Installed @pinia/nuxt");
 
     logger.info("[@lenne.tech/nuxt-base] Initialize done!");
+
+    nuxt.hook('ready', (nitro) => {});
   },
 });
