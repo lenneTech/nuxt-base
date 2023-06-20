@@ -7,7 +7,7 @@ import {
   prepareFields,
   useMutation,
   useQuery,
-  useSubscription
+  useSubscription,
 } from "#imports";
 import gql from "graphql-tag";
 
@@ -220,6 +220,10 @@ export async function useGraphQL<T = any>(
       data = useQuery<T>(request.query, request.variables);
       break;
     }
+  }
+
+  if (config.log) {
+    console.log("data", data);
   }
 
   return data;
