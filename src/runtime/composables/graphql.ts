@@ -5,8 +5,8 @@ import {
   getMeta,
   prepareArguments,
   prepareFields,
+  useAsyncQuery,
   useMutation,
-  useQuery,
   useSubscription,
 } from "#imports";
 import gql from "graphql-tag";
@@ -217,13 +217,10 @@ export async function useGraphQL<T = any>(
         console.log(request.query, request.variables, config.type);
       }
 
-      data = useQuery<T>(request.query, request.variables);
+      data = useAsyncQuery<T>(request.query, request.variables);
+
       break;
     }
-  }
-
-  if (config.log) {
-    console.log("data", data);
   }
 
   return data;
