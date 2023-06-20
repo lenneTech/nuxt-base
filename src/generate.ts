@@ -22,8 +22,10 @@ export async function generateComposables(host: string): Promise<string> {
   const methods = schemaMeta.getMethodNames();
   const template = [];
   let customTypes = [];
-  template.push('import { useGraphQL } from \'#imports\'\n')
-  template.push('import { UseMutationReturn, UseQueryReturn, UseSubscriptionReturn } from "@vue/apollo-composable"\n')
+  template.push("import { useGraphQL } from '#imports'\n");
+  template.push(
+    'import { UseMutationReturn, AsyncData, UseSubscriptionReturn } from "@vue/apollo-composable"\n'
+  );
 
   if (methods?.query) {
     for (const query of methods.query) {
@@ -33,7 +35,13 @@ export async function generateComposables(host: string): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[], log?: boolean): Promise<UseQueryReturn<{${query}: ${types.returnType}}, any>> => useGraphQL<UseQueryReturn<{${query}: ${types.returnType}}, any>>('${query}', {${types.argType ? 'arguments: args,' : ''} fields, log})`
+        } fields: any[], log?: boolean): Promise<AsyncData<{${query}: ${
+          types.returnType
+        }}, any>> => useGraphQL<AsyncData<{${query}: ${
+          types.returnType
+        }}, any>>('${query}', {${
+          types.argType ? "arguments: args," : ""
+        } fields, log})`
       );
     }
   }
@@ -44,11 +52,15 @@ export async function generateComposables(host: string): Promise<string> {
       customTypes.push(types.customTypes);
 
       template.push(
-        `  export const use${capitalizeFirstLetter(
-          mutation
-        )}Mutation = (${
+        `  export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${types.returnType}}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${types.returnType}}, any>>('${mutation}', {${types.argType ? 'arguments: args,' : ''} fields, log})`
+        } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
+          types.returnType
+        }}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${
+          types.returnType
+        }}, any>>('${mutation}', {${
+          types.argType ? "arguments: args," : ""
+        } fields, log})`
       );
     }
   }
@@ -63,7 +75,13 @@ export async function generateComposables(host: string): Promise<string> {
           subscription
         )}Subscription = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[], log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${types.returnType}}, any>> => useGraphQL<UseSubscriptionReturn<{${subscription}: ${types.returnType}}, any>>('${subscription}', {${types.argType ? 'arguments: args,' : ''} fields, log})`
+        } fields: any[], log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+          types.returnType
+        }}, any>> => useGraphQL<UseSubscriptionReturn<{${subscription}: ${
+          types.returnType
+        }}, any>>('${subscription}', {${
+          types.argType ? "arguments: args," : ""
+        } fields, log})`
       );
     }
   }
@@ -71,7 +89,7 @@ export async function generateComposables(host: string): Promise<string> {
   customTypes = [...new Set([].concat(...customTypes))];
 
   if (customTypes.length) {
-    template.unshift(`import {${customTypes.join(', ')}} from "#base/default"`)
+    template.unshift(`import {${customTypes.join(", ")}} from "#base/default"`);
   }
 
   return template.join("\n");
