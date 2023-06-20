@@ -1,4 +1,4 @@
-import { useRuntimeConfig } from "#app";
+import { useRuntimeConfig, useNuxtApp } from "#app";
 import {
   GraphQLRequestType,
   IGraphQLOptions,
@@ -15,7 +15,8 @@ export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
-  const runtimeConfig = useRuntimeConfig();
+  const nuxtApp = useNuxtApp();
+  const runtimeConfig = useRuntimeConfig(nuxtApp);
 
   // Check parameters
   if (!method) {
