@@ -24,7 +24,10 @@ export async function generateComposables(host: string): Promise<string> {
   let customTypes = [];
   template.push("import { useGraphQL } from '#imports'\n");
   template.push(
-    'import { UseMutationReturn, AsyncData, UseSubscriptionReturn } from "@vue/apollo-composable"\n'
+    "import type { AsyncData } from 'nuxt/dist/app/composables';'\n"
+  );
+  template.push(
+    'import { UseMutationReturn, UseQueryReturn, UseSubscriptionReturn } from "@vue/apollo-composable"\n'
   );
 
   if (methods?.query) {

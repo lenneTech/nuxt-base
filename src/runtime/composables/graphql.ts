@@ -5,7 +5,7 @@ import {
   getMeta,
   prepareArguments,
   prepareFields,
-  useAsyncQuery,
+  useLazyAsyncQuery,
   useMutation,
   useSubscription,
 } from "#imports";
@@ -217,7 +217,7 @@ export async function useGraphQL<T = any>(
         console.log(request.query, request.variables, config.type);
       }
 
-      data = useAsyncQuery<T>(request.query, request.variables);
+      data = useLazyAsyncQuery<T>(request.query, request.variables);
 
       break;
     }
