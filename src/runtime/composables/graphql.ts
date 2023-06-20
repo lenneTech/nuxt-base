@@ -1,12 +1,12 @@
-import { useRuntimeConfig, useNuxtApp } from "#app";
+import { useRuntimeConfig } from "#app";
 import {
   GraphQLRequestType,
   IGraphQLOptions,
   getMeta,
   prepareArguments,
   prepareFields,
-  useLazyAsyncQuery,
   useMutation,
+  useQuery,
   useSubscription,
 } from "#imports";
 import gql from "graphql-tag";
@@ -15,8 +15,7 @@ export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
-  const nuxtApp = useNuxtApp();
-  const runtimeConfig = useRuntimeConfig(nuxtApp);
+  const runtimeConfig = useRuntimeConfig();
 
   // Check parameters
   if (!method) {
@@ -218,8 +217,12 @@ export async function useGraphQL<T = any>(
         console.log(request.query, request.variables, config.type);
       }
 
-      data = useLazyAsyncQuery<T>(request.query, request.variables);
-
+      data = useQuery<T>(request.query, request.variables);
+      // data = useLazyAsyncData(() => {
+      //   return new Promise((resolve) => {
+      //     resolve("test");
+      //   });
+      // });
       break;
     }
   }
