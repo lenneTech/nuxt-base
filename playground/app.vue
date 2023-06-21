@@ -4,15 +4,15 @@
 
     <h3>useCountriesQuery</h3>
     <!-- <pre> {{ { loading } }}</pre> -->
-    <pre> {{ { result } }}</pre>
+    <pre> {{ { data } }}</pre>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useNewsQuery } from "./.nuxt/imports";
 
-const { result } = await useNewsQuery({}, ["id", "title"]);
-console.log(result.value);
+const { data } = await useNewsQuery({}, ["id", "title", { publisher: ["id", "title"] }]);
+console.log(data.value);
 </script>
 
 <style>

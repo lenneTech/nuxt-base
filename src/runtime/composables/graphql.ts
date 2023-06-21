@@ -10,6 +10,8 @@ import {
   useSubscription,
 } from "#imports";
 import gql from "graphql-tag";
+import { query, mutation, subscription } from 'gql-query-builder'
+import { useAsyncData } from "nuxt/app";
 
 export async function useGraphQL<T = any>(
   method: string,
@@ -30,7 +32,16 @@ export async function useGraphQL<T = any>(
     model: null,
     ...options,
   };
+  const fields = config.fields as unknown as string[]
 
+  const queryBody = query({
+    operation: method,
+    fields,
+    variables: config.arguments
+  })
+  const documentNode = gql(queryBody.query)
+
+  /*
   // Convert class to Object for arguments
   if (typeof config.arguments === "function") {
     config.arguments = new config.arguments();
@@ -47,8 +58,8 @@ export async function useGraphQL<T = any>(
   }
 
   // Get meta
-  const meta = await getMeta(runtimeConfig.public.graphqlHost);
-
+  const meta =  await getMeta(runtimeConfig.public.graphqlHost);
+console.log(JSON.stringify(meta));
   // Set GraphQLRequestType automatically
   if (!config.type) {
     const types = meta.getRequestTypesViaMethod(method);
@@ -141,6 +152,7 @@ export async function useGraphQL<T = any>(
   // Prepare request
   const request: any = {};
 
+
   // Prepare GraphQL
   const gQlFuncBody = fields
     ? " {\n" + method + args + fields + "\n}"
@@ -170,62 +182,67 @@ export async function useGraphQL<T = any>(
         useMultipart: true,
       };
     }
-  }
-  const documentNode = gql(gQlBody);
+  } 
+  const documentNode = gql(gQlBody); */
 
-  // Log
-  if (config.log) {
-    console.log({ documentNode });
-  }
-
-  // Set document node
-  request[config.type] = documentNode;
-
-  // Log
-  if (config.log) {
-    console.log({ request });
-  }
-
-  if (config.type === GraphQLRequestType.MUTATION) {
+  /*   // Log
+    if (config.log) {
+      console.log({ documentNode });
+    }
+  
+    // Set document node
     request[config.type] = documentNode;
-  } else if (config.type === GraphQLRequestType.SUBSCRIPTION) {
-    request.query = documentNode;
-  } else {
-    request[config.type] = documentNode;
-  }
-
-  let data;
-  switch (config.type) {
-    case GraphQLRequestType.MUTATION: {
-      if (config.log) {
-        console.log(request.mutation, request.variables, config.type);
-      }
-
-      data = useMutation<T>(request.mutation, request.variables);
-      break;
+  
+    // Log
+    if (config.log) {
+      console.log({ request });
     }
-    case GraphQLRequestType.SUBSCRIPTION: {
-      if (config.log) {
-        console.log(request.query, request.variables, config.type);
+  
+    if (config.type === GraphQLRequestType.MUTATION) {
+      request[config.type] = documentNode;
+    } else if (config.type === GraphQLRequestType.SUBSCRIPTION) {
+      request.query = documentNode;
+    } else {
+      request[config.type] = documentNode;
+    } */
+  /* 
+    let data;
+    switch (config.type) {
+      case GraphQLRequestType.MUTATION: {
+        if (config.log) {
+          console.log(request.mutation, request.variables, config.type);
+        }
+  
+        data = useMutation<T>(request.mutation, request.variables);
+        break;
       }
-
-      data = useSubscription<T>(request.query, request.variables);
-      break;
-    }
-    case GraphQLRequestType.QUERY: {
-      if (config.log) {
-        console.log(request.query, request.variables, config.type);
+      case GraphQLRequestType.SUBSCRIPTION: {
+        if (config.log) {
+          console.log(request.query, request.variables, config.type);
+        }
+  
+        data = useSubscription<T>(request.query, request.variables);
+        break;
       }
+      case GraphQLRequestType.QUERY: {
+        if (config.log) {
+          console.log(request.query, request.variables, config.type);
+        }
+  
+        data = useQuery<T>(request.query, request.variables);
+        // data = useLazyAsyncData(() => {
+        //   return new Promise((resolve) => {
+        //     resolve("test");
+        //   });
+        // });
+        break;
+      }
+    } */
+  // return useQuery<T>(documentNode);
 
-      data = useQuery<T>(request.query, request.variables);
-      // data = useLazyAsyncData(() => {
-      //   return new Promise((resolve) => {
-      //     resolve("test");
-      //   });
-      // });
-      break;
-    }
-  }
-
-  return data;
+  // @ts-expect-error - so many any types
+  return useAsyncData<T>(() => {
+    const { result } = useQuery<T>(documentNode, {});
+    return result;
+   });
 }
