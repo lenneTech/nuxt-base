@@ -1,7 +1,7 @@
 import { generate } from "@graphql-codegen/cli";
 import { Types } from "@graphql-codegen/plugin-helpers";
 import type { Import } from "unimport";
-import { getMetaServer } from "./runtime/functions/graphql-meta-server";
+import { GraphQLMeta } from "./runtime/classes/graphql-meta.class";
 
 export default async function generateGraphQLTypes(schema: string) {
   const config: Types.Config = {
@@ -17,9 +17,8 @@ export default async function generateGraphQLTypes(schema: string) {
   return await generate(config, false);
 }
 
-export async function generateComposables(schema: string): Promise<string> {
-  const schemaMeta = await getMetaServer(schema);
-  const methods = schemaMeta.getMethodNames();
+export async function generateComposables(meta: GraphQLMeta): Promise<string> {
+  const methods = meta.getMethodNames();
   const template = [];
   let customTypes = [];
   template.push("import { useGraphQL } from '#imports'\n");
@@ -28,11 +27,9 @@ export async function generateComposables(schema: string): Promise<string> {
     'import { UseMutationReturn, UseQueryReturn, UseSubscriptionReturn } from "@vue/apollo-composable"\n'
   );
 
-  console.log(methods);
-
   if (methods?.query) {
     for (const query of methods.query) {
-      const types = schemaMeta.getTypesForMethod(query, "Query");
+      const types = meta.getTypesForMethod(query, "Query");
       customTypes.push(types.customTypes);
 
       template.push(
@@ -51,7 +48,7 @@ export async function generateComposables(schema: string): Promise<string> {
 
   if (methods?.mutation) {
     for (const mutation of methods.mutation) {
-      const types = schemaMeta.getTypesForMethod(mutation, "Mutation");
+      const types = meta.getTypesForMethod(mutation, "Mutation");
       customTypes.push(types.customTypes);
 
       template.push(
@@ -70,7 +67,7 @@ export async function generateComposables(schema: string): Promise<string> {
 
   if (methods?.subscription) {
     for (const subscription of methods.subscription) {
-      const types = schemaMeta.getTypesForMethod(subscription, "Subscription");
+      const types = meta.getTypesForMethod(subscription, "Subscription");
       customTypes.push(types.customTypes);
 
       template.push(
@@ -98,8 +95,7 @@ export async function generateComposables(schema: string): Promise<string> {
   return template.join("\n");
 }
 
-export async function getAllMethods(schema: string) {
-  const meta = await getMetaServer(schema);
+export async function getAllMethods(meta: GraphQLMeta) {
   const methods = meta.getMethodNames();
   return [
     ...methods.query.map(

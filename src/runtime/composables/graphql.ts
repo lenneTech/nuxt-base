@@ -1,12 +1,11 @@
-import { useRuntimeConfig, useNuxtApp } from "#app";
 import {
   GraphQLRequestType,
   IGraphQLOptions,
-  getMeta,
   prepareArguments,
   prepareFields,
   useLazyAsyncQuery,
   useMutation,
+  useNuxtApp,
   useSubscription,
 } from "#imports";
 import gql from "graphql-tag";
@@ -15,8 +14,7 @@ export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
-  const runtimeConfig = useRuntimeConfig();
-
+  const nuxtApp = useNuxtApp();
   // Check parameters
   if (!method) {
     return;
@@ -45,9 +43,10 @@ export async function useGraphQL<T = any>(
   if (config.log) {
     console.log({ config });
   }
-
+  console.log("check");
   // Get meta
-  const meta = await getMeta(runtimeConfig.public.graphqlHost);
+  const meta = nuxtApp.gqlMeta.value;
+  console.log(meta);
 
   // Set GraphQLRequestType automatically
   if (!config.type) {

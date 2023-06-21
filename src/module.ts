@@ -11,7 +11,7 @@ import generateGraphQLTypes, {
   generateComposables,
   getAllMethods,
 } from "./generate";
-import { getSchemaServer } from "./runtime/functions/graphql-meta-server";
+import { loadMeta } from "./runtime/functions/graphql-meta";
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -66,8 +66,11 @@ export default defineNuxtModule<ModuleOptions>({
 
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
 
-    nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;
+    nuxt.options.runtimeConfig.public["host"] = options.host;
+    nuxt.options.runtimeConfig.public["schema"] = options.schema ?? null;
+
     addPlugin(resolver.resolve("runtime/plugins/apollo"));
+    addPlugin(resolver.resolve("runtime/plugins/graphql"));
 
     if (options.autoImport) {
       addImportsDir(resolver.resolve("runtime/composables"));
@@ -79,8 +82,7 @@ export default defineNuxtModule<ModuleOptions>({
       logger.success("[@lenne.tech/nuxt-base] Added imports");
 
       try {
-        await getSchemaServer(options.host, true);
-
+        const meta = await loadMeta({public: options});
         // Generate graphql types
         const generatedTypes = await generateGraphQLTypes(
           options.schema ?? options.host
@@ -93,9 +95,7 @@ export default defineNuxtModule<ModuleOptions>({
         logger.success("[@lenne.tech/nuxt-base] Generated base/default.ts");
 
         // Generate composable types
-        const composables = await generateComposables(
-          options.schema ?? options.host
-        );
+        const composables = await generateComposables(meta);
         addTemplate({
           write: true,
           filename: `base/index.ts`,
@@ -105,8 +105,7 @@ export default defineNuxtModule<ModuleOptions>({
 
         // Generate imports
         nuxt.hook("imports:extend", async (imports) => {
-          const methods = await getAllMethods(options.schema ?? options.host);
-          console.log(methods);
+          const methods = await getAllMethods(meta);
           imports.push(...(methods || []));
         });
 
@@ -121,6 +120,7 @@ export default defineNuxtModule<ModuleOptions>({
           "*"
         );
       } catch (e) {
+        console.error(e);
         logger.warn(
           "[@lenne.tech/nuxt-base] Generated failed. Please check your host."
         );
@@ -141,7 +141,7 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.hook("builder:watch", async (event, path) => {
         const start = Date.now();
         try {
-          await getSchemaServer(options.schema ?? options.host, true);
+          const meta = await loadMeta({ public: options });
 
           // Generate graphql types
           const generatedTypes = await generateGraphQLTypes(
@@ -155,9 +155,7 @@ export default defineNuxtModule<ModuleOptions>({
           logger.success("[@lenne.tech/nuxt-base] Generated base/default.ts");
 
           // Generate composable types
-          const composables = await generateComposables(
-            options.schema ?? options.host
-          );
+          const composables = await generateComposables(meta);
           addTemplate({
             write: true,
             filename: `base/index.ts`,

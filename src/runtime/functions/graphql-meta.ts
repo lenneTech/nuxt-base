@@ -1,47 +1,33 @@
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { loadSchema } from "@graphql-tools/load";
 import { buildClientSchema, getIntrospectionQuery } from "graphql";
 import { ofetch } from "ofetch";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
 import { Helper } from "../classes/helper.class";
 import { GraphQLEnum } from "../enums/graphql-enum.class";
-import { useSchemaStore } from "../stores/schema";
 
-/**
- * Get schema for API
- * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
- */
-export async function getSchema(uri: string): Promise<any> {
-  const store = useSchemaStore();
+export async function loadMeta(
+  config: Partial<{ public: { host: string; schema?: string } }>
+) {
+  let schema;
 
-  // Load schema from cache
-  if (store.schema) {
-    return JSON.parse(store.schema);
+  if (!config.public.schema) {
+    const { data: result } = await ofetch(config.public.host, {
+      method: "POST",
+      body: JSON.stringify({
+        query: getIntrospectionQuery({ descriptions: false }),
+        variables: {},
+      }),
+    });
+
+    schema = buildClientSchema(result);
+  } else {
+    schema = await loadSchema(config.public.schema, {
+      loaders: [new GraphQLFileLoader()],
+    });
   }
 
-  const { data } = await ofetch(uri, {
-    method: "POST",
-    body: JSON.stringify({
-      query: getIntrospectionQuery({ descriptions: false }),
-      variables: {},
-    }),
-  });
-
-  // cache schema
-  store.setSchema(data);
-
-  return data;
-}
-
-/**
- * Get meta for API
- * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
- */
-export async function getMeta(uri: string): Promise<GraphQLMeta> {
-  const result = await getSchema(uri);
-  // TODO: Cache for only client
-  const schema = buildClientSchema(result);
-
-  // Return result
   return new GraphQLMeta(schema);
 }
 
