@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+
 // import { useCountriesQuery } from "./.nuxt/imports";
 
 // const { result, loading } = await useCountriesQuery({}, ['name', 'capital', 'code']);

@@ -15,8 +15,7 @@ export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
-  const nuxtApp = useNuxtApp();
-  const runtimeConfig = useRuntimeConfig(nuxtApp);
+  const runtimeConfig = useRuntimeConfig();
 
   // Check parameters
   if (!method) {

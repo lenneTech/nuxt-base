@@ -1,11 +1,11 @@
 import { generate } from "@graphql-codegen/cli";
 import { Types } from "@graphql-codegen/plugin-helpers";
 import type { Import } from "unimport";
-import { getMeta } from "./runtime/functions/graphql-meta";
+import { getMetaServer } from "./runtime/functions/graphql-meta-server";
 
-export default async function generateGraphQLTypes(schemaUrl: string) {
+export default async function generateGraphQLTypes(schema: string) {
   const config: Types.Config = {
-    schema: schemaUrl,
+    schema,
     ignoreNoDocuments: true,
     generates: {
       [process.cwd() + "/src/types/schema.d.ts"]: {
@@ -17,8 +17,8 @@ export default async function generateGraphQLTypes(schemaUrl: string) {
   return await generate(config, false);
 }
 
-export async function generateComposables(host: string): Promise<string> {
-  const schemaMeta = await getMeta(host);
+export async function generateComposables(schema: string): Promise<string> {
+  const schemaMeta = await getMetaServer(schema);
   const methods = schemaMeta.getMethodNames();
   const template = [];
   let customTypes = [];
@@ -27,6 +27,8 @@ export async function generateComposables(host: string): Promise<string> {
   template.push(
     'import { UseMutationReturn, UseQueryReturn, UseSubscriptionReturn } from "@vue/apollo-composable"\n'
   );
+
+  console.log(methods);
 
   if (methods?.query) {
     for (const query of methods.query) {
@@ -96,8 +98,8 @@ export async function generateComposables(host: string): Promise<string> {
   return template.join("\n");
 }
 
-export async function getAllMethods(host: string) {
-  const meta = await getMeta(host);
+export async function getAllMethods(schema: string) {
+  const meta = await getMetaServer(schema);
   const methods = meta.getMethodNames();
   return [
     ...methods.query.map(

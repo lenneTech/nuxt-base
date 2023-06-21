@@ -4,12 +4,20 @@ import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
 import { Helper } from "../classes/helper.class";
 import { GraphQLEnum } from "../enums/graphql-enum.class";
+import { useSchemaStore } from "../stores/schema";
 
 /**
  * Get schema for API
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
  */
 export async function getSchema(uri: string): Promise<any> {
+  const store = useSchemaStore();
+
+  // Load schema from cache
+  if (store.schema) {
+    return JSON.parse(store.schema);
+  }
+
   const { data } = await ofetch(uri, {
     method: "POST",
     body: JSON.stringify({
@@ -17,6 +25,9 @@ export async function getSchema(uri: string): Promise<any> {
       variables: {},
     }),
   });
+
+  // cache schema
+  store.setSchema(data);
 
   return data;
 }
@@ -187,19 +198,21 @@ export async function prepareArguments(
 
       // Process array
       else if (Array.isArray(value)) {
-        let argumentsString: string = key + ': [';
+        let argumentsString: string = key + ": [";
         for (const val of value) {
-            argumentsString += (await prepareArguments(val, {
-                allowed: allowed.fields[key],
-                levelKey: key,
-                level: level + 1,
-                parent: currentKey + ".",
-                schemaArgs,
-                usedArgs,
-                variables,
-              })).argsString;
+          argumentsString += (
+            await prepareArguments(val, {
+              allowed: allowed.fields[key],
+              levelKey: key,
+              level: level + 1,
+              parent: currentKey + ".",
+              schemaArgs,
+              usedArgs,
+              variables,
+            })
+          ).argsString;
         }
-        argumentsString += ']';
+        argumentsString += "]";
         result.push(argumentsString);
         continue;
       }
@@ -429,28 +442,38 @@ export async function prepareFields(
 
 export async function hash(string) {
   const utf8 = new TextEncoder().encode(string);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", utf8);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray
-    .map((bytes) => bytes.toString(16).padStart(2, '0'))
-    .join('');
+    .map((bytes) => bytes.toString(16).padStart(2, "0"))
+    .join("");
   return hashHex;
 }
 
-export async function graphQLTypeToStringArray(graphQLType: GraphQLType, current = '', result = [], cacheNode = []) {
-    if (!graphQLType) {
-      return result;
-    }
-    if (current?.includes('.')) {
-      cacheNode.push(current.split('.')[1]);
-    } else if (current) {
-      cacheNode.push(current);
-    }
-    for (const key of Object.keys(graphQLType.fields)) {
-      if (current === key || cacheNode.includes(key)) {
-        continue;
-      }
-      graphQLTypeToStringArray(graphQLType.fields[key], current ? current + '.' + key : key, result, cacheNode);
-    }
+export async function graphQLTypeToStringArray(
+  graphQLType: GraphQLType,
+  current = "",
+  result = [],
+  cacheNode = []
+) {
+  if (!graphQLType) {
     return result;
+  }
+  if (current?.includes(".")) {
+    cacheNode.push(current.split(".")[1]);
+  } else if (current) {
+    cacheNode.push(current);
+  }
+  for (const key of Object.keys(graphQLType.fields)) {
+    if (current === key || cacheNode.includes(key)) {
+      continue;
+    }
+    graphQLTypeToStringArray(
+      graphQLType.fields[key],
+      current ? current + "." + key : key,
+      result,
+      cacheNode
+    );
+  }
+  return result;
 }
