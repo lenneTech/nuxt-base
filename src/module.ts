@@ -65,6 +65,7 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.build.transpile.push(resolver.resolve("runtime"));
 
     nuxt.options.runtimeConfig.public["graphqlHost"] = options.host;
+    addPlugin(resolver.resolve("runtime/plugins/graphql"));
     addPlugin(resolver.resolve("runtime/plugins/apollo"));
 
     if (options.autoImport) {

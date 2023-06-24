@@ -1,4 +1,4 @@
-import { useRuntimeConfig } from "#app";
+
 import {
   GraphQLRequestType,
   IGraphQLOptions,
@@ -11,14 +11,14 @@ import {
 } from "#imports";
 import gql from "graphql-tag";
 import { query, mutation, subscription } from 'gql-query-builder'
-import { useAsyncData } from "nuxt/app";
+import { useAsyncData, useNuxtApp } from "nuxt/app";
+import { GraphQLMeta } from "../classes/graphql-meta.class";
 
 export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
 ): Promise<T> {
-  const runtimeConfig = useRuntimeConfig();
-
+  const { $graphQl } = useNuxtApp()
   // Check parameters
   if (!method) {
     return;
@@ -41,6 +41,9 @@ export async function useGraphQL<T = any>(
   })
   const documentNode = gql(queryBody.query)
 
+  // @ts-expect-error - plugin not well typed
+  const meta = $graphQl() as GraphQLMeta
+  console.log(meta)
   /*
   // Convert class to Object for arguments
   if (typeof config.arguments === "function") {
@@ -58,8 +61,7 @@ export async function useGraphQL<T = any>(
   }
 
   // Get meta
-  const meta =  await getMeta(runtimeConfig.public.graphqlHost);
-console.log(JSON.stringify(meta));
+  
   // Set GraphQLRequestType automatically
   if (!config.type) {
     const types = meta.getRequestTypesViaMethod(method);
@@ -244,5 +246,5 @@ console.log(JSON.stringify(meta));
   return useAsyncData<T>(() => {
     const { result } = useQuery<T>(documentNode, {});
     return result;
-   });
+  });
 }

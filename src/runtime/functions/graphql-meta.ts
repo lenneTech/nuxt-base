@@ -4,7 +4,7 @@ import { GraphQLMeta } from "../classes/graphql-meta.class";
 import { GraphQLType } from "../classes/graphql-type.class";
 import { Helper } from "../classes/helper.class";
 import { GraphQLEnum } from "../enums/graphql-enum.class";
-import schemaJson from './schema.json';
+
 /**
  * Get schema for API
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
@@ -26,11 +26,12 @@ export async function getSchema(uri: string): Promise<any> {
  * See https://www.apollographql.com/blog/three-ways-to-represent-your-graphql-schema-a41f4175100d
  */
 export async function getMeta(uri: string): Promise<GraphQLMeta> {
-  // const result = await getSchema(uri);
+  // meta
+  const result = await getSchema(uri);
   // TODO: Cache for only client
   // console.log(JSON.stringify(result))
-  const schema = buildClientSchema(schemaJson);
-console.log(JSON.stringify(schema));
+  const schema = buildClientSchema(result);
+
   // Return result
   return new GraphQLMeta(schema);
 }
