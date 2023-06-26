@@ -5,7 +5,7 @@ import {
   useQuery,
   useSubscription,
 } from "#imports";
-import * as gqlBuilder from "gql-query-builder";
+import { mutation, query, subscription } from "gql-query-builder";
 import gql from "graphql-tag";
 import { useAsyncData, useNuxtApp } from "nuxt/app";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
@@ -56,7 +56,7 @@ export async function useGraphQL<T = any>(
   let queryBody;
   switch (config.type) {
     case GraphQLRequestType.MUTATION: {
-      queryBody = gqlBuilder.mutation({
+      queryBody = mutation({
         operation: method,
         fields,
         variables: config.variables,
@@ -64,7 +64,7 @@ export async function useGraphQL<T = any>(
       break;
     }
     case GraphQLRequestType.SUBSCRIPTION: {
-      queryBody = gqlBuilder.subscription({
+      queryBody = subscription({
         operation: method,
         fields,
         variables: config.variables,
@@ -72,7 +72,7 @@ export async function useGraphQL<T = any>(
       break;
     }
     case GraphQLRequestType.QUERY: {
-      queryBody = gqlBuilder.query({
+      queryBody = query({
         operation: method,
         fields,
         variables: config.variables,

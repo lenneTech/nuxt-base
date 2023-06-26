@@ -3,8 +3,12 @@
   "compilerOptions": {
     "strict": false,
     "resolveJsonModule": true,
-		"noImplicitAny": false,
-    "baseUrl": "."
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "target": "es6"
   },
-  "exclude": ["node_modules", "cypress"]
+  "exclude": [
+    "node_modules",
+    "cypress"
+  ]
 }
