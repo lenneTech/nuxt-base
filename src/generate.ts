@@ -1,11 +1,11 @@
 import { generate } from "@graphql-codegen/cli";
 import { Types } from "@graphql-codegen/plugin-helpers";
-import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { loadSchema } from "@graphql-tools/load";
 import { buildClientSchema, getIntrospectionQuery } from "graphql";
 import { ofetch } from "ofetch";
 import type { Import } from "unimport";
 import { GraphQLMeta } from "./runtime/classes/graphql-meta.class";
+const { loadSchema } = require("@graphql-tools/load");
+const { GraphQLFileLoader } = require("@graphql-tools/graphql-file-loader");
 
 export async function loadMetaServer(
   config: Partial<{ public: { host: string; schema?: string } }>
