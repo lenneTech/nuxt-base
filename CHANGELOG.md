@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/lenneTech/nuxt-base/compare/v1.13.5...v1.14.0) (2023-06-26)
+
+
+### Features
+
+* cache meta via plugin ([c22ca1b](https://github.com/lenneTech/nuxt-base/commit/c22ca1b89ae90d810e332f602f72fffa43265670))
+
+
+### Bug Fixes
+
+* instance problem ([ba9def9](https://github.com/lenneTech/nuxt-base/commit/ba9def9d871928a7fea4678ab8e4d9746a1f8b85))
+
 ### [1.13.5](https://github.com/lenneTech/nuxt-base/compare/v1.13.4...v1.13.5) (2023-06-20)
 
 
