@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 env:
@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [18]
         os: [ubuntu-latest]
 
     steps:
@@ -33,9 +33,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: 'pnpm'
+          cache: "pnpm"
           node-version: ${{ matrix.node }}
-          registry-url: 'https://registry.npmjs.org/'
+          registry-url: "https://registry.npmjs.org/"
       - uses: actions/checkout@v2
         with:
           fetch-depth: 3
@@ -50,8 +50,8 @@ jobs:
         if: always()
         uses: adamkdean/simple-slack-notify@master
         with:
-          channel: '#deployments'
+          channel: "#deployments"
           status: ${{ job.status }}
-          success_text: 'Version (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde erfolgreich released.'
-          failure_text: 'Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base ist fehlgeschlagen.'
-          cancelled_text: 'Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde abgebrochen.'
+          success_text: "Version (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde erfolgreich released."
+          failure_text: "Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base ist fehlgeschlagen."
+          cancelled_text: "Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde abgebrochen."

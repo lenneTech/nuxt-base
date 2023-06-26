@@ -2,17 +2,21 @@
   <div>
     Nuxt module playground!
 
-    <h3>useCountriesQuery</h3>
-    <!-- <pre> {{ { loading } }}</pre> -->
+    <h3>useNewsQuery</h3>
+    <pre> {{ { pending } }}</pre>
+    <pre> {{ { status } }}</pre>
+    <pre> {{ { error } }}</pre>
     <pre> {{ { data } }}</pre>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useNewsQuery } from "./.nuxt/imports";
-
-const { data } = await useNewsQuery({}, ["id", "title", { publisher: ["id", "title"] }]);
-console.log(data.value);
+const { data, pending, status, error } = await useNewsQuery({}, [
+  "id",
+  "title",
+]);
+//console.log(data.value);
 </script>
 
 <style>

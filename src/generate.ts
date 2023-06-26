@@ -1,11 +1,39 @@
 import { generate } from "@graphql-codegen/cli";
 import { Types } from "@graphql-codegen/plugin-helpers";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { loadSchema } from "@graphql-tools/load";
+import { buildClientSchema, getIntrospectionQuery } from "graphql";
+import { ofetch } from "ofetch";
 import type { Import } from "unimport";
-import { getMeta } from "./runtime/functions/graphql-meta";
+import { GraphQLMeta } from "./runtime/classes/graphql-meta.class";
 
-export default async function generateGraphQLTypes(schemaUrl: string) {
+export async function loadMetaServer(
+  config: Partial<{ public: { host: string; schema?: string } }>
+): Promise<GraphQLMeta> {
+  let schema;
+
+  if (!config.public.schema) {
+    const { data: result } = await ofetch(config.public.host, {
+      method: "POST",
+      body: JSON.stringify({
+        query: getIntrospectionQuery({ descriptions: false }),
+        variables: {},
+      }),
+    });
+
+    schema = buildClientSchema(result);
+  } else {
+    schema = await loadSchema(config.public.schema, {
+      loaders: [new GraphQLFileLoader()],
+    });
+  }
+
+  return new GraphQLMeta(schema);
+}
+
+export default async function generateGraphQLTypes(schema: string) {
   const config: Types.Config = {
-    schema: schemaUrl,
+    schema,
     ignoreNoDocuments: true,
     generates: {
       [process.cwd() + "/src/types/schema.d.ts"]: {
@@ -17,9 +45,8 @@ export default async function generateGraphQLTypes(schemaUrl: string) {
   return await generate(config, false);
 }
 
-export async function generateComposables(host: string): Promise<string> {
-  const schemaMeta = await getMeta(host);
-  const methods = schemaMeta.getMethodNames();
+export async function generateComposables(meta: GraphQLMeta): Promise<string> {
+  const methods = meta.getMethodNames();
   const template = [];
   let customTypes = [];
   template.push("import { useGraphQL } from '#imports'\n");
@@ -30,7 +57,7 @@ export async function generateComposables(host: string): Promise<string> {
 
   if (methods?.query) {
     for (const query of methods.query) {
-      const types = schemaMeta.getTypesForMethod(query, "Query");
+      const types = meta.getTypesForMethod(query, "Query");
       customTypes.push(types.customTypes);
 
       template.push(
@@ -49,15 +76,15 @@ export async function generateComposables(host: string): Promise<string> {
 
   if (methods?.mutation) {
     for (const mutation of methods.mutation) {
-      const types = schemaMeta.getTypesForMethod(mutation, "Mutation");
+      const types = meta.getTypesForMethod(mutation, "Mutation");
       customTypes.push(types.customTypes);
 
       template.push(
         `  export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
+        } fields: any[], log?: boolean): Promise<AsyncData<{${mutation}: ${
           types.returnType
-        }}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${
+        }}, any>> => useGraphQL<AsyncData<{${mutation}: ${
           types.returnType
         }}, any>>('${mutation}', {${
           types.argType ? "arguments: args," : ""
@@ -68,7 +95,7 @@ export async function generateComposables(host: string): Promise<string> {
 
   if (methods?.subscription) {
     for (const subscription of methods.subscription) {
-      const types = schemaMeta.getTypesForMethod(subscription, "Subscription");
+      const types = meta.getTypesForMethod(subscription, "Subscription");
       customTypes.push(types.customTypes);
 
       template.push(
@@ -76,9 +103,9 @@ export async function generateComposables(host: string): Promise<string> {
           subscription
         )}Subscription = (${
           types.argType ? "args: {" + types.argType + "}," : ""
-        } fields: any[], log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+        } fields: any[], log?: boolean): Promise<AsyncData<{${subscription}: ${
           types.returnType
-        }}, any>> => useGraphQL<UseSubscriptionReturn<{${subscription}: ${
+        }}, any>> => useGraphQL<AsyncData<{${subscription}: ${
           types.returnType
         }}, any>>('${subscription}', {${
           types.argType ? "arguments: args," : ""
@@ -96,8 +123,7 @@ export async function generateComposables(host: string): Promise<string> {
   return template.join("\n");
 }
 
-export async function getAllMethods(host: string) {
-  const meta = await getMeta(host);
+export async function getAllMethods(meta: GraphQLMeta) {
   const methods = meta.getMethodNames();
   return [
     ...methods.query.map(
