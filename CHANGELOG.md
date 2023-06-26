@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://github.com/lenneTech/nuxt-base/compare/v1.14.0...v1.14.1) (2023-06-26)
+
+
+### Bug Fixes
+
+* fix import of query builder ([0f6e606](https://github.com/lenneTech/nuxt-base/commit/0f6e606e4ef37e6254957c73f6ccba2ee69fb7da))
+
 ## [1.14.0](https://github.com/lenneTech/nuxt-base/compare/v1.13.5...v1.14.0) (2023-06-26)
 
 
