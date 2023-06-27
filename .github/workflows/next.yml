@@ -23,13 +23,6 @@ jobs:
         with:
           fetch-depth: 0
       - run: corepack enable
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-      - run: npx changelogithub
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -42,17 +35,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - run: pnpm dev:prepare
-      - run: npm version patch --preid dev
+      - run: npm version patch --preid=dev
       - name: Publish Package
         run: pnpm publish --tag next --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
       - name: Deploy notification
         if: always()
         uses: adamkdean/simple-slack-notify@master
         with:
           channel: "#deployments"
           status: ${{ job.status }}
-          success_text: "Version (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde erfolgreich released."
-          failure_text: "Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base ist fehlgeschlagen."
-          cancelled_text: "Release (#${{github.ref_name}}) von @lenne.tech/nuxt-base wurde abgebrochen."
+          success_text: "Version (#${{ steps.package-version.outputs.current-version}}) von @lenne.tech/nuxt-base wurde erfolgreich released."
+          failure_text: "Release (#${{ steps.package-version.outputs.current-version}}) von @lenne.tech/nuxt-base ist fehlgeschlagen."
+          cancelled_text: "Release (#$${{ steps.package-version.outputs.current-version}}) von @lenne.tech/nuxt-base wurde abgebrochen."
