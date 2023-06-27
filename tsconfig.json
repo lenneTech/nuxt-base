@@ -5,7 +5,8 @@
     "resolveJsonModule": true,
     "noImplicitAny": false,
     "baseUrl": ".",
-    "target": "es6"
+    "target": "es6",
+    "declaration": false
   },
   "exclude": [
     "node_modules",

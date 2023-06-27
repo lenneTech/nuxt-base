@@ -4,6 +4,7 @@ import {
   addTemplate,
   createResolver,
   defineNuxtModule,
+  extendViteConfig,
   installModule,
   useLogger,
 } from "@nuxt/kit";
@@ -43,7 +44,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: "@lenne.tech/nuxt-base",
     configKey: "nuxtBase",
     compatibility: {
-      nuxt: "3.5.3",
+      nuxt: "3.6.1",
     },
   },
   // Default configuration options of the Nuxt module
@@ -126,6 +127,19 @@ export default defineNuxtModule<ModuleOptions>({
         );
       }
     }
+
+    // TODO: Remove when package fixed with valid ESM exports
+    nuxt.options.build.transpile.push(
+      ({ isServer }) => !isServer && "gql-query-builder"
+    );
+
+    // TODO: Remove when package fixed with valid ESM exports
+    extendViteConfig((config) => {
+      config.optimizeDeps = config.optimizeDeps || {};
+      config.optimizeDeps.include = config.optimizeDeps.include || [];
+      config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
+      config.optimizeDeps.include.push("gql-query-builder");
+    });
 
     nuxt.hook("nitro:config", (nitro) => {
       if (nitro.imports === false) {
