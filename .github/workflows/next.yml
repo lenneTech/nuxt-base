@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - run: pnpm dev:prepare
-      - run: npm version patch --preid=dev
+      - run: npm version prepatch --preid=dev && git push -o ci.skip
       - name: Publish Package
         run: pnpm publish --tag next --access public --no-git-checks
         env:
