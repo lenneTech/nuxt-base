@@ -35,7 +35,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - run: pnpm dev:prepare
-      - run: npm version prepatch --preid=dev && git push -o ci.skip
+      - run: npm version prepatch --preid=dev
+      - name: Set git identity
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+      # ...
+      # ADD YOUR GIT OPERATION STEPS HERE
+      # ...
+      - name: Push
+        run: |
+          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+          git push -o ci.skip
       - name: Publish Package
         run: pnpm publish --tag next --access public --no-git-checks
         env:
