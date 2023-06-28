@@ -51,6 +51,7 @@ export async function useGraphQL<T = any>(
   config.type = types[0] as GraphQLRequestType;
 
   if (config.log) {
+    console.log("useGraphQL::variables ", config.variables);
     console.log("useGraphQL::type ", config.type);
   }
 
@@ -59,8 +60,8 @@ export async function useGraphQL<T = any>(
     case GraphQLRequestType.MUTATION: {
       queryBody = mutation({
         operation: method,
-        fields,
         variables: config.variables,
+        fields: fields,
       });
       break;
     }
@@ -85,6 +86,7 @@ export async function useGraphQL<T = any>(
   const documentNode = gql(queryBody.query);
 
   if (config.log) {
+    console.log("useGraphQL::queryBody ", queryBody);
     console.log("useGraphQL::query ", queryBody.query);
     console.log("useGraphQL::documentNode ", documentNode);
   }
