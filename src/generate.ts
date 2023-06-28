@@ -60,13 +60,13 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
 
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
-          types.argType ? "args: {" + types.argType + "}," : ""
+          types.argType ? "variables: {" + types.argType + "}," : ""
         } fields: any[], log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => useGraphQL<AsyncData<{${query}: ${
           types.returnType
         }}, any>>('${query}', {${
-          types.argType ? "arguments: args," : ""
+          types.argType ? "variables: variables," : ""
         } fields, log})`
       );
     }
@@ -79,13 +79,13 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
 
       template.push(
         `  export const use${capitalizeFirstLetter(mutation)}Mutation = (${
-          types.argType ? "args: {" + types.argType + "}," : ""
+          types.argType ? "variables: {" + types.argType + "}," : ""
         } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
           types.returnType
         }}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${
           types.returnType
         }}, any>>('${mutation}', {${
-          types.argType ? "arguments: args," : ""
+          types.argType ? "variables: variables," : ""
         } fields, log})`
       );
     }
@@ -100,13 +100,13 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
         `  export const use${capitalizeFirstLetter(
           subscription
         )}Subscription = (${
-          types.argType ? "args: {" + types.argType + "}," : ""
+          types.argType ? "variables: {" + types.argType + "}," : ""
         } fields: any[], log?: boolean): Promise<AsyncData<{${subscription}: ${
           types.returnType
         }}, any>> => useGraphQL<AsyncData<{${subscription}: ${
           types.returnType
         }}, any>>('${subscription}', {${
-          types.argType ? "arguments: args," : ""
+          types.argType ? "variables: variables," : ""
         } fields, log})`
       );
     }
