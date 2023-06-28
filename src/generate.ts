@@ -49,7 +49,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const methods = meta.getMethodNames();
   const template = [];
   let customTypes = [];
-  template.push("import { useGraphQL } from '#imports'\n");
+  template.push(
+    "import { gqlQuery, gqlMutation, gqlSubscription } from '#imports'\n"
+  );
   template.push("import type { AsyncData } from 'nuxt/dist/app/composables'\n");
   template.push('import { UseMutationReturn } from "@vue/apollo-composable"\n');
 
@@ -63,9 +65,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
           types.argType ? "variables: {" + types.argType + "}," : ""
         } fields: any[], log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
-        }}, any>> => useGraphQL<AsyncData<{${query}: ${
-          types.returnType
-        }}, any>>('${query}', {${
+        }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? "variables: variables," : ""
         } fields, log})`
       );
@@ -82,9 +82,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
           types.argType ? "variables: {" + types.argType + "}," : ""
         } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
           types.returnType
-        }}, any>> => useGraphQL<UseMutationReturn<{${mutation}: ${
+        }}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
-        }}, any>>('${mutation}', {${
+        }}>('${mutation}', {${
           types.argType ? "variables: variables," : ""
         } fields, log})`
       );
@@ -103,9 +103,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
           types.argType ? "variables: {" + types.argType + "}," : ""
         } fields: any[], log?: boolean): Promise<AsyncData<{${subscription}: ${
           types.returnType
-        }}, any>> => useGraphQL<AsyncData<{${subscription}: ${
+        }}, any>> => gqlSubscription<{${subscription}: ${
           types.returnType
-        }}, any>>('${subscription}', {${
+        }}>('${subscription}', {${
           types.argType ? "variables: variables," : ""
         } fields, log})`
       );

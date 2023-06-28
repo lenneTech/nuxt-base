@@ -122,6 +122,7 @@ export default defineNuxtModule<ModuleOptions>({
           "*"
         );
       } catch (e) {
+        console.log(e);
         logger.warn(
           "[@lenne.tech/nuxt-base] Generated failed. Please check your host."
         );

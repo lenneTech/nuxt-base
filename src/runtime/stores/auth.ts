@@ -1,4 +1,4 @@
-import { defineStore, ref, useCookie, useGraphQL } from "#imports";
+import { defineStore, gqlMutation, ref, useCookie } from "#imports";
 
 export const useAuthStore: any = defineStore("auth", () => {
   // Cookies
@@ -15,7 +15,7 @@ export const useAuthStore: any = defineStore("auth", () => {
     token: string;
     refreshToken: string;
   }> {
-    const { mutate } = await useGraphQL("refreshToken", {
+    const { mutate } = await gqlMutation("refreshToken", {
       fields: ["token", "refreshToken"],
     });
 
