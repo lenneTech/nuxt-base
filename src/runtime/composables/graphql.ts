@@ -10,6 +10,7 @@ import gql from "graphql-tag";
 import { useAsyncData, useNuxtApp } from "nuxt/app";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 
+// TODO: Type return
 export async function useGraphQL<T = any>(
   method: string,
   options: IGraphQLOptions = {}
@@ -91,10 +92,7 @@ export async function useGraphQL<T = any>(
   let asyncData;
   switch (config.type) {
     case GraphQLRequestType.MUTATION: {
-      asyncData = useAsyncData<T>(() => {
-        const { result } = useMutation<T>(documentNode, {});
-        return result;
-      });
+      asyncData = useMutation<T>(documentNode, {});
       break;
     }
     case GraphQLRequestType.SUBSCRIPTION: {
