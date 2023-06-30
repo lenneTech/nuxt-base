@@ -1,20 +1,20 @@
-import { defineNuxtPlugin } from '#app'
-import { useAuthStore } from '#imports'
-import type { ApolloClient } from '@apollo/client/core'
-import { ApolloLink, from, fromPromise } from '@apollo/client/core'
-import { onError } from '@apollo/client/link/error'
-import { provideApolloClient } from '@vue/apollo-composable'
+import { defineNuxtPlugin } from '#app';
+import { useAuthStore } from '#imports';
+import type { ApolloClient } from '@apollo/client/core';
+import { ApolloLink, from, fromPromise } from '@apollo/client/core';
+import { onError } from '@apollo/client/link/error';
+import { provideApolloClient } from '@vue/apollo-composable';
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const { $apollo } = nuxtApp
-  const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>
+  const { $apollo } = nuxtApp;
+  const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>;
 
   // trigger the error hook on an error
   const errorLink = onError((err) => {
-    const store = useAuthStore()
+    const store = useAuthStore();
 
     if (err.graphQLErrors) {
       for (const error of err.graphQLErrors) {
@@ -58,7 +58,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const authMiddleware = new ApolloLink((operation, forward) => {
     const headers: any = {};
     const operationName = (operation.query.definitions[0] as any)?.selectionSet?.selections[0]?.name?.value;
-    const store = useAuthStore()
+    const store = useAuthStore();
 
     if (store) {
       let token: string;
@@ -85,8 +85,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     authMiddleware,
     errorLink,
     defaultClient.link,
-  ]))
+  ]));
 
   // For using useQuery in `@vue/apollo-composable`
-  provideApolloClient(defaultClient)
-})
+  provideApolloClient(defaultClient);
+});

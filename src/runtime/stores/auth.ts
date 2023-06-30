@@ -1,10 +1,10 @@
-import { defineStore, gqlMutation, ref, useCookie } from "#imports";
+import { defineStore, gqlMutation, ref, useCookie } from '#imports';
 
-export const useAuthStore: any = defineStore("auth", () => {
+export const useAuthStore: any = defineStore('auth', () => {
   // Cookies
-  const tokenCookie = useCookie("token");
-  const refreshTokenCookie = useCookie("refreshToken");
-  const currentUserCookie = useCookie("currentUser");
+  const tokenCookie = useCookie('token');
+  const refreshTokenCookie = useCookie('refreshToken');
+  const currentUserCookie = useCookie('currentUser');
 
   // Refs
   const token = ref<string>(tokenCookie?.value || null);
@@ -15,8 +15,8 @@ export const useAuthStore: any = defineStore("auth", () => {
     token: string;
     refreshToken: string;
   }> {
-    const { mutate } = await gqlMutation("refreshToken", {
-      fields: ["token", "refreshToken"],
+    const { mutate } = await gqlMutation('refreshToken', {
+      fields: ['token', 'refreshToken'],
     });
 
     const result = await mutate();
@@ -24,7 +24,7 @@ export const useAuthStore: any = defineStore("auth", () => {
     if (result?.data?.refreshToken) {
       setTokens(
         result.data.refreshToken.token,
-        result.data.refreshToken.refreshToken
+        result.data.refreshToken.refreshToken,
       );
     }
 

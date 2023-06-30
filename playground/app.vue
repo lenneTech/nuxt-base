@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { useNewsQuery } from './.nuxt/imports';
+const { data, pending, status, error } = await useNewsQuery({}, [
+  'id',
+  'title',
+]);
+//console.log(data.value);
+</script>
+
 <template>
   <div>
     Nuxt module playground!
@@ -9,15 +18,6 @@
     <pre> {{ { data } }}</pre>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useNewsQuery } from "./.nuxt/imports";
-const { data, pending, status, error } = await useNewsQuery({}, [
-  "id",
-  "title",
-]);
-//console.log(data.value);
-</script>
 
 <style>
 pre {

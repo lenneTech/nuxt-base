@@ -1,4 +1,4 @@
-import { Standard } from "./standard.class";
+import type { Standard } from './standard.class';
 
 /**
  * Helper class
@@ -74,7 +74,7 @@ export class Helper {
   public static map<T = { [key: string]: any }>(
     source: Partial<T> | { [key: string]: any },
     target: T,
-    options: { funcAllowed?: boolean; dateStringToDate?: boolean | string[] } = {}
+    options: { funcAllowed?: boolean; dateStringToDate?: boolean | string[] } = {},
   ): T {
     // Set config
     const config = {
@@ -114,7 +114,7 @@ export class Helper {
    */
   public static maps<T extends Standard>(
     data: Partial<T> | Partial<T>[] | { [key: string]: any } | { [key: string]: any }[],
-    targetClass: new (...args: any[]) => T
+    targetClass: new (...args: any[]) => T,
   ): T[] {
     // Check data
     if (!data || typeof data !== 'object') {
@@ -189,7 +189,7 @@ export class Helper {
   /**
    * Generates an unique identifier with a specific length
    */
-  public static getUID(length: number = 24): string {
+  public static getUID(length = 24): string {
     let dt = new Date().getTime();
     const uuid = 'x'.repeat(length).replace(/[xy]/g, (c) => {
       // eslint-disable-next-line no-bitwise
@@ -303,7 +303,7 @@ export class Helper {
    *
    * @returns Record<string, any> Object with properties from first object
    */
-  static getDiff(a: Record<string, any>, b: Record<string, any>, clone: boolean = true) {
+  static getDiff(a: Record<string, any>, b: Record<string, any>, clone = true) {
     const result = {};
     let firstObject = a;
     if (clone) {

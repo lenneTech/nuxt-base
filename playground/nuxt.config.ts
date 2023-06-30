@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
-  modules: ["../src/module"],
+  modules: ['../src/module'],
   nuxtBase: {
-    host: "https://agw.hunt-on-demand.com/graphql",
+    host: 'https://agw.hunt-on-demand.com/graphql',
   },
 });

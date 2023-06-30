@@ -1,10 +1,10 @@
-import { Standard } from "./standard.class";
+import { Standard } from './standard.class';
 
 /**
  * GraphQL type
  */
 export class GraphQLType extends Standard {
-  type = "";
+  type = '';
   fields: Record<string, GraphQLType> = {};
   isRequired = false;
   isItemRequired = false;

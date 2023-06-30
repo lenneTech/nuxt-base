@@ -1,16 +1,15 @@
+import type { GraphQLNamedType, GraphQLSchema } from 'graphql';
 import {
   GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLList,
-  GraphQLNamedType,
   GraphQLNonNull,
   GraphQLScalarType,
-  GraphQLSchema,
-} from "graphql";
-import { GraphQLRequestType } from "../enums/graphql-request-type.enum";
-import { GraphqlCrudType } from "../interfaces/graphql-crud-type.interface";
-import { GraphQLType } from "./graphql-type.class";
-import { Helper } from "./helper.class";
+} from 'graphql';
+import type { GraphQLRequestType } from '../enums/graphql-request-type.enum';
+import type { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
+import { GraphQLType } from './graphql-type.class';
+import { Helper } from './helper.class';
 
 /**
  * GraphQL meta
@@ -25,7 +24,7 @@ export class GraphQLMeta {
    */
   constructor(protected schema: GraphQLSchema) {
     if (!schema) {
-      throw Error("Missing schema");
+      throw Error('Missing schema');
     }
   }
 
@@ -37,28 +36,27 @@ export class GraphQLMeta {
       query: Object.keys(this.schema.getQueryType()?.getFields() || {}),
       mutation: Object.keys(this.schema.getMutationType()?.getFields() || {}),
       subscription: Object.keys(
-        this.schema.getSubscriptionType()?.getFields() || {}
+        this.schema.getSubscriptionType()?.getFields() || {},
       ),
     };
   }
 
   getTypesForMethod(
     method: string,
-    type: "Query" | "Mutation" | "Subscription"
+    type: 'Query' | 'Mutation' | 'Subscription',
   ) {
     let returnType: string = null;
     let argType: string = null;
     const customTypes: string[] = [];
     const returnDeepType = this.getDeepType(
-      this.schema["get" + type + "Type"]()["_fields"][method],
+      this.schema['get' + type + 'Type']()['_fields'][method],
       {},
-      true
     );
     const argsDeepType = this.getArgs(method);
 
     if (returnDeepType) {
-      returnType = returnDeepType.type + (returnDeepType.isList ? "[]" : "");
-      returnType = returnType.replace(/Boolean/g, "boolean");
+      returnType = returnDeepType.type + (returnDeepType.isList ? '[]' : '');
+      returnType = returnType.replace(/Boolean/g, 'boolean');
       if (this.checkCustomTyp(returnDeepType.type)) {
         customTypes.push(returnDeepType.type);
       }
@@ -69,23 +67,23 @@ export class GraphQLMeta {
       for (const [key, value] of Object.entries(argsDeepType.fields)) {
         result.push(
           key +
-            (argsDeepType.fields[key].isRequired ? "" : "?") +
-            ": " +
+            (argsDeepType.fields[key].isRequired ? '' : '?') +
+            ': ' +
             argsDeepType.fields[key].type +
-            (argsDeepType.fields[key].isList ? "[]" : "")
+            (argsDeepType.fields[key].isList ? '[]' : ''),
         );
         if (this.checkCustomTyp(argsDeepType.fields[key].type)) {
           customTypes.push(argsDeepType.fields[key].type);
         }
       }
 
-      argType = result.join(", ");
+      argType = result.join(', ');
       argType = argType
-        .replace(/String/g, "string")
-        .replace(/Boolean/g, "string")
+        .replace(/String/g, 'string')
+        .replace(/Boolean/g, 'string')
         .toString()
-        .replace(/Int/g, "number")
-        .replace(/Float/g, "number");
+        .replace(/Int/g, 'number')
+        .replace(/Float/g, 'number');
     }
 
     return { argType, returnType, customTypes };
@@ -93,12 +91,12 @@ export class GraphQLMeta {
 
   checkCustomTyp(type: string): boolean {
     const defaultTypes = [
-      "boolean",
-      "string",
-      "date",
-      "int",
-      "number",
-      "float",
+      'boolean',
+      'string',
+      'date',
+      'int',
+      'number',
+      'float',
     ];
     return !defaultTypes.includes(type.toLocaleLowerCase());
   }
@@ -130,16 +128,16 @@ export class GraphQLMeta {
     const queryType = this.schema.getQueryType();
 
     if (logging) {
-      console.log(
-        "GraphQLMeta::getTypes->queryTypeFields",
-        queryType.getFields()
+      console.debug(
+        'GraphQLMeta::getTypes->queryTypeFields',
+        queryType.getFields(),
       );
     }
 
     for (const [key, value] of Object.entries(queryType.getFields())) {
-      if (key.startsWith("find")) {
+      if (key.startsWith('find')) {
         possibleTypes.push({
-          name: key.split("find").pop().slice(0, -1),
+          name: key.split('find').pop().slice(0, -1),
           create: false,
           update: false,
           delete: false,
@@ -149,37 +147,37 @@ export class GraphQLMeta {
     }
 
     if (logging) {
-      console.log(
-        "GraphQLMeta::getTypes->mutationTypeFields",
-        mutationType.getFields()
+      console.debug(
+        'GraphQLMeta::getTypes->mutationTypeFields',
+        mutationType.getFields(),
       );
-      console.log("GraphQLMeta::getTypes->possibleTypes", possibleTypes);
+      console.debug('GraphQLMeta::getTypes->possibleTypes', possibleTypes);
     }
 
     for (const [key, value] of Object.entries(mutationType.getFields())) {
-      if (key.startsWith("create")) {
-        const model = key.split("create").pop();
+      if (key.startsWith('create')) {
+        const model = key.split('create').pop();
         if (possibleTypes.find((e) => e.name === model)) {
           possibleTypes.find((item) => item.name === model).create = true;
         }
       }
 
-      if (key.startsWith("update")) {
-        const model = key.split("update").pop();
+      if (key.startsWith('update')) {
+        const model = key.split('update').pop();
         if (possibleTypes.find((e) => e.name === model)) {
           possibleTypes.find((item) => item.name === model).update = true;
         }
       }
 
-      if (key.startsWith("delete")) {
-        const model = key.split("delete").pop();
+      if (key.startsWith('delete')) {
+        const model = key.split('delete').pop();
         if (possibleTypes.find((e) => e.name === model)) {
           possibleTypes.find((item) => item.name === model).delete = true;
         }
       }
 
-      if (key.startsWith("duplicate")) {
-        const model = key.split("duplicate").pop();
+      if (key.startsWith('duplicate')) {
+        const model = key.split('duplicate').pop();
         if (possibleTypes.find((e) => e.name === model)) {
           possibleTypes.find((item) => item.name === model).duplicate = true;
         }
@@ -187,10 +185,10 @@ export class GraphQLMeta {
     }
 
     if (logging) {
-      console.log("GraphQLMeta::getTypes->possibleTypes", possibleTypes);
-      console.log(
-        "GraphQLMeta::getTypes->filteredPossibleTypes",
-        possibleTypes.filter((e) => e.create || e.update)
+      console.debug('GraphQLMeta::getTypes->possibleTypes', possibleTypes);
+      console.debug(
+        'GraphQLMeta::getTypes->filteredPossibleTypes',
+        possibleTypes.filter((e) => e.create || e.update),
       );
     }
 
@@ -206,7 +204,7 @@ export class GraphQLMeta {
       cache?: boolean;
       freeze?: boolean;
       type?: GraphQLRequestType;
-    } = {}
+    } = {},
   ): GraphQLType {
     const { cache, freeze, type } = {
       cache: true,
@@ -248,7 +246,7 @@ export class GraphQLMeta {
       cache?: boolean;
       freeze?: boolean;
       type?: GraphQLRequestType;
-    } = {}
+    } = {},
   ): GraphQLType {
     const { cache, freeze, type } = {
       cache: true,
@@ -281,7 +279,7 @@ export class GraphQLMeta {
    */
   protected getFunction(
     name: string,
-    options: { type?: GraphQLRequestType } = {}
+    options: { type?: GraphQLRequestType } = {},
   ): Record<string, any> {
     // Set config
     const config = {
@@ -303,7 +301,7 @@ export class GraphQLMeta {
 
     // If function type is not set
     else {
-      ["Subscription", "Mutation", "Query"].forEach((item) => {
+      ['Subscription', 'Mutation', 'Query'].forEach((item) => {
         const type: any = this.schema.getType(item);
         if (type) {
           functions = {
@@ -349,7 +347,7 @@ export class GraphQLMeta {
    */
   protected getDeepType(
     type: any,
-    prepared: Record<string, any> = {}
+    prepared: Record<string, any> = {},
   ): GraphQLType {
     // Check type
     if (!type) {
@@ -363,7 +361,7 @@ export class GraphQLMeta {
     });
 
     // Check prepared
-    if (typeof type === "object") {
+    if (typeof type === 'object') {
       const preparedType = prepared[typeName];
 
       // Work with cached type

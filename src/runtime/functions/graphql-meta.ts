@@ -1,15 +1,15 @@
-import { buildClientSchema, getIntrospectionQuery } from "graphql";
-import { ofetch } from "ofetch";
-import { GraphQLMeta } from "../classes/graphql-meta.class";
-import { GraphQLType } from "../classes/graphql-type.class";
-import { Helper } from "../classes/helper.class";
-import { GraphQLEnum } from "../enums/graphql-enum.class";
+import { buildClientSchema, getIntrospectionQuery } from 'graphql';
+import { ofetch } from 'ofetch';
+import { GraphQLMeta } from '../classes/graphql-meta.class';
+import type { GraphQLType } from '../classes/graphql-type.class';
+import { Helper } from '../classes/helper.class';
+import { GraphQLEnum } from '../enums/graphql-enum.class';
 
 export async function loadMeta(
-  config: Partial<{ public: { host: string; schema?: string } }>
+  config: Partial<{ public: { host: string; schema?: string } }>,
 ): Promise<GraphQLMeta> {
   const { data: result } = await ofetch(config.public.host, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
       query: getIntrospectionQuery({ descriptions: false }),
       variables: {},
@@ -34,7 +34,7 @@ export async function prepareArguments(
     schemaArgs?: string[];
     usedArgs?: string[];
     variables?: { [key: string]: { type: string; value: any } };
-  } = {}
+  } = {},
 ): Promise<{
   argsString: string;
   schemaArgs: string[];
@@ -45,9 +45,9 @@ export async function prepareArguments(
   const { allowed, levelKey, level, parent, schemaArgs, usedArgs, variables } =
     {
       allowed: null,
-      levelKey: "",
+      levelKey: '',
       level: 1,
-      parent: "",
+      parent: '',
       schemaArgs: [],
       usedArgs: [],
       variables: {},
@@ -56,7 +56,7 @@ export async function prepareArguments(
 
   // Check args
   if (args === undefined || args === null) {
-    return { argsString: "", schemaArgs, usedArgs, variables };
+    return { argsString: '', schemaArgs, usedArgs, variables };
   }
 
   // Init args
@@ -81,12 +81,12 @@ export async function prepareArguments(
             allowed: key ? allowed.fields[key] : null,
             levelKey: key,
             level: level + 1,
-            parent: parent + key + ".",
+            parent: parent + key + '.',
             schemaArgs,
             usedArgs,
             variables,
           })
-        ).argsString
+        ).argsString,
       );
     }
 
@@ -95,7 +95,7 @@ export async function prepareArguments(
       // Complete result, encapsulated via round brackets
       if (level === 1) {
         return {
-          argsString: "(" + result.join(", ") + ")",
+          argsString: '(' + result.join(', ') + ')',
           schemaArgs,
           usedArgs,
           variables,
@@ -105,7 +105,7 @@ export async function prepareArguments(
       // Deeper result part, encapsulated via square brackets
       else {
         return {
-          argsString: "[" + result.join(", ") + "]",
+          argsString: '[' + result.join(', ') + ']',
           schemaArgs,
           usedArgs,
           variables,
@@ -115,15 +115,15 @@ export async function prepareArguments(
   }
 
   // Process object
-  else if (typeof args === "object") {
+  else if (typeof args === 'object') {
     // Check for Upload type for variable handling
-    if (allowed?.type === "Upload") {
-      const name = levelKey + "_" + Helper.getUID(6);
+    if (allowed?.type === 'Upload') {
+      const name = levelKey + '_' + Helper.getUID(6);
       variables[name] = {
-        type: allowed.type + (allowed.isRequired ? "!" : ""),
+        type: allowed.type + (allowed.isRequired ? '!' : ''),
         value: args,
       };
-      return { argsString: "$" + name, schemaArgs, usedArgs, variables };
+      return { argsString: '$' + name, schemaArgs, usedArgs, variables };
     }
 
     // Check object is empty
@@ -132,7 +132,7 @@ export async function prepareArguments(
       Object.keys(args).length === 0 &&
       Object.getPrototypeOf(args) === Object.prototype
     ) {
-      return { argsString: "{}", schemaArgs, usedArgs, variables };
+      return { argsString: '{}', schemaArgs, usedArgs, variables };
     }
 
     // Process all object entries
@@ -154,7 +154,7 @@ export async function prepareArguments(
 
       // Set null e.g. for resetting
       if (value === null) {
-        result.push(key + ":" + null);
+        result.push(key + ':' + null);
         continue;
       }
 
@@ -163,49 +163,49 @@ export async function prepareArguments(
 
       // Process GraphQLEnum
       if (value instanceof GraphQLEnum) {
-        result.push(key + ":" + value.value);
+        result.push(key + ':' + value.value);
         continue;
       }
 
-      if (key === "password") {
-        result.push(key + ":" + `"${await hash(value as string)}"`);
+      if (key === 'password') {
+        result.push(key + ':' + `"${await hash(value as string)}"`);
         continue;
       }
 
       // Process array
       else if (Array.isArray(value)) {
-        let argumentsString: string = key + ": [";
+        let argumentsString: string = key + ': [';
         for (const val of value) {
           argumentsString += (
             await prepareArguments(val, {
               allowed: allowed.fields[key],
               levelKey: key,
               level: level + 1,
-              parent: currentKey + ".",
+              parent: currentKey + '.',
               schemaArgs,
               usedArgs,
               variables,
             })
           ).argsString;
         }
-        argumentsString += "]";
+        argumentsString += ']';
         result.push(argumentsString);
         continue;
       }
 
       // Prepare additional result string
-      let additionalResult = key + ": ";
+      let additionalResult = key + ': ';
 
       // Value is a date object
       if (
-        typeof value === "object" &&
-        Object.prototype.toString.call(value) === "[object Date]"
+        typeof value === 'object' &&
+        Object.prototype.toString.call(value) === '[object Date]'
       ) {
         additionalResult += `"""${(value as Date).toString()}"""`;
       }
 
       // Value is a string
-      else if (typeof value === "string") {
+      else if (typeof value === 'string') {
         // Enum (doesn't need quotation marks)
         if (allowed.fields[key].isEnum) {
           additionalResult += value;
@@ -215,12 +215,12 @@ export async function prepareArguments(
         else {
           additionalResult += `"${value
             .replace(/"/g, '\\"')
-            .replace(/\n/g, "\\n")}"`;
+            .replace(/\n/g, '\\n')}"`;
         }
       }
 
       // Value is a simple boolean or a number
-      else if (typeof value === "boolean" || typeof value === "number") {
+      else if (typeof value === 'boolean' || typeof value === 'number') {
         additionalResult += value;
       }
 
@@ -230,7 +230,7 @@ export async function prepareArguments(
           allowed: allowed.fields[key],
           levelKey: key,
           level: level + 1,
-          parent: currentKey + ".",
+          parent: currentKey + '.',
           schemaArgs,
           usedArgs,
           variables,
@@ -240,9 +240,9 @@ export async function prepareArguments(
             .argsString;
         } catch (e) {
           console.error(
-            "Error during preparing arguments",
+            'Error during preparing arguments',
             value,
-            prepareOptions
+            prepareOptions,
           );
           throw e;
         }
@@ -257,7 +257,7 @@ export async function prepareArguments(
       // Complete result, encapsulated via round brackets
       if (level === 1) {
         return {
-          argsString: "(" + result.join(", ") + ")",
+          argsString: '(' + result.join(', ') + ')',
           schemaArgs,
           usedArgs,
           variables,
@@ -267,7 +267,7 @@ export async function prepareArguments(
       // Deeper result part, encapsulated via curly brackets
       else {
         return {
-          argsString: "{" + result.join(", ") + "}",
+          argsString: '{' + result.join(', ') + '}',
           schemaArgs,
           usedArgs,
           variables,
@@ -299,7 +299,7 @@ export async function prepareFields(
     parent?: string;
     spaces?: number;
     tab?: number;
-  } = {}
+  } = {},
 ): Promise<{
   schemaFields: string[];
   fieldsString: string;
@@ -308,7 +308,7 @@ export async function prepareFields(
   // Config
   const { allowed, parent, schemaFields, spaces, tab, usedFields } = {
     allowed: null,
-    parent: "",
+    parent: '',
     schemaFields: [],
     spaces: 2,
     tab: 1,
@@ -317,7 +317,7 @@ export async function prepareFields(
   };
 
   // Init fields string
-  let fieldsString = "";
+  let fieldsString = '';
 
   // Check fields
   if (!fields) {
@@ -325,12 +325,12 @@ export async function prepareFields(
   }
 
   // Process string
-  if (typeof fields === "string") {
+  if (typeof fields === 'string') {
     if (allowed && !allowed.fields[fields]) {
       return { fieldsString, schemaFields, usedFields };
     }
     return {
-      fieldsString: "\n" + " ".repeat(spaces).repeat(tab) + fields,
+      fieldsString: '\n' + ' '.repeat(spaces).repeat(tab) + fields,
       schemaFields,
       usedFields,
     };
@@ -339,7 +339,7 @@ export async function prepareFields(
   // Process array
   else if (Array.isArray(fields)) {
     for (const item of fields) {
-      if (typeof item === "object") {
+      if (typeof item === 'object') {
         fieldsString =
           fieldsString +
           (
@@ -365,7 +365,7 @@ export async function prepareFields(
         (
           await prepareFields(item, {
             allowed: null, // item is string
-            parent: currentPath + ".",
+            parent: currentPath + '.',
             spaces,
             schemaFields,
             tab: tab + 1,
@@ -376,7 +376,7 @@ export async function prepareFields(
   }
 
   // Process object
-  else if (typeof fields === "object") {
+  else if (typeof fields === 'object') {
     for (const [key, val] of Object.entries(fields)) {
       const currentPath = parent + key;
       schemaFields.push(currentPath);
@@ -384,30 +384,30 @@ export async function prepareFields(
         continue;
       }
       usedFields.push(currentPath);
-      if (typeof val !== "object" || !Object.keys(val).length) {
+      if (typeof val !== 'object' || !Object.keys(val).length) {
         fieldsString =
-          fieldsString + "\n" + " ".repeat(spaces).repeat(tab) + key;
+          fieldsString + '\n' + ' '.repeat(spaces).repeat(tab) + key;
       } else {
         fieldsString =
           fieldsString +
-          "\n" +
-          " ".repeat(spaces).repeat(tab) +
+          '\n' +
+          ' '.repeat(spaces).repeat(tab) +
           key +
-          " " +
-          "{" +
+          ' ' +
+          '{' +
           (
             await prepareFields(val, {
               allowed: allowed.fields[key], // val is object or array
-              parent: currentPath + ".",
+              parent: currentPath + '.',
               spaces,
               schemaFields,
               tab: tab + 1,
               usedFields,
             })
           ).fieldsString +
-          "\n" +
-          " ".repeat(spaces).repeat(tab) +
-          "}";
+          '\n' +
+          ' '.repeat(spaces).repeat(tab) +
+          '}';
       }
     }
   }
@@ -418,25 +418,25 @@ export async function prepareFields(
 
 export async function hash(string) {
   const utf8 = new TextEncoder().encode(string);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", utf8);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray
-    .map((bytes) => bytes.toString(16).padStart(2, "0"))
-    .join("");
+    .map((bytes) => bytes.toString(16).padStart(2, '0'))
+    .join('');
   return hashHex;
 }
 
 export async function graphQLTypeToStringArray(
   graphQLType: GraphQLType,
-  current = "",
+  current = '',
   result = [],
-  cacheNode = []
+  cacheNode = [],
 ) {
   if (!graphQLType) {
     return result;
   }
-  if (current?.includes(".")) {
-    cacheNode.push(current.split(".")[1]);
+  if (current?.includes('.')) {
+    cacheNode.push(current.split('.')[1]);
   } else if (current) {
     cacheNode.push(current);
   }
@@ -446,9 +446,9 @@ export async function graphQLTypeToStringArray(
     }
     graphQLTypeToStringArray(
       graphQLType.fields[key],
-      current ? current + "." + key : key,
+      current ? current + '.' + key : key,
       result,
-      cacheNode
+      cacheNode,
     );
   }
   return result;

@@ -1,20 +1,21 @@
-import { IGraphQLOptions, useMutation } from "#imports";
-import { UseMutationReturn } from "@vue/apollo-composable";
-import { mutation } from "gql-query-builder";
-import gql from "graphql-tag";
-import { useNuxtApp } from "nuxt/app";
-import { GraphQLMeta } from "../classes/graphql-meta.class";
+import type { IGraphQLOptions } from '#imports';
+import { useMutation } from '#imports';
+import type { UseMutationReturn } from '@vue/apollo-composable';
+import { mutation } from 'gql-query-builder';
+import gql from 'graphql-tag';
+import { useNuxtApp } from 'nuxt/app';
+import type { GraphQLMeta } from '../classes/graphql-meta.class';
 
 // TODO: Type return
 export async function gqlMutation<T = any>(
   method: string,
-  options: IGraphQLOptions = {}
+  options: IGraphQLOptions = {},
 ): Promise<UseMutationReturn<T, any>> {
   const { $graphQl } = useNuxtApp();
 
   // Check parameters
   if (!method) {
-    throw new Error(`No method detected`);
+    throw new Error('No method detected');
   }
 
   // Get config
@@ -28,7 +29,7 @@ export async function gqlMutation<T = any>(
   const fields = config.fields as unknown as string[];
 
   if (config.log) {
-    console.log("gqlMutation::fields ", fields);
+    console.debug('gqlMutation::fields ', fields);
   }
 
   const meta = $graphQl() as GraphQLMeta;
@@ -36,9 +37,9 @@ export async function gqlMutation<T = any>(
   const builderInput = {};
 
   if (config.log) {
-    console.log("gqlMutation::variables ", config.variables);
-    console.log("gqlMutation::type ", config.type);
-    console.log("gqlMutation::argType ", argType);
+    console.debug('gqlMutation::variables ', config.variables);
+    console.debug('gqlMutation::type ', config.type);
+    console.debug('gqlMutation::argType ', argType);
   }
 
   for (const [key, value] of Object.entries(argType.fields)) {
@@ -50,7 +51,7 @@ export async function gqlMutation<T = any>(
   }
 
   if (config.log) {
-    console.log("gqlMutation::builderInput ", builderInput);
+    console.debug('gqlMutation::builderInput ', builderInput);
   }
 
   const queryBody = mutation({
@@ -61,9 +62,9 @@ export async function gqlMutation<T = any>(
   const documentNode = gql(queryBody.query);
 
   if (config.log) {
-    console.log("gqlMutation::queryBody ", queryBody);
-    console.log("gqlMutation::query ", queryBody.query);
-    console.log("gqlMutation::documentNode ", documentNode);
+    console.debug('gqlMutation::queryBody ', queryBody);
+    console.debug('gqlMutation::query ', queryBody.query);
+    console.debug('gqlMutation::documentNode ', documentNode);
   }
 
   return useMutation<T>(documentNode, { variables: config.variables });

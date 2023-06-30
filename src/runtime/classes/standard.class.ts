@@ -12,7 +12,7 @@ export class Standard {
   public static map<T extends Standard>(
     this: new (...args: any[]) => T,
     data: Partial<T> | { [key: string]: any },
-    item: T = new this()
+    item: T = new this(),
   ): T {
     return (item as any).map(data);
   }
@@ -41,7 +41,7 @@ export class Standard {
    *
    * @return Record<string, any> with properties of this object which are different
    */
-  public getDiff(compare: Record<string, any>, clone: boolean = true) {
+  public getDiff(compare: Record<string, any>, clone = true) {
     return Helper.getDiff(this, compare, clone);
   }
 }
