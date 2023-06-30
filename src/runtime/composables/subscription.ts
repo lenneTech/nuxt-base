@@ -1,13 +1,14 @@
 import { IGraphQLOptions, useSubscription } from "#imports";
+import { UseSubscriptionReturn } from "@vue/apollo-composable";
 import { subscription } from "gql-query-builder";
 import gql from "graphql-tag";
-import { AsyncData, useAsyncData, useNuxtApp } from "nuxt/app";
+import { useNuxtApp } from "nuxt/app";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 
 export async function gqlSubscription<T = any>(
   method: string,
   options: IGraphQLOptions = {}
-): Promise<AsyncData<T, any>> {
+): Promise<UseSubscriptionReturn<T, any>> {
   const { $graphQl } = useNuxtApp();
 
   // Check parameters
@@ -39,8 +40,5 @@ export async function gqlSubscription<T = any>(
     console.log("gqlSubscription::documentNode ", documentNode);
   }
 
-  return useAsyncData<T, any>(() => {
-    const { result } = useSubscription<T>(documentNode, {});
-    return result;
-  });
+  return useSubscription<T>(documentNode, config.variables ?? {});
 }

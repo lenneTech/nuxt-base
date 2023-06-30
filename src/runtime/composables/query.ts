@@ -1,7 +1,7 @@
-import { IGraphQLOptions, useQuery } from "#imports";
+import { IGraphQLOptions, useAsyncQuery } from "#imports";
 import { query } from "gql-query-builder";
 import gql from "graphql-tag";
-import { AsyncData, useAsyncData, useNuxtApp } from "nuxt/app";
+import { AsyncData, useNuxtApp } from "nuxt/app";
 import { GraphQLMeta } from "../classes/graphql-meta.class";
 
 export async function gqlQuery<T = any>(
@@ -44,8 +44,5 @@ export async function gqlQuery<T = any>(
     console.log("gqlQuery::documentNode ", documentNode);
   }
 
-  return useAsyncData<T, any>(() => {
-    const { result } = useQuery<T>(documentNode, {});
-    return result;
-  });
+  return useAsyncQuery<T>(documentNode, config.variables ?? {});
 }
