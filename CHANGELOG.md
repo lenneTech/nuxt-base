@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/lenneTech/nuxt-base/compare/v2.0.2-dev.0...v2.1.0) (2023-06-30)
+
+
+### Features
+
+* add eslint config ([9e7d537](https://github.com/lenneTech/nuxt-base/commit/9e7d537792eefae7c7e8f5677120d14dbad40165))
+
+
+### Bug Fixes
+
+* fix dev action ([e9ae18d](https://github.com/lenneTech/nuxt-base/commit/e9ae18d6e20d96bbc7fb7b3a6d17fdba06084e2b))
+* fix mutation ([964b98f](https://github.com/lenneTech/nuxt-base/commit/964b98feacfd0dbbc099c083cd3faaed64b1bc80))
+* fix rename args to variables ([4ba8739](https://github.com/lenneTech/nuxt-base/commit/4ba87396ccfebba4d86c22b5284fa0659a92a185))
+* fix return type of mutation ([ea24b57](https://github.com/lenneTech/nuxt-base/commit/ea24b57dd85500957e77a826b8fcf56008ea7ca1))
+
 ## [2.0.0](https://github.com/lenneTech/nuxt-base/compare/v1.14.3...v2.0.0) (2023-06-26)
 
 ### [1.14.3](https://github.com/lenneTech/nuxt-base/compare/v1.14.2...v1.14.3) (2023-06-26)
