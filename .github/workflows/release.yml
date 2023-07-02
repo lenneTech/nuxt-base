@@ -43,7 +43,7 @@ jobs:
         run: pnpm install
       - run: pnpm dev:prepare
       - name: Publish Package
-        run: pnpm publish --access public --no-git-checks
+        run: pnpm publish --access public --tag latest --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Deploy notification
