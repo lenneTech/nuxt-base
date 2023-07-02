@@ -6,7 +6,6 @@ import gql from 'graphql-tag';
 import { useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 
-// TODO: Type return
 export async function gqlMutation<T = any>(
   method: string,
   options: IGraphQLOptions = {},

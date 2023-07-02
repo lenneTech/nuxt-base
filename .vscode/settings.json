@@ -7,5 +7,17 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true
     },
-    "hide-files.files": []
+    "hide-files.files": [],
+    "eslint.format.enable": true,
+    "[typescript][javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": [
+            "source.organizeImports",
+            "source.formatDocument",
+            "source.fixAll"
+        ],
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    }
 }

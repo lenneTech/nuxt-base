@@ -33,9 +33,24 @@ export async function gqlQuery<T = any>(
   }
 
   const meta = $graphQl() as GraphQLMeta;
+  const argType = meta.getArgs(method);
+  const builderInput = {};
+
+  for (const [key, value] of Object.entries(argType.fields)) {
+    builderInput[key] = {
+      type: value.type,
+      required: value.isRequired,
+      value: config.variables[key],
+    };
+  }
+
+  if (config.log) {
+    console.debug('gqlMutation::builderInput ', builderInput);
+  }
+
   const queryBody = query({
     operation: method,
-    variables: config.variables,
+    variables: builderInput,
     fields,
   });
   const documentNode = gql(queryBody.query);
