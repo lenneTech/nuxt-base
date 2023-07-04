@@ -49,6 +49,7 @@ export async function gqlMutation<T = any>(
   for (const [key, value] of Object.entries(argType.fields)) {
     builderInput[key] = {
       type: value.type,
+      list: value.isList,
       required: value.isRequired,
       value: config.variables[key],
     };
