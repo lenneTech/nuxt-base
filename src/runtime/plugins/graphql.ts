@@ -6,9 +6,14 @@ export default defineNuxtPlugin(async () => {
   const config = useRuntimeConfig();
   let meta: GraphQLMeta | null = null;
 
-  if (!meta) {
-    meta = await loadMeta({ public: config.public });
+  try {
+    if (!meta) {
+      meta = await loadMeta({ public: config.public });
+    }
+  } catch (e) {
+    console.error(e);
   }
+
   return {
     provide: {
       graphQl: () => meta,

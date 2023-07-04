@@ -8,17 +8,22 @@ import { GraphQLEnum } from '../enums/graphql-enum.class';
 export async function loadMeta(
   config: Partial<{ public: { host: string; schema?: string } }>,
 ): Promise<GraphQLMeta> {
-  const { data: result } = await ofetch(config.public.host, {
-    method: 'POST',
-    body: JSON.stringify({
-      query: getIntrospectionQuery({ descriptions: false }),
-      variables: {},
-    }),
+  return new Promise(async (resolve, reject) => {
+    const { data: result } = await ofetch(config.public.host, {
+      method: 'POST',
+      body: JSON.stringify({
+        query: getIntrospectionQuery({ descriptions: false }),
+        variables: {},
+      }),
+      onRequestError: (e) => {
+        reject(e);
+      },
+    });
+
+    const schema = buildClientSchema(result);
+
+    resolve(new GraphQLMeta(schema));
   });
-
-  const schema = buildClientSchema(result);
-
-  return new GraphQLMeta(schema);
 }
 
 /**
@@ -43,16 +48,16 @@ export async function prepareArguments(
 }> {
   // Init config variables
   const { allowed, levelKey, level, parent, schemaArgs, usedArgs, variables } =
-    {
-      allowed: null,
-      levelKey: '',
-      level: 1,
-      parent: '',
-      schemaArgs: [],
-      usedArgs: [],
-      variables: {},
-      ...options,
-    };
+  {
+    allowed: null,
+    levelKey: '',
+    level: 1,
+    parent: '',
+    schemaArgs: [],
+    usedArgs: [],
+    variables: {},
+    ...options,
+  };
 
   // Check args
   if (args === undefined || args === null) {
