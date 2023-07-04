@@ -67,10 +67,10 @@ export class GraphQLMeta {
       for (const [key, value] of Object.entries(argsDeepType.fields)) {
         result.push(
           key +
-            (argsDeepType.fields[key].isRequired ? '' : '?') +
-            ': ' +
-            argsDeepType.fields[key].type +
-            (argsDeepType.fields[key].isList ? '[]' : ''),
+          (argsDeepType.fields[key].isRequired ? '' : '?') +
+          ': ' +
+          argsDeepType.fields[key].type +
+          (argsDeepType.fields[key].isList ? '[]' : ''),
         );
         if (this.checkCustomTyp(argsDeepType.fields[key].type)) {
           customTypes.push(argsDeepType.fields[key].type);
@@ -418,6 +418,9 @@ export class GraphQLMeta {
 
       if (type instanceof GraphQLNonNull) {
         ofTypeResult.isRequired = true;
+      } else if (type instanceof GraphQLList) {
+        ofTypeResult.isList = true;
+        ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
       }
 
       Object.assign(graphQLType, ofTypeResult);
