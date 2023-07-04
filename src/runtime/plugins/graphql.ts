@@ -11,7 +11,7 @@ export default defineNuxtPlugin(async () => {
       meta = await loadMeta({ public: config.public });
     }
   } catch (e) {
-    console.error(e);
+    console.error('$graphql::loadMeta::error - Please check connection to your host.');
     meta = null;
   }
 
