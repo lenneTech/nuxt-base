@@ -12,6 +12,7 @@ export default defineNuxtPlugin(async () => {
     }
   } catch (e) {
     console.error(e);
+    meta = null;
   }
 
   return {

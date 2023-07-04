@@ -32,6 +32,11 @@ export async function gqlMutation<T = any>(
   }
 
   const meta = $graphQl() as GraphQLMeta;
+
+  if (!meta) {
+    return;
+  }
+
   const argType = meta.getArgs(method);
   const builderInput = {};
 

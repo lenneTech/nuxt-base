@@ -8,6 +8,9 @@ import { GraphQLEnum } from '../enums/graphql-enum.class';
 export async function loadMeta(
   config: Partial<{ public: { host: string; schema?: string } }>,
 ): Promise<GraphQLMeta> {
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), 5000);
+
   return new Promise(async (resolve, reject) => {
     const { data: result } = await ofetch(config.public.host, {
       method: 'POST',
@@ -15,6 +18,7 @@ export async function loadMeta(
         query: getIntrospectionQuery({ descriptions: false }),
         variables: {},
       }),
+      signal: controller.signal,
       onRequestError: (e) => {
         reject(e);
       },

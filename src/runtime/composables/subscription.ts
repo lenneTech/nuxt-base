@@ -27,6 +27,11 @@ export async function gqlSubscription<T = any>(
 
   const fields = config.fields as unknown as string[];
   const meta = $graphQl() as GraphQLMeta;
+
+  if (!meta) {
+    return;
+  }
+
   const argType = meta.getArgs(method);
   const builderInput = {};
 
