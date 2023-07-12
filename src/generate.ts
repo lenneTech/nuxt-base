@@ -125,9 +125,31 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   return template.join('\n');
 }
 
-export async function getAllMethods(meta: GraphQLMeta) {
+export async function getAllImports(meta: GraphQLMeta) {
   const methods = meta.getMethodNames();
+  let customTypes = [];
+
+  for (const method of methods.query) {
+    const types = meta.getTypesForMethod(method, 'Query');
+    customTypes = [...customTypes, ...types.customTypes];
+  }
+
+  for (const method of methods.mutation) {
+    const types = meta.getTypesForMethod(method, 'Mutation');
+    customTypes = [...customTypes, ...types.customTypes];
+  }
+
+  for (const method of methods.subscription) {
+    const types = meta.getTypesForMethod(method, 'Subscription');
+    customTypes = [...customTypes, ...types.customTypes];
+  }
+
+  customTypes = [...new Set([].concat(...customTypes))];
+
   return [
+    ...customTypes.map(
+      (type): Import => ({ from: '#base', name: type }),
+    ),
     ...methods.query.map(
       (fn): Import => ({ from: '#base', name: getMethodName(fn, 'Query') }),
     ),

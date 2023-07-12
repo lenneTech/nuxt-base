@@ -8,11 +8,7 @@ import {
   installModule,
   useLogger,
 } from '@nuxt/kit';
-import generateGraphQLTypes, {
-  generateComposables,
-  getAllMethods,
-  loadMetaServer,
-} from './generate';
+import generateGraphQLTypes, { generateComposables, getAllImports, loadMetaServer } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -107,7 +103,7 @@ export default defineNuxtModule<ModuleOptions>({
 
         // Generate imports
         nuxt.hook('imports:extend', async (imports) => {
-          const methods = await getAllMethods(meta);
+          const methods = await getAllImports(meta);
           imports.push(...(methods || []));
         });
 
