@@ -36,8 +36,16 @@ export async function gqlSubscription<T = any>(
   const builderInput = {};
 
   for (const [key, value] of Object.entries(argType.fields)) {
+    let type: string;
+
+    if (value.isList) {
+      type = value.isItemRequired ? `${value.type}!` : value.type;
+    } else {
+      type = value.isRequired ? `${value.type}!` : value.type;
+    }
+
     builderInput[key] = {
-      type: value.isRequired ? `${value.type}!` : value.type,
+      type,
       list: value.isList,
       value: config.variables[key],
     };
