@@ -148,7 +148,7 @@ export async function getAllImports(meta: GraphQLMeta) {
 
   return [
     ...customTypes.map(
-      (type): Import => ({ from: '#base', name: type }),
+      (type): Import => ({ from: '#base/default', name: type }),
     ),
     ...methods.query.map(
       (fn): Import => ({ from: '#base', name: getMethodName(fn, 'Query') }),
