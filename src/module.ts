@@ -15,7 +15,6 @@ export interface ModuleOptions {
   host: string;
   schema?: string;
   watch: boolean;
-  autoImport: boolean;
   apollo?: {
     browserHttpEndpoint?: string;
     wsEndpoint?: string;
@@ -48,7 +47,6 @@ export default defineNuxtModule<ModuleOptions>({
     host: '',
     schema: null,
     watch: true,
-    autoImport: true,
     apollo: {
       authType: 'Bearer',
       authHeader: 'Authorization',
@@ -69,60 +67,58 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolver.resolve('runtime/plugins/graphql'));
     addPlugin(resolver.resolve('runtime/plugins/apollo'));
 
-    if (options.autoImport) {
-      addImportsDir(resolver.resolve('runtime/composables'));
-      addImportsDir(resolver.resolve('runtime/stores'));
-      addImportsDir(resolver.resolve('runtime/interfaces'));
-      addImportsDir(resolver.resolve('runtime/enums'));
-      addImportsDir(resolver.resolve('runtime/classes'));
-      addImportsDir(resolver.resolve('runtime/functions'));
-      logger.success('[@lenne.tech/nuxt-base] Added imports');
+    addImportsDir(resolver.resolve('runtime/composables'));
+    addImportsDir(resolver.resolve('runtime/stores'));
+    addImportsDir(resolver.resolve('runtime/interfaces'));
+    addImportsDir(resolver.resolve('runtime/enums'));
+    addImportsDir(resolver.resolve('runtime/classes'));
+    addImportsDir(resolver.resolve('runtime/functions'));
+    logger.success('[@lenne.tech/nuxt-base] Added imports');
 
-      try {
-        const meta = await loadMetaServer({ public: options });
+    try {
+      const meta = await loadMetaServer({ public: options });
 
-        // Generate graphql types
-        const generatedTypes = await generateGraphQLTypes(
-          options.schema ?? options.host,
-        );
-        addTemplate({
-          write: true,
-          filename: 'base/default.ts',
-          getContents: () => generatedTypes[0].content || '',
-        });
-        logger.success('[@lenne.tech/nuxt-base] Generated base/default.ts');
+      // Generate graphql types
+      const generatedTypes = await generateGraphQLTypes(
+        options.schema ?? options.host,
+      );
+      addTemplate({
+        write: true,
+        filename: 'base/default.ts',
+        getContents: () => generatedTypes[0].content || '',
+      });
+      logger.success('[@lenne.tech/nuxt-base] Generated base/default.ts');
 
-        // Generate composable types
-        const composables = await generateComposables(meta);
-        addTemplate({
-          write: true,
-          filename: 'base/index.ts',
-          getContents: () => composables || '',
-        });
-        logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
+      // Generate composable types
+      const composables = await generateComposables(meta);
+      addTemplate({
+        write: true,
+        filename: 'base/index.ts',
+        getContents: () => composables || '',
+      });
+      logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
 
-        // Generate imports
-        nuxt.hook('imports:extend', async (imports) => {
-          const methods = await getAllImports(meta);
-          imports.push(...(methods || []));
-        });
+      // Generate imports
+      nuxt.hook('imports:extend', async (imports) => {
+        const methods = await getAllImports(meta);
+        imports.push(...(methods || []));
+      });
 
-        nuxt.options.alias['#base'] = resolver.resolve(
-          nuxt.options.buildDir,
-          'base',
-        );
+      nuxt.options.alias['#base'] = resolver.resolve(
+        nuxt.options.buildDir,
+        'base',
+      );
 
-        nuxt.options.alias['#base/*'] = resolver.resolve(
-          nuxt.options.buildDir,
-          'base',
-          '*',
-        );
-      } catch (e) {
-        console.error(e);
-        logger.warn(
-          '[@lenne.tech/nuxt-base] Generated failed. Please check your host.',
-        );
-      }
+      nuxt.options.alias['#base/*'] = resolver.resolve(
+        nuxt.options.buildDir,
+        'base',
+        '*',
+      );
+    } catch (e) {
+      console.error(e);
+      logger.warn(
+        '[@lenne.tech/nuxt-base] Generated failed. Please check your host.',
+      );
     }
 
     // TODO: Remove when package fixed with valid ESM exports
@@ -173,6 +169,12 @@ export default defineNuxtModule<ModuleOptions>({
             getContents: () => composables || '',
           });
           logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
+
+          // Generate imports
+          nuxt.hook('imports:extend', async (imports) => {
+            const methods = await getAllImports(meta);
+            imports.push(...(methods || []));
+          });
 
           nuxt.options.alias['#base'] = resolver.resolve(
             nuxt.options.buildDir,
