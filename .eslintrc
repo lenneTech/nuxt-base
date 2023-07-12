@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["@lenne.tech/eslint-config-vue"]
+  "extends": ["@lenne.tech/vue"]
 }

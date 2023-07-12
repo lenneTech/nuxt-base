@@ -1,11 +1,5 @@
-import type { GraphQLNamedType, GraphQLSchema } from 'graphql';
-import {
-  GraphQLEnumType,
-  GraphQLInputObjectType,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLScalarType,
-} from 'graphql';
+import type { GraphQLSchema } from 'graphql';
+import { GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType } from 'graphql';
 import type { GraphQLRequestType } from '../enums/graphql-request-type.enum';
 import type { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
 import { GraphQLType } from './graphql-type.class';
@@ -317,13 +311,6 @@ export class GraphQLMeta {
   }
 
   /**
-   * Get type
-   */
-  protected getType(name: string): GraphQLNamedType | null | undefined {
-    return this.schema.getType(name);
-  }
-
-  /**
    * Get (deep) type name
    */
   protected getTypeName(type: any) {
@@ -418,10 +405,15 @@ export class GraphQLMeta {
 
       if (type instanceof GraphQLNonNull) {
         ofTypeResult.isRequired = true;
-      } else if (type instanceof GraphQLList) {
-        ofTypeResult.isList = true;
-        ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
+      } else {
+        ofTypeResult.isRequired = false;
+
+        if (type instanceof GraphQLList) {
+          ofTypeResult.isList = true;
+          ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
+        }
       }
+
 
       Object.assign(graphQLType, ofTypeResult);
       return graphQLType;
