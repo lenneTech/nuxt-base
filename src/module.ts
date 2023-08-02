@@ -39,7 +39,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: '@lenne.tech/nuxt-base',
     configKey: 'nuxtBase',
     compatibility: {
-      nuxt: '3.6.1',
+      nuxt: '3.6.5',
     },
   },
   // Default configuration options of the Nuxt module
@@ -145,7 +145,7 @@ export default defineNuxtModule<ModuleOptions>({
     });
 
     if (options.watch) {
-      nuxt.hook('builder:watch', async (event, path) => {
+      nuxt.hook('builder:watch', async () => {
         const start = Date.now();
         try {
           const meta = await loadMetaServer({ public: options });
@@ -218,7 +218,5 @@ export default defineNuxtModule<ModuleOptions>({
     logger.success('[@lenne.tech/nuxt-base] Installed @pinia/nuxt');
 
     logger.info('[@lenne.tech/nuxt-base] Initialize done!');
-
-    nuxt.hook('ready', (nitro) => {});
   },
 });
