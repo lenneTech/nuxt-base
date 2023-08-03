@@ -67,7 +67,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields: any[], log?: boolean): Promise<AsyncData<{${query}: ${
+        } fields: any[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? 'variables: variables,' : ''

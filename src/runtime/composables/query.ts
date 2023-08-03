@@ -46,9 +46,21 @@ export async function gqlQuery<T = any>(
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
       if (Object.keys(metaFields.fields[key].fields).length) {
-        const subObject = {};
-        subObject[key] = ['id'];
-        availableFields.push(subObject);
+        if (metaFields.fields[key].fields['id']) {
+          const subObject = {};
+          subObject[key] = ['id'];
+          availableFields.push(subObject);
+        } else {
+          const subObject = {};
+          const subFields = [];
+          for (const [subKey] of Object.entries(metaFields.fields[key].fields)) {
+            if (!Object.keys(metaFields.fields[key].fields[subKey])) {
+              subFields.push(subKey);
+            }
+          }
+          subObject[key] = subFields;
+          availableFields.push(subObject);
+        }
       } else {
         availableFields.push(key);
       }
@@ -79,7 +91,7 @@ export async function gqlQuery<T = any>(
   const queryBody = query({
     operation: method,
     variables: builderInput,
-    fields: fields ? fields : availableFields,
+    fields: fields !== null ? fields : availableFields,
   });
   const documentNode = gql(queryBody.query);
 
