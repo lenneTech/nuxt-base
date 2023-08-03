@@ -39,8 +39,21 @@ export async function gqlQuery<T = any>(
   }
 
   const argType = meta.getArgs(method);
-  const availableFields = meta.getFields(method);
   const builderInput = {};
+  const metaFields = meta.getFields(method);
+  const availableFields = [];
+
+  if (!fields) {
+    for (const [key] of Object.entries(metaFields.fields)) {
+      if (metaFields.fields[key].fields) {
+        const subObject = {};
+        subObject[key] = ['id'];
+        availableFields.push(subObject);
+      } else {
+        availableFields.push(key);
+      }
+    }
+  }
 
   for (const [key, value] of Object.entries(argType.fields)) {
     let type: string;
@@ -66,7 +79,7 @@ export async function gqlQuery<T = any>(
   const queryBody = query({
     operation: method,
     variables: builderInput,
-    fields,
+    fields: fields ? fields : availableFields,
   });
   const documentNode = gql(queryBody.query);
 
