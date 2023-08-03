@@ -54,7 +54,7 @@ export async function gqlQuery<T = any>(
           const subObject = {};
           const subFields = [];
           for (const [subKey] of Object.entries(metaFields.fields[key].fields)) {
-            if (!Object.keys(metaFields.fields[key].fields[subKey])) {
+            if (!Object.keys(metaFields.fields[key].fields[subKey]).length) {
               subFields.push(subKey);
             }
           }
