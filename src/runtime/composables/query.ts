@@ -39,6 +39,7 @@ export async function gqlQuery<T = any>(
   }
 
   const argType = meta.getArgs(method);
+  const availableFields = meta.getFields(method);
   const builderInput = {};
 
   for (const [key, value] of Object.entries(argType.fields)) {
@@ -59,6 +60,7 @@ export async function gqlQuery<T = any>(
 
   if (config.log) {
     console.debug('gqlMutation::builderInput ', builderInput);
+    console.debug('gqlMutation::availableFields ', availableFields);
   }
 
   const queryBody = query({
