@@ -84,8 +84,8 @@ export async function gqlQuery<T = any>(
   }
 
   if (config.log) {
-    console.debug('gqlMutation::builderInput ', builderInput);
-    console.debug('gqlMutation::availableFields ', availableFields);
+    console.debug('gqlQuery::builderInput ', builderInput);
+    console.debug('gqlQuery::availableFields ', availableFields);
   }
 
   const queryBody = query({

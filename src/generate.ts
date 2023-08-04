@@ -67,7 +67,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields: any[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
+        } fields?: any[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? 'variables: variables,' : ''
@@ -84,7 +84,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields: any[], log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
+        } fields?: any[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
           types.returnType
         }}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
@@ -105,7 +105,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
           subscription,
         )}Subscription = (${
           types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields: any[], log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+        } fields?: any[] | null, log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
           types.returnType
         }}, any>> => gqlSubscription<{${subscription}: ${
           types.returnType

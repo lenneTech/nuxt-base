@@ -34,6 +34,32 @@ export async function gqlSubscription<T = any>(
 
   const argType = meta.getArgs(method);
   const builderInput = {};
+  const metaFields = meta.getFields(method);
+  const availableFields = [];
+
+  if (!fields) {
+    for (const [key] of Object.entries(metaFields.fields)) {
+      if (Object.keys(metaFields.fields[key].fields).length) {
+        if (metaFields.fields[key].fields['id']) {
+          const subObject = {};
+          subObject[key] = ['id'];
+          availableFields.push(subObject);
+        } else {
+          const subObject = {};
+          const subFields = [];
+          for (const [subKey] of Object.entries(metaFields.fields[key].fields)) {
+            if (!Object.keys(metaFields.fields[key].fields[subKey].fields).length) {
+              subFields.push(subKey);
+            }
+          }
+          subObject[key] = subFields;
+          availableFields.push(subObject);
+        }
+      } else {
+        availableFields.push(key);
+      }
+    }
+  }
 
   for (const [key, value] of Object.entries(argType.fields)) {
     let type: string;
@@ -52,13 +78,14 @@ export async function gqlSubscription<T = any>(
   }
 
   if (config.log) {
-    console.debug('gqlMutation::builderInput ', builderInput);
+    console.debug('gqlSubscription::builderInput ', builderInput);
+    console.debug('gqlSubscription::availableFields ', availableFields);
   }
 
   const queryBody = subscription({
     operation: method,
     variables: builderInput,
-    fields,
+    fields: fields !== null ? fields : availableFields,
   });
   const documentNode = gql(queryBody.query);
 
