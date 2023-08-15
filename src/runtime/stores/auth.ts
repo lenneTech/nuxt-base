@@ -4,9 +4,9 @@ import { useRuntimeConfig } from 'nuxt/app';
 export const useAuthStore: any = defineStore('auth', () => {
   const config = useRuntimeConfig();
   // Cookies
-  const tokenCookie = useCookie(config.storagePrefix ? `${config.storagePrefix}-token` : 'token');
-  const refreshTokenCookie = useCookie(config.storagePrefix ? `${config.storagePrefix}-refreshToken` : 'refreshToken');
-  const currentUserCookie = useCookie(config.storagePrefix ? `${config.storagePrefix}-currentUser` : 'currentUser');
+  const tokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-token` : 'token');
+  const refreshTokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken');
+  const currentUserCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser');
 
   // Refs
   const token = ref<string>(tokenCookie?.value || null);
