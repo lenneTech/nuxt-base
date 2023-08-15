@@ -1,4 +1,4 @@
-import type { IGraphQLOptions } from '#imports';
+import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { useSubscription } from '#imports';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';

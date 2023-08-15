@@ -1,10 +1,12 @@
 import { defineStore, gqlMutation, ref, useCookie } from '#imports';
+import { useRuntimeConfig } from 'nuxt/app';
 
 export const useAuthStore: any = defineStore('auth', () => {
+  const config = useRuntimeConfig();
   // Cookies
-  const tokenCookie = useCookie('token');
-  const refreshTokenCookie = useCookie('refreshToken');
-  const currentUserCookie = useCookie('currentUser');
+  const tokenCookie = useCookie(config.storagePrefix ? `${config.storagePrefix}-token` : 'token');
+  const refreshTokenCookie = useCookie(config.storagePrefix ? `${config.storagePrefix}-refreshToken` : 'refreshToken');
+  const currentUserCookie = useCookie(config.storagePrefix ? `${config.storagePrefix}-currentUser` : 'currentUser');
 
   // Refs
   const token = ref<string>(tokenCookie?.value || null);

@@ -1,4 +1,4 @@
-import type { IGraphQLOptions } from '#imports';
+import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { useMutation } from '#imports';
 import type { UseMutationReturn } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
@@ -68,7 +68,6 @@ export async function gqlMutation<T = any>(
 
   if (config.log) {
     console.debug('gqlMutation::variables ', config.variables);
-    console.debug('gqlMutation::type ', config.type);
     console.debug('gqlMutation::argType ', argType);
   }
 

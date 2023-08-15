@@ -15,6 +15,7 @@ export interface ModuleOptions {
   host: string;
   schema?: string;
   watch: boolean;
+  storagePrefix?: string;
   apollo?: {
     browserHttpEndpoint?: string;
     wsEndpoint?: string;
@@ -47,6 +48,7 @@ export default defineNuxtModule<ModuleOptions>({
     host: '',
     schema: null,
     watch: true,
+    storagePrefix: '',
     apollo: {
       authType: 'Bearer',
       authHeader: 'Authorization',
@@ -63,6 +65,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     nuxt.options.runtimeConfig.public['host'] = options.host;
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
+    nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
     addPlugin(resolver.resolve('runtime/plugins/graphql'));
     addPlugin(resolver.resolve('runtime/plugins/apollo'));

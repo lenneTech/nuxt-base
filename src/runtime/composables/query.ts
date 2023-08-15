@@ -1,10 +1,10 @@
-import type { IGraphQLOptions } from '#imports';
 import { useAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import type { AsyncData } from 'nuxt/app';
 import { useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
+import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 export async function gqlQuery<T = any>(
   method: string,
