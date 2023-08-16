@@ -1,20 +1,20 @@
 import {
   addImportsDir,
   addPlugin,
-  addTemplate,
   createResolver,
   defineNuxtModule,
   extendViteConfig,
   installModule,
   useLogger,
 } from '@nuxt/kit';
-import generateGraphQLTypes, { generateComposables, getAllImports, loadMetaServer } from './generate';
+import { generateFiles } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
   host: string;
   schema?: string;
   watch: boolean;
+  generateTypes?: boolean;
   storagePrefix?: string;
   apollo?: {
     browserHttpEndpoint?: string;
@@ -48,6 +48,7 @@ export default defineNuxtModule<ModuleOptions>({
     host: '',
     schema: null,
     watch: true,
+    generateTypes: true,
     storagePrefix: '',
     apollo: {
       authType: 'Bearer',
@@ -78,50 +79,8 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir(resolver.resolve('runtime/functions'));
     logger.success('[@lenne.tech/nuxt-base] Added imports');
 
-    try {
-      const meta = await loadMetaServer({ public: options });
-
-      // Generate graphql types
-      const generatedTypes = await generateGraphQLTypes(
-        options.schema ?? options.host,
-      );
-      addTemplate({
-        write: true,
-        filename: nuxt.options.rootDir + '/src/base/default.ts',
-        getContents: () => generatedTypes[0].content || '',
-      });
-      logger.success('[@lenne.tech/nuxt-base] Generated base/default.ts');
-
-      // Generate composable types
-      const composables = await generateComposables(meta);
-      addTemplate({
-        write: true,
-        filename: nuxt.options.rootDir + '/src/base/index.ts',
-        getContents: () => composables || '',
-      });
-      logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
-
-      // Generate imports
-      nuxt.hook('imports:extend', async (imports) => {
-        const methods = await getAllImports(meta);
-        imports.push(...(methods || []));
-      });
-
-      nuxt.options.alias['#base'] = resolver.resolve(
-        nuxt.options.rootDir,
-        'base',
-      );
-
-      nuxt.options.alias['#base/*'] = resolver.resolve(
-        nuxt.options.rootDir,
-        'base',
-        '*',
-      );
-    } catch (e) {
-      console.error(e);
-      logger.warn(
-        '[@lenne.tech/nuxt-base] Generated failed. Please check your host.',
-      );
+    if (options.generateTypes) {
+      await generateFiles(options, logger, nuxt, resolver);
     }
 
     // TODO: Remove when package fixed with valid ESM exports
@@ -150,53 +109,12 @@ export default defineNuxtModule<ModuleOptions>({
     if (options.watch) {
       nuxt.hook('builder:watch', async () => {
         const start = Date.now();
-        try {
-          const meta = await loadMetaServer({ public: options });
 
-          // Generate graphql types
-          const generatedTypes = await generateGraphQLTypes(
-            options.schema ?? options.host,
-          );
-          addTemplate({
-            write: true,
-            filename: 'base/default.ts',
-            getContents: () => generatedTypes[0].content || '',
-          });
-          logger.success('[@lenne.tech/nuxt-base] Generated base/default.ts');
-
-          // Generate composable types
-          const composables = await generateComposables(meta);
-          addTemplate({
-            write: true,
-            filename: 'base/index.ts',
-            getContents: () => composables || '',
-          });
-          logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
-
-          // Generate imports
-          nuxt.hook('imports:extend', async (imports) => {
-            const methods = await getAllImports(meta);
-            imports.push(...(methods || []));
-          });
-
-          nuxt.options.alias['#base'] = resolver.resolve(
-            nuxt.options.buildDir,
-            'base',
-          );
-
-          nuxt.options.alias['#base/*'] = resolver.resolve(
-            nuxt.options.buildDir,
-            'base',
-            '*',
-          );
-
-          await nuxt.callHook('builder:generateApp');
-        } catch (e) {
-          console.error(e);
-          logger.warn(
-            '[@lenne.tech/nuxt-base] Generated failed. Please check your host.',
-          );
+        if (options.generateTypes) {
+          await generateFiles(options, logger, nuxt, resolver);
         }
+
+        await nuxt.callHook('builder:generateApp');
         const time = Date.now() - start;
         logger.success(
           `[@lenne.tech/nuxt-base] Generation completed in ${time}ms`,

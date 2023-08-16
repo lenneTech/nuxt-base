@@ -4,6 +4,7 @@ import { buildClientSchema, getIntrospectionQuery } from 'graphql';
 import { ofetch } from 'ofetch';
 import type { Import } from 'unimport';
 import { GraphQLMeta } from './runtime/classes/graphql-meta.class';
+import { addTemplate } from '@nuxt/kit';
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const { loadSchema } = require('@graphql-tools/load');
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
@@ -118,8 +119,11 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
 
   customTypes = [...new Set([].concat(...customTypes))];
 
+  // Remove type upload
+  customTypes = customTypes.filter((e) => e !== 'Upload');
+
   if (customTypes.length) {
-    template.unshift(`import {${customTypes.join(', ')}} from "#base/default"`);
+    template.unshift(`import {${customTypes.join(', ')}} from "./default"`);
   }
 
   return template.join('\n');
@@ -171,4 +175,52 @@ function getMethodName(method: string, type: string) {
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export async function generateFiles(options: any, logger: any, nuxt: any, resolver: any) {
+  try {
+    const meta = await loadMetaServer({ public: options });
+
+    // Generate graphql types
+    const generatedTypes = await generateGraphQLTypes(
+      options.schema ?? options.host,
+    );
+    addTemplate({
+      write: true,
+      filename: nuxt.options.rootDir + '/src/base/default.ts',
+      getContents: () => generatedTypes[0].content || '',
+    });
+    logger.success('[@lenne.tech/nuxt-base] Generated base/default.ts');
+
+    // Generate composable types
+    const composables = await generateComposables(meta);
+    addTemplate({
+      write: true,
+      filename: nuxt.options.rootDir + '/src/base/index.ts',
+      getContents: () => composables || '',
+    });
+    logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
+
+    // Generate imports
+    nuxt.hook('imports:extend', async (imports) => {
+      const methods = await getAllImports(meta);
+      imports.push(...(methods || []));
+    });
+
+    nuxt.options.alias['#base'] = resolver.resolve(
+      nuxt.options.rootDir,
+      'base',
+    );
+
+    nuxt.options.alias['#base/*'] = resolver.resolve(
+      nuxt.options.rootDir,
+      'base',
+      '*',
+    );
+  } catch (e) {
+    console.error(e);
+    logger.warn(
+      '[@lenne.tech/nuxt-base] Generated failed. Please check your host.',
+    );
+  }
 }
