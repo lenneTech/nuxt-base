@@ -209,11 +209,13 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
 
     nuxt.options.alias['#base'] = resolver.resolve(
       nuxt.options.rootDir,
+      'src',
       'base',
     );
 
     nuxt.options.alias['#base/*'] = resolver.resolve(
       nuxt.options.rootDir,
+      'src',
       'base',
       '*',
     );
