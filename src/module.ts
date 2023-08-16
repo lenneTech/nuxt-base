@@ -87,7 +87,7 @@ export default defineNuxtModule<ModuleOptions>({
       );
       addTemplate({
         write: true,
-        filename: 'base/default.ts',
+        filename: nuxt.options.rootDir + '/src/base/default.ts',
         getContents: () => generatedTypes[0].content || '',
       });
       logger.success('[@lenne.tech/nuxt-base] Generated base/default.ts');
@@ -96,7 +96,7 @@ export default defineNuxtModule<ModuleOptions>({
       const composables = await generateComposables(meta);
       addTemplate({
         write: true,
-        filename: 'base/index.ts',
+        filename: nuxt.options.rootDir + '/src/base/index.ts',
         getContents: () => composables || '',
       });
       logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
@@ -108,12 +108,12 @@ export default defineNuxtModule<ModuleOptions>({
       });
 
       nuxt.options.alias['#base'] = resolver.resolve(
-        nuxt.options.buildDir,
+        nuxt.options.rootDir,
         'base',
       );
 
       nuxt.options.alias['#base/*'] = resolver.resolve(
-        nuxt.options.buildDir,
+        nuxt.options.rootDir,
         'base',
         '*',
       );
