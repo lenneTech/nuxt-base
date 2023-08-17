@@ -45,8 +45,7 @@ export default async function generateGraphQLTypes(schema: string) {
       },
       maybeValue: 'T',
       useTypeImports: true,
-      declarationKind: 'class',
-      scalars: {
+      primitives: {
         ID: 'string',
         Any: 'any',
         String: 'string',
