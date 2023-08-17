@@ -85,9 +85,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `  export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields?: any[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
+        } fields?: any[] | null, log?: boolean): Promise<UseMutationReturn<{data: {${mutation}: ${
           types.returnType
-        }}, any>> => gqlMutation<{${mutation}: ${
+        }}}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
         }}>('${mutation}', {${
           types.argType ? 'variables: variables,' : ''
