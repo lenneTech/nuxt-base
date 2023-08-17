@@ -4,6 +4,7 @@ import type { ApolloClient } from '@apollo/client/core';
 import { ApolloLink, from, fromPromise } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { provideApolloClient } from '@vue/apollo-composable';
+
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
@@ -33,7 +34,7 @@ export default defineNuxtPlugin((nuxtApp) => {
               return;
             }
 
-
+            console.log('need to refresh token!!!');
             return fromPromise(store.requestNewToken())
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
