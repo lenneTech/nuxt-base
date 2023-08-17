@@ -38,6 +38,26 @@ export default async function generateGraphQLTypes(schema: string) {
   const config: Types.Config = {
     schema,
     ignoreNoDocuments: true,
+    config: {
+      skipTypename: true,
+      namingConvention: {
+        enumValues: 'change-case-all#upperCase',
+      },
+      maybeValue: 'T',
+      useTypeImports: true,
+      declarationKind: 'class',
+      scalars: {
+        ID: 'string',
+        Any: 'any',
+        String: 'string',
+        Float: 'number',
+        Int: 'number',
+        Boolean: 'boolean',
+        DateTime: 'Date',
+        JSON: '{ [key: string]: any }',
+        Upload: 'File',
+      },
+    },
     generates: {
       [process.cwd() + '/src/types/schema.d.ts']: {
         plugins: ['typescript'],
