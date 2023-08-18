@@ -1,4 +1,4 @@
-import { ref, useCookie } from '#imports';
+import { ref, useCookie, useRuntimeConfig } from '#imports';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
 export function useAuthCookies() {
