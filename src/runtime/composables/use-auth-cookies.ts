@@ -2,10 +2,22 @@ import { ref, useCookie, useRuntimeConfig } from '#imports';
 import { callWithNuxt } from 'nuxt/app';
 
 export function useAuthCookies(nuxtApp: any) {
-  const config = callWithNuxt(nuxtApp, useRuntimeConfig);
-  const tokenCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-token` : 'token'));
-  const refreshTokenCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken'));
-  const userCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser'));
+  let config;
+  let tokenCookie;
+  let refreshTokenCookie;
+  let userCookie;
+
+  if (nuxtApp) {
+    config = callWithNuxt(nuxtApp, useRuntimeConfig);
+    tokenCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-token` : 'token'));
+    refreshTokenCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken'));
+    userCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser'));
+  } else {
+    config = useRuntimeConfig();
+    tokenCookie = useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-token` : 'token');
+    refreshTokenCookie = useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken');
+    userCookie = useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser');
+  }
 
   const token = ref<string | null>(tokenCookie.value ?? null);
   const refreshToken = ref<string | null>(refreshTokenCookie.value ?? null);
