@@ -15,6 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // trigger the error hook on an error
   const errorLink = onError((err) => {
+    console.log('errorLink');
     const store = useAuthStore();
 
     if (err.graphQLErrors) {
