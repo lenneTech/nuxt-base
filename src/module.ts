@@ -85,7 +85,7 @@ export default defineNuxtModule<ModuleOptions>({
       await generateFiles(options, logger, nuxt, resolver);
 
       if (options.exitAfterGeneration) {
-        setTimeout(() => process.exit(), 1000);
+        setTimeout(() => process.exit(), 2000);
       }
     }
 
