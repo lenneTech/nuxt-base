@@ -3,6 +3,7 @@ import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import { useAuthCookies } from '../composables/use-auth-cookies';
 
 export const useAuthStore: any = defineStore('auth', (_nuxtApp?: any) => {
+  console.log(_nuxtApp);
   const nuxtApp = _nuxtApp ? _nuxtApp : useNuxtApp();
   const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies(nuxtApp);
 
