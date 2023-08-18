@@ -3,14 +3,14 @@ import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import { useAuthCookies } from '../composables/use-auth-cookies';
 
 export const useAuthStore: any = defineStore('auth', () => {
-  const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies();
+  const nuxtApp = useNuxtApp();
+  const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies(nuxtApp);
 
   async function requestNewToken(): Promise<{
     token: string;
     refreshToken: string;
   }> {
     console.log('requestNewToken');
-    const nuxtApp = useNuxtApp();
     const { mutate } = await callWithNuxt(nuxtApp, gqlMutation, [
       'refreshToken',
       {
