@@ -1,4 +1,4 @@
-import { ref, useCookie } from '#imports';
+import { ref, useCookie, useRuntimeConfig } from '#imports';
 
 const config = useRuntimeConfig();
 const tokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-token` : 'token');
