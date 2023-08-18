@@ -1,17 +1,9 @@
-import { defineStore, gqlMutation, ref, useCookie } from '#imports';
-import { callWithNuxt, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
+import { defineStore, gqlMutation } from '#imports';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useAuthCookies } from '../composables/use-auth-cookies';
 
 export const useAuthStore: any = defineStore('auth', () => {
-  const config = useRuntimeConfig();
-  // Cookies
-  const tokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-token` : 'token');
-  const refreshTokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken');
-  const currentUserCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser');
-
-  // Refs
-  const token = ref<string>(tokenCookie?.value || null);
-  const refreshToken = ref<string>(refreshTokenCookie?.value || null);
-  const currentUser = ref<any>(currentUserCookie?.value || null);
+  const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies();
 
   async function requestNewToken(): Promise<{
     token: string;
@@ -45,27 +37,18 @@ export const useAuthStore: any = defineStore('auth', () => {
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
-    tokenCookie.value = newToken;
-    token.value = newToken;
-
-    refreshTokenCookie.value = newRefreshToken;
-    refreshToken.value = newRefreshToken;
+    setTokenCookie(newToken);
+    setRefreshTokenCookie(newRefreshToken);
   }
 
   function setCurrentUser(user: any) {
-    currentUserCookie.value = user;
-    currentUser.value = user;
+    setUserCookie(user);
   }
 
   function clearSession() {
-    tokenCookie.value = null;
-    token.value = null;
-
-    refreshTokenCookie.value = null;
-    refreshToken.value = null;
-
-    currentUserCookie.value = null;
-    currentUser.value = null;
+    setTokenCookie(null);
+    setRefreshTokenCookie(null);
+    setUserCookie(null);
   }
 
   return {
