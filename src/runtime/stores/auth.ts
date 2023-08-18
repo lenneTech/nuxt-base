@@ -1,5 +1,5 @@
 import { defineStore, gqlMutation, ref, useCookie } from '#imports';
-import { useRuntimeConfig } from 'nuxt/app';
+import { callWithNuxt, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 
 export const useAuthStore: any = defineStore('auth', () => {
   const config = useRuntimeConfig();
@@ -18,12 +18,16 @@ export const useAuthStore: any = defineStore('auth', () => {
     refreshToken: string;
   }> {
     console.log('requestNewToken');
-    const { mutate } = await gqlMutation('refreshToken', {
-      fields: ['token', 'refreshToken'],
-      log: true,
-    });
+    const nuxtApp = useNuxtApp();
+    const { mutate } = await callWithNuxt(nuxtApp, gqlMutation, [
+      'refreshToken',
+      {
+        fields: ['token', 'refreshToken'],
+        log: true,
+      },
+    ]);
 
-    const result = await mutate();
+    const result = await callWithNuxt(nuxtApp, mutate);
 
     console.log('requestNewToken::result', JSON.stringify(result));
 

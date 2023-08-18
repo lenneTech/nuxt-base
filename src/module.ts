@@ -15,6 +15,7 @@ export interface ModuleOptions {
   schema?: string;
   watch: boolean;
   generateTypes?: boolean;
+  exitAfterGeneration?: boolean;
   storagePrefix?: string;
   apollo?: {
     browserHttpEndpoint?: string;
@@ -49,6 +50,7 @@ export default defineNuxtModule<ModuleOptions>({
     schema: null,
     watch: true,
     generateTypes: true,
+    exitAfterGeneration: false,
     storagePrefix: '',
     apollo: {
       authType: 'Bearer',
@@ -81,6 +83,10 @@ export default defineNuxtModule<ModuleOptions>({
 
     if (options.generateTypes) {
       await generateFiles(options, logger, nuxt, resolver);
+
+      if (options.exitAfterGeneration) {
+        process.exit(1);
+      }
     }
 
     // TODO: Remove when package fixed with valid ESM exports
@@ -110,7 +116,7 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.hook('builder:watch', async () => {
         const start = Date.now();
 
-        if (options.generateTypes) {
+        if (options.generateTypes && !options.exitAfterGeneration) {
           await generateFiles(options, logger, nuxt, resolver);
         }
 
