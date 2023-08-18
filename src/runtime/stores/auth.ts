@@ -1,10 +1,9 @@
 import { defineStore, gqlMutation } from '#imports';
-import { callWithNuxt } from 'nuxt/app';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import { useAuthCookies } from '../composables/use-auth-cookies';
 
-export const useAuthStore: any = defineStore('auth', (_nuxtApp?: any) => {
-  console.log(_nuxtApp);
-  const nuxtApp = _nuxtApp ? _nuxtApp : null;
+export const useAuthStore: any = defineStore('auth', () => {
+  const nuxtApp = useNuxtApp();
   const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies(nuxtApp);
 
   async function requestNewToken(): Promise<{

@@ -10,14 +10,13 @@ import { provideApolloClient } from '@vue/apollo-composable';
  */
 
 export default defineNuxtPlugin(nuxtApp => {
-  console.log('apollo plugin', nuxtApp);
   const { $apollo } = nuxtApp;
   const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>;
 
   // trigger the error hook on an error
   const errorLink = onError((err) => {
-    console.log('errorLink', nuxtApp);
-    const store = useAuthStore(nuxtApp);
+    console.log('errorLink');
+    const store = useAuthStore();
 
     if (err.graphQLErrors) {
       for (const error of err.graphQLErrors) {
