@@ -40,6 +40,9 @@ export default defineNuxtPlugin((nuxtApp) => {
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
                 const oldHeaders = err.operation.getContext().headers;
+
+                console.log('new tokens', response);
+
                 // modify the operation context with a new token
                 err.operation.setContext({
                   headers: {
@@ -47,6 +50,8 @@ export default defineNuxtPlugin((nuxtApp) => {
                     Authorization: `Bearer ${response.token}`,
                   },
                 });
+
+                console.log('retry');
 
                 // retry the request, returning the new observable
                 return err.forward(err.operation);
