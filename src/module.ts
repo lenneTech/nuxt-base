@@ -70,8 +70,8 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
-    addPlugin(resolver.resolve('runtime/plugins/graphql'));
     addPlugin(resolver.resolve('runtime/plugins/apollo'));
+    addPlugin(resolver.resolve('runtime/plugins/graphql'));
 
     addImportsDir(resolver.resolve('runtime/composables'));
     addImportsDir(resolver.resolve('runtime/stores'));

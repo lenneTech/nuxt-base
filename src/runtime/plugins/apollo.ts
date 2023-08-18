@@ -9,7 +9,8 @@ import { provideApolloClient } from '@vue/apollo-composable';
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(nuxtApp => {
+  console.log('apollo plugin', nuxtApp);
   const { $apollo } = nuxtApp;
   const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>;
 
