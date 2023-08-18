@@ -20,9 +20,12 @@ export const useAuthStore: any = defineStore('auth', () => {
     console.log('requestNewToken');
     const { mutate } = await gqlMutation('refreshToken', {
       fields: ['token', 'refreshToken'],
+      log: true,
     });
 
     const result = await mutate();
+
+    console.log('requestNewToken::result', JSON.stringify(result));
 
     if (result?.data?.refreshToken) {
       setTokens(
