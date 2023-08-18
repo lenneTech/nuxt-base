@@ -16,7 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   // trigger the error hook on an error
   const errorLink = onError((err) => {
     console.log('errorLink');
-    const store = useAuthStore();
+    const store = useAuthStore(nuxtApp);
 
     if (err.graphQLErrors) {
       for (const error of err.graphQLErrors) {
@@ -65,7 +65,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const authMiddleware = new ApolloLink((operation, forward) => {
     const headers: any = {};
     const operationName = (operation.query.definitions[0] as any)?.selectionSet?.selections[0]?.name?.value;
-    const store = useAuthStore();
+    const store = useAuthStore(nuxtApp);
 
     if (store) {
       let token: string;
