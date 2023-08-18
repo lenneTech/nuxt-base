@@ -1,11 +1,13 @@
 import { ref, useCookie } from '#imports';
-
-console.log(process.env);
-const tokenCookie = useCookie(process.env['NUXT_PUBLIC_STORAGE_PREFIX'] ? `${process.env['NUXT_PUBLIC_STORAGE_PREFIX']}-token` : 'token');
-const refreshTokenCookie = useCookie(process.env['NUXT_PUBLIC_STORAGE_PREFIX'] ? `${process.env['NUXT_PUBLIC_STORAGE_PREFIX']}-refreshToken` : 'refreshToken');
-const userCookie = useCookie(process.env['NUXT_PUBLIC_STORAGE_PREFIX'] ? `${process.env['NUXT_PUBLIC_STORAGE_PREFIX']}-currentUser` : 'currentUser');
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
 export function useAuthCookies() {
+  const nuxtApp = useNuxtApp();
+  const config = callWithNuxt(nuxtApp, useRuntimeConfig);
+  const tokenCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-token` : 'token'));
+  const refreshTokenCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken'));
+  const userCookie = callWithNuxt(nuxtApp, useCookie(config.public?.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser'));
+
   const token = ref<string | null>(tokenCookie.value ?? null);
   const refreshToken = ref<string | null>(refreshTokenCookie.value ?? null);
   const currentUser = ref<object | null>(userCookie.value ?? null);
