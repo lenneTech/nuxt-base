@@ -1,8 +1,17 @@
-import { defineStore, gqlMutation } from '#imports';
-import { useAuthCookies } from '../composables/use-auth-cookies';
+import { defineStore, gqlMutation, ref, useCookie } from '#imports';
+import { useRuntimeConfig } from 'nuxt/app';
 
 export const useAuthStore: any = defineStore('auth', () => {
-  const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies();
+  const config = useRuntimeConfig();
+  // Cookies
+  const tokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-token` : 'token');
+  const refreshTokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken');
+  const currentUserCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser');
+
+  // Refs
+  const token = ref<string>(tokenCookie?.value || null);
+  const refreshToken = ref<string>(refreshTokenCookie?.value || null);
+  const currentUser = ref<any>(currentUserCookie?.value || null);
 
   async function requestNewToken(): Promise<{
     token: string;
@@ -12,6 +21,7 @@ export const useAuthStore: any = defineStore('auth', () => {
       fields: ['token', 'refreshToken'],
       log: true,
     });
+
     const result = await mutate();
 
     if (result?.data?.refreshToken) {
@@ -28,18 +38,27 @@ export const useAuthStore: any = defineStore('auth', () => {
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
-    setTokenCookie(newToken);
-    setRefreshTokenCookie(newRefreshToken);
+    tokenCookie.value = newToken;
+    token.value = newToken;
+
+    refreshTokenCookie.value = newRefreshToken;
+    refreshToken.value = newRefreshToken;
   }
 
   function setCurrentUser(user: any) {
-    setUserCookie(user);
+    currentUserCookie.value = user;
+    currentUser.value = user;
   }
 
   function clearSession() {
-    setTokenCookie(null);
-    setRefreshTokenCookie(null);
-    setUserCookie(null);
+    tokenCookie.value = null;
+    token.value = null;
+
+    refreshTokenCookie.value = null;
+    refreshToken.value = null;
+
+    currentUserCookie.value = null;
+    currentUser.value = null;
   }
 
   return {

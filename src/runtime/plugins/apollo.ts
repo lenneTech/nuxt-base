@@ -1,4 +1,5 @@
-import { defineNuxtPlugin, useAuthStore } from '#imports';
+import { defineNuxtPlugin } from '#app';
+import { useAuthStore } from '#imports';
 import type { ApolloClient } from '@apollo/client/core';
 import { ApolloLink, from, fromPromise } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
@@ -7,7 +8,7 @@ import { provideApolloClient } from '@vue/apollo-composable';
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
-export default defineNuxtPlugin(nuxtApp => {
+export default defineNuxtPlugin((nuxtApp) => {
   const { $apollo } = nuxtApp;
   const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>;
 
@@ -21,8 +22,8 @@ export default defineNuxtPlugin(nuxtApp => {
           case 'UNAUTHENTICATED': {
             if (
               error.message !== 'Expired refresh token' &&
-              error.message !== 'Expired token' &&
-              error.message !== 'Invalid token'
+                error.message !== 'Expired token' &&
+                error.message !== 'Invalid token'
             ) {
               return;
             }
@@ -32,13 +33,11 @@ export default defineNuxtPlugin(nuxtApp => {
               return;
             }
 
-            console.debug('store.requestNewToken');
+            console.log('store.requestNewToken()');
             return fromPromise(store.requestNewToken())
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
                 const oldHeaders = err.operation.getContext().headers;
-
-                console.debug('new tokens', response);
 
                 // modify the operation context with a new token
                 err.operation.setContext({
@@ -47,8 +46,6 @@ export default defineNuxtPlugin(nuxtApp => {
                     Authorization: `Bearer ${response.token}`,
                   },
                 });
-
-                console.debug('retry');
 
                 // retry the request, returning the new observable
                 return err.forward(err.operation);
@@ -62,7 +59,7 @@ export default defineNuxtPlugin(nuxtApp => {
   const authMiddleware = new ApolloLink((operation, forward) => {
     const headers: any = {};
     const operationName = (operation.query.definitions[0] as any)?.selectionSet?.selections[0]?.name?.value;
-    const store = useAuthStore(nuxtApp);
+    const store = useAuthStore();
 
     if (store) {
       let token: string;
