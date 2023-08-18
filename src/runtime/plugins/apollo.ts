@@ -1,5 +1,4 @@
-import { defineNuxtPlugin } from '#app';
-import { useAuthStore } from '#imports';
+import { defineNuxtPlugin, useAuthStore } from '#imports';
 import type { ApolloClient } from '@apollo/client/core';
 import { ApolloLink, from, fromPromise } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
@@ -8,14 +7,12 @@ import { provideApolloClient } from '@vue/apollo-composable';
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
-
 export default defineNuxtPlugin(nuxtApp => {
   const { $apollo } = nuxtApp;
   const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>;
 
   // trigger the error hook on an error
   const errorLink = onError((err) => {
-    console.log('errorLink');
     const store = useAuthStore();
 
     if (err.graphQLErrors) {
@@ -35,13 +32,13 @@ export default defineNuxtPlugin(nuxtApp => {
               return;
             }
 
-            console.log('need to refresh token!!!');
+            console.debug('store.requestNewToken');
             return fromPromise(store.requestNewToken())
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
                 const oldHeaders = err.operation.getContext().headers;
 
-                console.log('new tokens', response);
+                console.debug('new tokens', response);
 
                 // modify the operation context with a new token
                 err.operation.setContext({
@@ -51,7 +48,7 @@ export default defineNuxtPlugin(nuxtApp => {
                   },
                 });
 
-                console.log('retry');
+                console.debug('retry');
 
                 // retry the request, returning the new observable
                 return err.forward(err.operation);

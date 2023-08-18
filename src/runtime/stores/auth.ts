@@ -1,35 +1,18 @@
 import { defineStore, gqlMutation } from '#imports';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import { useAuthCookies } from '../composables/use-auth-cookies';
 
 export const useAuthStore: any = defineStore('auth', () => {
-  const nuxtApp = useNuxtApp();
-  const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies(nuxtApp);
+  const { token, refreshToken, currentUser, setTokenCookie, setRefreshTokenCookie, setUserCookie } = useAuthCookies();
 
   async function requestNewToken(): Promise<{
     token: string;
     refreshToken: string;
   }> {
-    console.log('requestNewToken');
-    let result;
-    if (nuxtApp) {
-      const { mutate } = await callWithNuxt(nuxtApp, gqlMutation, [
-        'refreshToken',
-        {
-          fields: ['token', 'refreshToken'],
-          log: true,
-        },
-      ]);
-      result = await callWithNuxt(nuxtApp, mutate);
-    } else {
-      const { mutate } = await gqlMutation('refreshToken', {
-        fields: ['token', 'refreshToken'],
-        log: true,
-      });
-      result = await mutate();
-    }
-
-    console.log('requestNewToken::result', JSON.stringify(result));
+    const { mutate } = await gqlMutation('refreshToken', {
+      fields: ['token', 'refreshToken'],
+      log: true,
+    });
+    const result = await mutate();
 
     if (result?.data?.refreshToken) {
       setTokens(
