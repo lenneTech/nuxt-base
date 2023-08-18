@@ -1,6 +1,8 @@
 import { ref, useCookie, useRuntimeConfig } from '#imports';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
-const config = useRuntimeConfig();
+const nuxtApp = useNuxtApp();
+const config = callWithNuxt(nuxtApp, useRuntimeConfig);
 const tokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-token` : 'token');
 const refreshTokenCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-refreshToken` : 'refreshToken');
 const userCookie = useCookie(config.public.storagePrefix ? `${config.public.storagePrefix}-currentUser` : 'currentUser');
