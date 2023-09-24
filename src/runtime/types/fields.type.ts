@@ -1,12 +1,12 @@
-type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];
+export type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];
 
-type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;
+export type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;
 
-type SimpleKeysFromObject<T> = {
+export type SimpleKeysFromObject<T> = {
   [K in keyof T]: T[K] extends SimpleTypes ? K : never;
 }[keyof T];
 
-type SubFields<T extends object, K extends keyof T = keyof T> =
+export type SubFields<T extends object, K extends keyof T = keyof T> =
     K extends SimpleKeysFromObject<T> ?
       K :
       T[K] extends any[] ?

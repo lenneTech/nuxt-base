@@ -221,10 +221,10 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
     const composables = await generateComposables(meta);
     addTemplate({
       write: true,
-      filename: nuxt.options.rootDir + '/src/base/composables.ts',
+      filename: nuxt.options.rootDir + '/src/base/index.ts',
       getContents: () => composables || '',
     });
-    logger.success('[@lenne.tech/nuxt-base] Generated base/composables.ts');
+    logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
 
     // Generate imports
     nuxt.hook('imports:extend', async (imports) => {
