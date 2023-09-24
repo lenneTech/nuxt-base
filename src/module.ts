@@ -41,7 +41,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: '@lenne.tech/nuxt-base',
     configKey: 'nuxtBase',
     compatibility: {
-      nuxt: '3.7.1',
+      nuxt: '3.7.3',
     },
   },
   // Default configuration options of the Nuxt module
