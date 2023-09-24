@@ -1,6 +1,7 @@
 import {
   addImportsDir,
   addPlugin,
+  addTemplate,
   createResolver,
   defineNuxtModule,
   extendViteConfig,
@@ -8,6 +9,7 @@ import {
   useLogger,
 } from '@nuxt/kit';
 import { generateFiles } from './generate';
+import { readFileSync } from 'fs';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -73,6 +75,23 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolver.resolve('runtime/plugins/01.graphql'));
     addPlugin(resolver.resolve('runtime/plugins/02.auth.server'));
     addPlugin(resolver.resolve('runtime/plugins/03.apollo'));
+
+    addTemplate({
+      write: true,
+      filename: nuxt.options.buildDir + '/base-types/fields-types.d.ts',
+      getContents: () => readFileSync('./src/runtime/types/fields.d.ts') as any || '',
+    });
+
+    nuxt.options.alias['#base-types'] = resolver.resolve(
+      nuxt.options.buildDir,
+      'base',
+    );
+
+    nuxt.options.alias['#base-types/*'] = resolver.resolve(
+      nuxt.options.buildDir,
+      'base',
+      '*',
+    );
 
     addImportsDir(resolver.resolve('runtime/types'));
     addImportsDir(resolver.resolve('runtime/composables'));

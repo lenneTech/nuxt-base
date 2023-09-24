@@ -75,7 +75,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const template = [];
   let customTypes = [];
   template.push(
-    'import type { InputFields } from \'#imports\';\n',
+    'import type { InputFields } from \'#base-types\';\n',
   );
   template.push(
     'import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n',
