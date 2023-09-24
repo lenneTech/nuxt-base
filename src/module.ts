@@ -70,11 +70,13 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
-    addPlugin(resolver.resolve('runtime/plugins/apollo'));
-    addPlugin(resolver.resolve('runtime/plugins/graphql'));
+    addPlugin(resolver.resolve('runtime/plugins/01.graphql'));
+    addPlugin(resolver.resolve('runtime/plugins/02.auth.server'));
+    addPlugin(resolver.resolve('runtime/plugins/03.apollo'));
 
+    addImportsDir(resolver.resolve('runtime/types'));
     addImportsDir(resolver.resolve('runtime/composables'));
-    addImportsDir(resolver.resolve('runtime/stores'));
+    addImportsDir(resolver.resolve('runtime/states'));
     addImportsDir(resolver.resolve('runtime/interfaces'));
     addImportsDir(resolver.resolve('runtime/enums'));
     addImportsDir(resolver.resolve('runtime/classes'));

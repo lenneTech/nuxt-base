@@ -1,15 +1,14 @@
-import { defineNuxtPlugin, useRuntimeConfig } from 'nuxt/app';
+import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import { loadMeta } from '../functions/graphql-meta';
 
-export default defineNuxtPlugin(async () => {
-  const config = useRuntimeConfig();
+export default defineNuxtPlugin(async (_nuxt) => {
+  const nuxt = useNuxtApp();
+  const config = await callWithNuxt(nuxt, useRuntimeConfig);
   let meta: GraphQLMeta | null = null;
 
   try {
-    if (!meta) {
-      meta = await loadMeta({ public: config.public });
-    }
+    meta = await callWithNuxt(nuxt, loadMeta, [{ public: config.public }]);
   } catch (e) {
     console.error('$graphql::loadMeta::error - Please check connection to your host.');
     meta = null;

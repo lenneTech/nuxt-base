@@ -1,0 +1,1267 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Health check result"""
+type CoreHealthCheckResult {
+  """The overall status of the Health Check"""
+  status: String!
+
+  """
+  The info object contains information of each health indicator which is of status “up”
+  """
+  info: JSON
+
+  """
+  The error object contains information of each health indicator which is of status “down”
+  """
+  error: JSON
+
+  """The details object contains information of every health indicator"""
+  details: JSON!
+}
+
+"""AboutMe"""
+type AboutMe {
+  """Visibility of AboutMe"""
+  aboutMeVisibility: VisibilityEnum
+
+  """Drink of AboutMe"""
+  drink: DrinkEnum
+
+  """Activity of AboutMe"""
+  activity: ActivityEnum
+
+  """Location of AboutMe"""
+  location: LocationEnum
+
+  """Outfit of AboutMe"""
+  outfit: OutfitEnum
+}
+
+"""Enum of visibility states"""
+enum VisibilityEnum {
+  ALL
+  ME
+  REGISTERED
+}
+
+"""Favourite drink of user as enum"""
+enum DrinkEnum {
+  BEER
+  COFFEE
+  MILK
+  TEA
+  WATER
+  WINE
+}
+
+"""Enum of user activity"""
+enum ActivityEnum {
+  COUCH
+  SPORT
+}
+
+"""User preferred location as enum"""
+enum LocationEnum {
+  CITY
+  VILLAGE
+}
+
+"""User preferred outfit as enum"""
+enum OutfitEnum {
+  BUSINESS
+  CASUAL
+}
+
+"""Location"""
+type Location {
+  """Street of Location"""
+  street: String!
+
+  """Zip of Location"""
+  zip: String!
+
+  """City of Location"""
+  city: String!
+
+  """Lat of Location"""
+  lat: Float
+
+  """Long of Location"""
+  long: Float
+}
+
+"""Company"""
+type Company {
+  """Name of Company"""
+  name: String!
+
+  """Location of Company"""
+  location: Location!
+
+  """Logo of Company"""
+  logo: String
+
+  """Website of Company"""
+  website: String!
+
+  """CompanyForms of Company"""
+  companyForms: [String!]!
+
+  """CompanyType of Company"""
+  companyType: String!
+
+  """Branches of Company"""
+  branches: [String!]!
+
+  """Description of Company"""
+  description: String!
+}
+
+"""SearchConfig"""
+type SearchConfig {
+  """CompanyForms of SearchConfig"""
+  companyForms: [String!]
+
+  """CompanyTypes of SearchConfig"""
+  companyTypes: [String!]
+
+  """Branches of SearchConfig"""
+  branches: [String!]
+
+  """Distance of SearchConfig"""
+  distance: Float
+
+  """Skills of SearchConfig"""
+  skills: [String!]
+}
+
+"""Contact"""
+type Contact {
+  """Contact user"""
+  contact: User!
+
+  """Status of Contact"""
+  status: String!
+
+  """Created of Contact"""
+  created: Float!
+
+  """Updated of Contact"""
+  updated: Float
+
+  """Message of Contact"""
+  message: String
+}
+
+"""User"""
+type User {
+  """ID of the persistence object"""
+  id: ID
+
+  """Created date"""
+  createdAt: Date
+
+  """Labels of the object"""
+  labels: [String!]
+
+  """Tags for the object"""
+  tags: [String!]
+
+  """Updated date"""
+  updatedAt: Date
+
+  """Email of the user"""
+  email: String
+
+  """First name of the user"""
+  firstName: String
+
+  """Last name of the user"""
+  lastName: String
+
+  """Roles of the user"""
+  roles: [String!]
+
+  """Username of the user"""
+  username: String
+
+  """Verification state of the user"""
+  verified: Boolean
+
+  """Verified date"""
+  verifiedAt: Date
+
+  """URL to avatar file of the user"""
+  avatar: String
+
+  """ID of the user who created the object"""
+  createdBy: String
+
+  """Gender of user"""
+  gender: String
+
+  """Title of user"""
+  title: String
+
+  """Phone number of the user"""
+  phone: String
+
+  """Job title of the user"""
+  jobTitle: String
+
+  """Things about the user"""
+  aboutMe: AboutMe
+
+  """Description of the user"""
+  description: String
+
+  """Company the user is working for"""
+  company: Company
+
+  """Skills of the user"""
+  skills: [String!]
+
+  """Search configuration of the user"""
+  searchConfig: SearchConfig
+
+  """Contacts of the user"""
+  contacts: [Contact!]
+
+  """Likes for the user"""
+  likes: [User!]
+
+  """Likes count of the user"""
+  likesCount: Float
+
+  """ID of the user who last updated the object"""
+  updatedBy: String
+}
+
+"""Result of find and count"""
+type FindAndCountUsersResult {
+  """Found users"""
+  items: [User!]!
+
+  """Total count (skip/offset and limit/take are ignored in the count)"""
+  totalCount: Float!
+}
+
+"""Skill"""
+type Skill {
+  """ID of the persistence object"""
+  id: ID
+
+  """Created date"""
+  createdAt: Date
+
+  """Labels of the object"""
+  labels: [String!]
+
+  """Tags for the object"""
+  tags: [String!]
+
+  """Updated date"""
+  updatedAt: Date
+
+  """ID of the user who created the object"""
+  createdBy: User
+
+  """ID of the user who updated the object"""
+  updatedBy: User
+
+  """Name of Skill"""
+  name: String!
+
+  """Count of Skill"""
+  count: Float!
+}
+
+"""Result of find and count Skills"""
+type FindAndCountSkillsResult {
+  """Found Skills"""
+  items: [Skill!]!
+
+  """Total count (skip/offset and limit/take are ignored in the count)"""
+  totalCount: Float!
+}
+
+"""Faq"""
+type Faq {
+  """ID of the persistence object"""
+  id: ID
+
+  """Created date"""
+  createdAt: Date
+
+  """Labels of the object"""
+  labels: [String!]
+
+  """Tags for the object"""
+  tags: [String!]
+
+  """Updated date"""
+  updatedAt: Date
+
+  """ID of the user who created the object"""
+  createdBy: User
+
+  """ID of the user who updated the object"""
+  updatedBy: User
+
+  """Question of Faq"""
+  question: String!
+
+  """Answer of Faq"""
+  answer: String!
+
+  """Order of Faq"""
+  order: Float
+}
+
+"""Result of find and count Faqs"""
+type FindAndCountFaqsResult {
+  """Found Faqs"""
+  items: [Faq!]!
+
+  """Total count (skip/offset and limit/take are ignored in the count)"""
+  totalCount: Float!
+}
+
+"""Event"""
+type Event {
+  """ID of the persistence object"""
+  id: ID
+
+  """Created date"""
+  createdAt: Date
+
+  """Labels of the object"""
+  labels: [String!]
+
+  """Tags for the object"""
+  tags: [String!]
+
+  """Updated date"""
+  updatedAt: Date
+
+  """ID of the user who created the object"""
+  createdBy: User
+
+  """ID of the user who updated the object"""
+  updatedBy: User
+
+  """Title of Event"""
+  title: String!
+
+  """Description of Event"""
+  description: String
+
+  """StartDateTime of Event"""
+  startDateTime: Date!
+
+  """EndDateTime of Event"""
+  endDateTime: Date!
+
+  """Image of Event"""
+  image: String
+
+  """Link of Event"""
+  link: String!
+}
+
+"""Result of find and count Events"""
+type FindAndCountEventsResult {
+  """Found Events"""
+  items: [Event!]!
+
+  """Total count (skip/offset and limit/take are ignored in the count)"""
+  totalCount: Float!
+}
+
+"""Authentication data"""
+type Auth {
+  """JavaScript Web Token (JWT)"""
+  token: String
+
+  """Refresh token"""
+  refreshToken: String
+
+  """User who signed in"""
+  user: User!
+}
+
+"""Information about file"""
+type FileInfo {
+  """ID of the file"""
+  id: String!
+
+  """
+  The size of each chunk in bytes. GridFS divides the document into chunks of size chunkSize, except for the last, which is only as large as needed. The default size is 255 kilobytes (kB)
+  """
+  chunkSize: Float
+
+  """Content type"""
+  contentType: String
+
+  """Name of the file"""
+  filename: String
+
+  """The size of the document in bytes"""
+  length: Float
+
+  """The date the file was first stored"""
+  uploadDate: Date
+}
+
+"""Metadata of API"""
+type Meta {
+  """Environment of API"""
+  environment: String!
+
+  """Title of API"""
+  title: String!
+
+  """Package name of API"""
+  package: String!
+
+  """Version of API"""
+  version: String!
+}
+
+"""Any scalar type"""
+scalar Any
+
+"""Date custom scalar type"""
+scalar Date
+
+"""
+JSON scalar type. Information on the exact schema of the JSON object is contained in the description of the field.
+"""
+scalar JSON
+
+type Query {
+  """Get health check result"""
+  healthCheck: CoreHealthCheckResult!
+
+  """Find users (via filter)"""
+  findAndCountUsers(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): FindAndCountUsersResult!
+
+  """Find users (via filter)"""
+  findUsers(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): [User!]!
+
+  """Get user with specified ID"""
+  getUser(id: String!): User!
+
+  """Get user with specified ID"""
+  getProfile(id: String!): User!
+
+  """Get verified state of user with token"""
+  getVerifiedState(token: String!): Boolean!
+
+  """Request new password for user with email"""
+  requestPasswordResetMail(email: String!): Boolean!
+
+  """Get Meta"""
+  getMeta: Meta!
+  getFileInfo(filename: String!): FileInfo
+
+  """Find Events (via filter)"""
+  findAndCountEvents(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): FindAndCountEventsResult!
+
+  """Find Events (via filter)"""
+  findEvents(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): [Event!]!
+
+  """Get Event with specified ID"""
+  getEvent(id: String!): Event!
+
+  """Find Faqs (via filter)"""
+  findAndCountFaqs(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): FindAndCountFaqsResult!
+
+  """Find Faqs (via filter)"""
+  findFaqs(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): [Faq!]!
+
+  """Get Faq with specified ID"""
+  getFaq(id: String!): Faq!
+
+  """Find Skills (via filter)"""
+  findAndCountSkills(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): FindAndCountSkillsResult!
+
+  """Find Skills (via filter)"""
+  findSkills(
+    """
+    Limit specifies the maximum number of elements found that are to be returned
+    """
+    limit: Int
+
+    """Alias for skip"""
+    offset: Int
+
+    """Skip specifies how many found elements should be skipped on return"""
+    skip: Int
+
+    """Sorting the returned elements"""
+    sort: [SortInput!]
+
+    """Alias for limit"""
+    take: Int
+
+    """Input for filtering"""
+    filter: FilterInput
+
+    """
+    Request only a specified number of samples from the filter results; if not specified, all results are returned.
+    """
+    samples: Float
+  ): [Skill!]!
+
+  """Get Skill with specified ID"""
+  getSkill(id: String!): Skill!
+}
+
+"""Sorting the returned elements"""
+input SortInput {
+  """Field that is to be used for sorting"""
+  field: String!
+
+  """SortInput order of the field"""
+  order: SortOrderEnum!
+}
+
+"""SortInput order of items"""
+enum SortOrderEnum {
+  ASC
+  DESC
+}
+
+"""
+Input for filtering. The `singleFilter` will be ignored if the `combinedFilter` is set.
+"""
+input FilterInput {
+  """Combination of multiple filters via logical operator"""
+  combinedFilter: CombinedFilterInput
+
+  """Filter for a single property"""
+  singleFilter: SingleFilterInput
+}
+
+"""Combination of multiple filters via logical operator"""
+input CombinedFilterInput {
+  """Logical Operator to combine filters"""
+  logicalOperator: LogicalOperatorEnum!
+
+  """Filters to combine via logical operator"""
+  filters: [FilterInput!]!
+}
+
+"""Logical operators to combine filters"""
+enum LogicalOperatorEnum {
+  AND
+  NOR
+  OR
+}
+
+"""Input for a configuration of a filter"""
+input SingleFilterInput {
+  """Convert value to ObjectId"""
+  convertToObjectId: Boolean
+
+  """Name of the property to be used for the filter"""
+  field: String!
+
+  """Process value as reference"""
+  isReference: Boolean
+
+  """
+  [Negate operator](https://docs.mongodb.com/manual/reference/operator/query/not/)
+  """
+  not: Boolean
+
+  """
+  [Comparison operator](https://docs.mongodb.com/manual/reference/operator/query-comparison/)
+  """
+  operator: ComparisonOperatorEnum!
+
+  """
+  [Options](https://docs.mongodb.com/manual/reference/operator/query/regex/#op._S_options) for [REGEX](https://docs.mongodb.com/manual/reference/operator/query/regex/) operator
+  """
+  options: String
+
+  """Value of the property"""
+  value: JSON!
+}
+
+"""
+[Comparison Operators](https://docs.mongodb.com/manual/reference/operator/query-comparison/) for filters
+"""
+enum ComparisonOperatorEnum {
+  EQ
+  GT
+  GTE
+  IN
+  LT
+  LTE
+  NE
+  NIN
+  REGEX
+}
+
+type Mutation {
+  """Logout user (from specific device)"""
+  logout(allDevices: Boolean): Boolean!
+
+  """Refresh tokens (for specific device)"""
+  refreshToken: CoreAuthModel!
+
+  """Sign in and get JWT token"""
+  signIn(input: AuthSignInInput!): Auth!
+
+  """Sign up user and get JWT token"""
+  signUp(input: AuthSignUpInput!): Auth!
+
+  """Create a new user"""
+  createUser(input: UserCreateInput!): User!
+
+  """Delete existing user"""
+  deleteUser(id: String!): User!
+
+  """Set new password for user with token"""
+  resetPassword(token: String!, password: String!): Boolean!
+
+  """Update existing user"""
+  updateUser(input: UserInput!, id: String!): User!
+
+  """Verify user with email"""
+  verifyUser(token: String!): Boolean!
+
+  """Send feedback"""
+  feedback(firstName: String!, lastName: String!, email: String!, message: String!, subject: String!): Boolean!
+  deleteFile(filename: String!): FileInfo!
+  uploadFile(file: Upload!): FileInfo!
+  uploadFiles(files: [Upload!]!): Boolean!
+
+  """Create a new Event"""
+  createEvent(input: EventCreateInput!): Event!
+
+  """Delete existing Event"""
+  deleteEvent(id: String!): Event!
+
+  """Update existing Event"""
+  updateEvent(id: String!, input: EventInput!): Event!
+
+  """Create a new Faq"""
+  createFaq(input: FaqCreateInput!): Faq!
+
+  """Delete existing Faq"""
+  deleteFaq(id: String!): Faq!
+
+  """Update existing Faq"""
+  updateFaq(id: String!, input: FaqInput!): Faq!
+
+  """Create a new Skill"""
+  createSkill(input: SkillCreateInput!): Skill!
+
+  """Delete existing Skill"""
+  deleteSkill(id: String!): Skill!
+
+  """Update existing Skill"""
+  updateSkill(id: String!, input: SkillInput!): Skill!
+}
+
+"""CoreAuth"""
+type CoreAuthModel {
+  """JavaScript Web Token (JWT)"""
+  token: String
+
+  """Refresh token"""
+  refreshToken: String
+
+  """Current user"""
+  user: CoreUserModel!
+}
+
+"""User"""
+type CoreUserModel {
+  """ID of the persistence object"""
+  id: ID
+
+  """Created date"""
+  createdAt: Date
+
+  """Labels of the object"""
+  labels: [String!]
+
+  """Tags for the object"""
+  tags: [String!]
+
+  """Updated date"""
+  updatedAt: Date
+
+  """Email of the user"""
+  email: String
+
+  """First name of the user"""
+  firstName: String
+
+  """Last name of the user"""
+  lastName: String
+
+  """Roles of the user"""
+  roles: [String!]
+
+  """Username of the user"""
+  username: String
+
+  """Verification state of the user"""
+  verified: Boolean
+
+  """Verified date"""
+  verifiedAt: Date
+}
+
+"""Sign-in input"""
+input AuthSignInInput {
+  """Device ID (is created automatically if it is not set)"""
+  deviceId: String
+
+  """Device description"""
+  deviceDescription: String
+
+  """Email"""
+  email: String!
+
+  """Password"""
+  password: String!
+}
+
+"""Sign-up input"""
+input AuthSignUpInput {
+  """Device ID (is created automatically if it is not set)"""
+  deviceId: String
+
+  """Device description"""
+  deviceDescription: String
+
+  """Email"""
+  email: String!
+
+  """Password"""
+  password: String!
+
+  """Gender of the user"""
+  gender: GenderEnum
+
+  """firstName"""
+  firstName: String
+
+  """lastName"""
+  lastName: String
+}
+
+"""Gender of the user as enum"""
+enum GenderEnum {
+  DIVERSE
+  FEMALE
+  MALE
+}
+
+"""User input to create a new user"""
+input UserCreateInput {
+  """Email of the user"""
+  email: String!
+
+  """First name of the user"""
+  firstName: String
+
+  """Last name of the user"""
+  lastName: String
+
+  """Roles of the user"""
+  roles: [String!]
+
+  """Username / alias of the user"""
+  username: String
+
+  """Password of the user"""
+  password: String
+
+  """Gender of the user"""
+  gender: GenderEnum
+
+  """Title of the user"""
+  title: TitleEnum
+
+  """Phone number of the user"""
+  phone: String
+
+  """Job title of the user"""
+  jobTitle: String
+
+  """Things about the user"""
+  aboutMe: AboutMeInput
+
+  """Description of the user"""
+  description: String
+
+  """Company the user is working for"""
+  company: CompanyInput
+
+  """Skills of the user"""
+  skills: [String!]
+
+  """Search configuration of the user"""
+  searchConfig: SearchConfigInput
+
+  """Contacts of the user"""
+  contacts: [ContactInput!]
+
+  """Likes for the user"""
+  likes: [String!]
+}
+
+"""Title of the user as enum"""
+enum TitleEnum {
+  DR
+  PROF
+}
+
+"""Input data to update an existing AboutMe"""
+input AboutMeInput {
+  """Visibility of AboutMe"""
+  aboutMeVisibility: VisibilityEnum
+
+  """Drink of AboutMe"""
+  drink: DrinkEnum
+
+  """Activity of AboutMe"""
+  activity: ActivityEnum
+
+  """Location of AboutMe"""
+  location: LocationEnum
+
+  """Outfit of AboutMe"""
+  outfit: OutfitEnum
+}
+
+"""Input data to update an existing Company"""
+input CompanyInput {
+  """Name of Company"""
+  name: String
+
+  """Location of Company"""
+  location: LocationInput
+
+  """Logo of Company"""
+  logo: String
+
+  """Website of Company"""
+  website: String
+
+  """CompanyForms of Company"""
+  companyForms: [CompanyFormEnum!]
+
+  """CompanyType of Company"""
+  companyType: CompanyTypeEnum
+
+  """Branches of Company"""
+  branches: [BranchEnum!]
+
+  """Description of Company"""
+  description: String
+}
+
+"""Input data to update an existing Location"""
+input LocationInput {
+  """Street of Location"""
+  street: String
+
+  """Zip of Location"""
+  zip: String
+
+  """City of Location"""
+  city: String
+
+  """Lat of Location"""
+  lat: Float
+
+  """Long of Location"""
+  long: Float
+}
+
+"""Enum of form in which the company operates"""
+enum CompanyFormEnum {
+  START_UP
+}
+
+"""Enum of company type"""
+enum CompanyTypeEnum {
+  INDUSTRY
+}
+
+"""Enum of branch in which the company operates"""
+enum BranchEnum {
+  IT
+}
+
+"""Input data to update an existing SearchConfig"""
+input SearchConfigInput {
+  """CompanyForms of SearchConfig"""
+  companyForms: [CompanyFormEnum!]
+
+  """CompanyTypes of SearchConfig"""
+  companyTypes: [CompanyTypeEnum!]
+
+  """Branches of SearchConfig"""
+  branches: [BranchEnum!]
+
+  """Distance of SearchConfig"""
+  distance: Float
+
+  """Skills of SearchConfig"""
+  skills: [String!]
+}
+
+"""Input data to update an existing Contact"""
+input ContactInput {
+  """Id of Contact"""
+  contact: String
+
+  """Status of Contact"""
+  status: ContactStatusEnum
+
+  """Created of Contact"""
+  created: Float
+
+  """Updated of Contact"""
+  updated: Float
+
+  """Message of Contact"""
+  message: String
+}
+
+"""Enum for contact status of the user"""
+enum ContactStatusEnum {
+  REQUESTED
+  REQUESTED_BY
+}
+
+"""User input"""
+input UserInput {
+  """Email of the user"""
+  email: String
+
+  """First name of the user"""
+  firstName: String
+
+  """Last name of the user"""
+  lastName: String
+
+  """Roles of the user"""
+  roles: [String!]
+
+  """Username / alias of the user"""
+  username: String
+
+  """Password of the user"""
+  password: String
+
+  """Avatar of the user"""
+  avatar: String
+
+  """Gender of the user"""
+  gender: GenderEnum
+
+  """Title of the user"""
+  title: TitleEnum
+
+  """Phone number of the user"""
+  phone: String
+
+  """Job title of the user"""
+  jobTitle: String
+
+  """Things about the user"""
+  aboutMe: AboutMeInput
+
+  """Description of the user"""
+  description: String
+
+  """Company the user is working for"""
+  company: CompanyInput
+
+  """Skills of the user"""
+  skills: [String!]
+
+  """Search configuration of the user"""
+  searchConfig: SearchConfigInput
+
+  """Contacts of the user"""
+  contacts: [ContactInput!]
+
+  """Likes for the user"""
+  likes: [String!]
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+"""Input data to create a new Event"""
+input EventCreateInput {
+  """Title of Event"""
+  title: String!
+
+  """Description of Event"""
+  description: String
+
+  """DateTime of Event"""
+  dateTime: Float!
+
+  """Image of Event"""
+  image: String
+
+  """Link of Event"""
+  link: String!
+}
+
+"""Input data to update an existing Event"""
+input EventInput {
+  """Title of Event"""
+  title: String
+
+  """Description of Event"""
+  description: String
+
+  """DateTime of Event"""
+  dateTime: Float
+
+  """Image of Event"""
+  image: String
+
+  """Link of Event"""
+  link: String
+}
+
+"""Input data to create a new Faq"""
+input FaqCreateInput {
+  """Question of Faq"""
+  question: String!
+
+  """Answer of Faq"""
+  answer: String!
+
+  """Order of Faq"""
+  order: Float
+}
+
+"""Input data to update an existing Faq"""
+input FaqInput {
+  """Question of Faq"""
+  question: String
+
+  """Answer of Faq"""
+  answer: String
+
+  """Order of Faq"""
+  order: Float
+}
+
+"""Input data to create a new Skill"""
+input SkillCreateInput {
+  """Name of Skill"""
+  name: String!
+
+  """Count of Skill"""
+  count: Float!
+}
+
+"""Input data to update an existing Skill"""
+input SkillInput {
+  """Name of Skill"""
+  name: String
+
+  """Count of Skill"""
+  count: Float
+}
+
+type Subscription {
+  userCreated: User!
+  eventCreated: Event!
+  faqCreated: Faq!
+  skillCreated: Skill!
+}

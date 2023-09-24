@@ -55,6 +55,7 @@ export default async function generateGraphQLTypes(schema: string) {
         Int: 'number',
         Boolean: 'boolean',
         DateTime: 'Date',
+        Date: 'Date',
         JSON: '{ [key: string]: any }',
         Upload: 'File',
       },
@@ -74,11 +75,14 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const template = [];
   let customTypes = [];
   template.push(
-    'import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\'\n',
+    'import type { InputFields } from \'#imports\';\n',
   );
-  template.push('import type { AsyncData } from \'nuxt/dist/app/composables\'\n');
   template.push(
-    'import { UseMutationReturn, UseSubscriptionReturn } from "@vue/apollo-composable"\n',
+    'import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n',
+  );
+  template.push('import type { AsyncData } from \'nuxt/dist/app/composables\';\n');
+  template.push(
+    'import { UseMutationReturn, UseSubscriptionReturn } from \'@vue/apollo-composable\';\n',
   );
 
   if (methods?.query) {
@@ -87,9 +91,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       customTypes.push(types.customTypes);
 
       template.push(
-        `  export const use${capitalizeFirstLetter(query)}Query = (${
-          types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields?: any[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
+        `export const use${capitalizeFirstLetter(query)}Query = (${
+          types.argType ? 'variables: { ' + types.argType + ' },' : ''
+        } fields?: InputFields<${types.returnType}>[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? 'variables: variables,' : ''
@@ -104,9 +108,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       customTypes.push(types.customTypes);
 
       template.push(
-        `  export const use${capitalizeFirstLetter(mutation)}Mutation = (${
-          types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields?: any[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
+        `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
+          types.argType ? 'variables: { ' + types.argType + ' },' : ''
+        } fields?: InputFields<${types.returnType}>[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
           types.returnType
         }}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
@@ -123,11 +127,11 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       customTypes.push(types.customTypes);
 
       template.push(
-        `  export const use${capitalizeFirstLetter(
+        `export const use${capitalizeFirstLetter(
           subscription,
         )}Subscription = (${
-          types.argType ? 'variables: {' + types.argType + '},' : ''
-        } fields?: any[] | null, log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+          types.argType ? 'variables: { ' + types.argType + ' },' : ''
+        } fields?: InputFields<${types.returnType}>[] | null, log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
           types.returnType
         }}, any>> => gqlSubscription<{${subscription}: ${
           types.returnType
@@ -217,10 +221,10 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
     const composables = await generateComposables(meta);
     addTemplate({
       write: true,
-      filename: nuxt.options.rootDir + '/src/base/index.ts',
+      filename: nuxt.options.rootDir + '/src/base/composables.ts',
       getContents: () => composables || '',
     });
-    logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
+    logger.success('[@lenne.tech/nuxt-base] Generated base/composables.ts');
 
     // Generate imports
     nuxt.hook('imports:extend', async (imports) => {

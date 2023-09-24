@@ -3,14 +3,16 @@ import { useMutation } from '#imports';
 import type { UseMutationReturn } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useNuxtApp } from 'nuxt/app';
+import { useNuxtApp } from '#app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
+import { callWithNuxt } from 'nuxt/app';
 
 export async function gqlMutation<T = any>(
   method: string,
   options: IGraphQLOptions = {},
 ): Promise<UseMutationReturn<T, any>> {
-  const { $graphQl } = useNuxtApp();
+  const _nuxt = useNuxtApp();
+  const { $graphQl } = _nuxt;
 
   // Check parameters
   if (!method) {
@@ -105,5 +107,5 @@ export async function gqlMutation<T = any>(
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return useMutation<T>(documentNode, { variables: config.variables });
+  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { variables: config.variables }]);
 }

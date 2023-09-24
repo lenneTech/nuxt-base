@@ -1,9 +1,10 @@
-import { defineNuxtPlugin } from '#app';
-import { useAuthStore } from '#imports';
+import { callWithNuxt, defineNuxtPlugin } from 'nuxt/app';
 import type { ApolloClient } from '@apollo/client/core';
 import { ApolloLink, from, fromPromise } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { provideApolloClient } from '@vue/apollo-composable';
+import { useAuthState } from '../states/auth';
+import { useAuth } from '../composables/use-auth';
 
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
@@ -14,7 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // trigger the error hook on an error
   const errorLink = onError((err) => {
-    const store = useAuthStore();
+    const { requestNewToken, clearSession } = useAuth();
 
     if (err.graphQLErrors) {
       for (const error of err.graphQLErrors) {
@@ -29,12 +30,11 @@ export default defineNuxtPlugin((nuxtApp) => {
             }
 
             if (error.message === 'Expired refresh token' || error.message === 'Invalid token') {
-              store.clearSession();
+              clearSession();
               return;
             }
 
-            console.log('store.requestNewToken()');
-            return fromPromise(store.requestNewToken())
+            return fromPromise(callWithNuxt(nuxtApp, requestNewToken) as any)
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
                 const oldHeaders = err.operation.getContext().headers;
@@ -57,17 +57,17 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const headers: any = {};
+    const headers: Record<string, string> = {};
     const operationName = (operation.query.definitions[0] as any)?.selectionSet?.selections[0]?.name?.value;
-    const store = useAuthStore();
+    const { accessTokenState, refreshTokenState } = useAuthState();
 
-    if (store) {
+    if (accessTokenState.value && refreshTokenState.value) {
       let token: string;
 
       if (operationName === 'refreshToken') {
-        token = store.refreshToken || null;
+        token = accessTokenState.value || null;
       } else {
-        token = store.token || null;
+        token = refreshTokenState.value || null;
       }
 
       if (token) {
