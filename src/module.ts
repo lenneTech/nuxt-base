@@ -9,7 +9,6 @@ import {
   useLogger,
 } from '@nuxt/kit';
 import { generateFiles } from './generate';
-import { SimpleTypes } from '#build/src/runtime/types/fields';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -79,10 +78,10 @@ export default defineNuxtModule<ModuleOptions>({
     addTemplate({
       filename: 'base/types/fields.d.ts',
       getContents: () => [
-        'type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];',
-        'type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;',
-        'type SimpleKeysFromObject<T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];',
-        'type SubFields<T extends object, K extends keyof T = "keyof" T> =',
+        'export type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];',
+        'export type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;',
+        'export type SimpleKeysFromObject<T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];',
+        'export type SubFields<T extends object, K extends keyof T = keyof T> =',
         '    K extends SimpleKeysFromObject<T> ?',
         '      K :',
         '      T[K] extends any[] ?',
@@ -160,7 +159,7 @@ export default defineNuxtModule<ModuleOptions>({
         await nuxt.callHook('builder:generateApp');
         const time = Date.now() - start;
         logger.success(
-          `[@lenne.tech/nuxt-base] Generation completed in ${time}ms`,
+          "[@lenne.tech/nuxt-base] Generation completed in ${time}ms`,
         );
       });
     }
