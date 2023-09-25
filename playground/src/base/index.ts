@@ -1,5 +1,5 @@
 import {CoreHealthCheckResult, FindAndCountUsersResult, SortInput, FilterInput, User, Meta, FileInfo, FindAndCountEventsResult, Event, FindAndCountFaqsResult, Faq, FindAndCountSkillsResult, Skill, CoreAuthModel, Auth, AuthSignInInput, AuthSignUpInput, UserCreateInput, UserInput, EventCreateInput, EventInput, FaqCreateInput, FaqInput, SkillCreateInput, SkillInput} from "./default"
-import type { InputFields } from '#imports';
+import type { InputFields } from '#base-types';
 
 import { gqlQuery, gqlMutation, gqlSubscription } from '#imports';
 
