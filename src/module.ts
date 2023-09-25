@@ -109,11 +109,6 @@ export default defineNuxtModule<ModuleOptions>({
       '*',
     );
 
-    nuxt.hook('prepare:types', (options) => {
-      options.references.push({ path: resolver.resolve(nuxt.options.buildDir, 'types/fields.d.ts') });
-    });
-
-    addImportsDir(resolver.resolve('runtime/types'));
     addImportsDir(resolver.resolve('runtime/composables'));
     addImportsDir(resolver.resolve('runtime/states'));
     addImportsDir(resolver.resolve('runtime/interfaces'));
