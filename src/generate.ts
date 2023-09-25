@@ -75,6 +75,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const template = [];
   let customTypes = [];
   template.push(
+    'import type { InputFields } from \'#base-types\';\n',
+  );
+  template.push(
     'import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n',
   );
   template.push('import type { AsyncData } from \'nuxt/dist/app/composables\';\n');
@@ -228,6 +231,19 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
       const methods = await getAllImports(meta);
       imports.push(...(methods || []));
     });
+
+    nuxt.options.alias['#base'] = resolver.resolve(
+      nuxt.options.rootDir,
+      'src',
+      'base',
+    );
+
+    nuxt.options.alias['#base/*'] = resolver.resolve(
+      nuxt.options.rootDir,
+      'src',
+      'base',
+      '*',
+    );
   } catch (e) {
     console.error(e);
     logger.warn(

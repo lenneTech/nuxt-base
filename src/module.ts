@@ -76,31 +76,42 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolver.resolve('runtime/plugins/03.apollo'));
 
     addTemplate({
-      filename: 'types/fields.d.ts',
+      filename: 'base-types/fields.d.ts',
       getContents: () => [
-        "type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];",
-        "type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;",
-        "type SimpleKeysFromObject<T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];",
-        "type SubFields<T extends object, K extends keyof T = keyof T> =",
-        "    K extends SimpleKeysFromObject<T> ?",
-        "      K :",
-        "      T[K] extends any[] ?",
-        "          { [P in K]: UnArray<T[P]> extends object ?",
-        "            SubFields<Required<UnArray<T[P]>>>[] :",
-        "            never } :",
-        "          {",
-        "            [P in K]: T[P] extends object ?",
-        "              SubFields<Required<T[P]>>[] :",
-        "              never",
-        "          };",
-        "type InputFields<T> = SubFields<Required<T>>;",
-        "export { InputFields };",
+        'type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];',
+        'type UnArray<\T> = T extends Array<infer U> ? UnArray<U> : T;',
+        'type SimpleKeysFromObject<\T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];',
+        'type SubFields<\T extends object, K extends keyof T = keyof T> =',
+        '    K extends SimpleKeysFromObject<\T> ?',
+        '      K :',
+        '      T[K] extends any[] ?',
+        '          { [P in K]: UnArray<\T[P]> extends object ?',
+        '            SubFields<\Required<UnArray<T[P]>>>[] :',
+        '            never } :',
+        '          {',
+        '            [P in K]: T[P] extends object ?',
+        '              SubFields<\Required<T[P]>>[] :',
+        '              never',
+        '          };',
+        'type InputFields<\T> = SubFields<Required<T>>;',
+        'export { InputFields };',
       ].join('\n'),
     });
 
+    nuxt.options.alias['#base-types'] = resolver.resolve(
+      nuxt.options.buildDir,
+      'base-types',
+    );
+
+    nuxt.options.alias['#base-types/*'] = resolver.resolve(
+      nuxt.options.buildDir,
+      'base-types',
+      '*',
+    );
+
     nuxt.hook('prepare:types', (options) => {
-      options.references.push({ path: resolver.resolve(nuxt.options.buildDir, 'types/fields.d.ts') })
-    })
+      options.references.push({ path: resolver.resolve(nuxt.options.buildDir, 'types/fields.d.ts') });
+    });
 
     addImportsDir(resolver.resolve('runtime/types'));
     addImportsDir(resolver.resolve('runtime/composables'));
@@ -153,7 +164,7 @@ export default defineNuxtModule<ModuleOptions>({
         await nuxt.callHook('builder:generateApp');
         const time = Date.now() - start;
         logger.success(
-          "[@lenne.tech/nuxt-base] Generation completed in ${time}ms`,
+          `[@lenne.tech/nuxt-base] Generation completed in ${time}ms`,
         );
       });
     }
