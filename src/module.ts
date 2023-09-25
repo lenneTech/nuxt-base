@@ -76,37 +76,31 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolver.resolve('runtime/plugins/03.apollo'));
 
     addTemplate({
-      filename: 'base/types/fields.d.ts',
+      filename: 'types/fields.d.ts',
       getContents: () => [
-        'export type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];',
-        'export type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;',
-        'export type SimpleKeysFromObject<T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];',
-        'export type SubFields<T extends object, K extends keyof T = keyof T> =',
-        '    K extends SimpleKeysFromObject<T> ?',
-        '      K :',
-        '      T[K] extends any[] ?',
-        '          { [P in K]: UnArray<T[P]> extends object ?',
-        '            SubFields<Required<UnArray<T[P]>>>[] :',
-        '            never } :',
-        '          {',
-        '            [P in K]: T[P] extends object ?',
-        '              SubFields<Required<T[P]>>[] :',
-        '              never',
-        '          };',
-        'export type InputFields<T> = SubFields<Required<T>>;',
+        "type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];",
+        "type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;",
+        "type SimpleKeysFromObject<T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];",
+        "type SubFields<T extends object, K extends keyof T = keyof T> =",
+        "    K extends SimpleKeysFromObject<T> ?",
+        "      K :",
+        "      T[K] extends any[] ?",
+        "          { [P in K]: UnArray<T[P]> extends object ?",
+        "            SubFields<Required<UnArray<T[P]>>>[] :",
+        "            never } :",
+        "          {",
+        "            [P in K]: T[P] extends object ?",
+        "              SubFields<Required<T[P]>>[] :",
+        "              never",
+        "          };",
+        "type InputFields<T> = SubFields<Required<T>>;",
+        "export { InputFields };",
       ].join('\n'),
     });
 
-    nuxt.options.alias['#base'] = resolver.resolve(
-      nuxt.options.buildDir,
-      'base',
-    );
-
-    nuxt.options.alias['#base/*'] = resolver.resolve(
-      nuxt.options.buildDir,
-      'base',
-      '*',
-    );
+    nuxt.hook('prepare:types', (options) => {
+      options.references.push({ path: resolver.resolve(nuxt.options.buildDir, 'types/fields.d.ts') })
+    })
 
     addImportsDir(resolver.resolve('runtime/types'));
     addImportsDir(resolver.resolve('runtime/composables'));
