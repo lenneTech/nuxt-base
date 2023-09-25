@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSignInMutation } from '../base/composables';
+import { useSignInMutation } from '../base';
 import { navigateTo } from '#app';
 import { useAuth } from '#imports';
 

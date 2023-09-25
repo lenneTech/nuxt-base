@@ -9,7 +9,7 @@ import {
   useLogger,
 } from '@nuxt/kit';
 import { generateFiles } from './generate';
-import { readFileSync } from 'fs';
+import { SimpleTypes } from '#build/src/runtime/types/fields';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -77,17 +77,33 @@ export default defineNuxtModule<ModuleOptions>({
     addPlugin(resolver.resolve('runtime/plugins/03.apollo'));
 
     addTemplate({
-      write: true,
-      filename: nuxt.options.buildDir + '/base-types/fields-types.d.ts',
-      getContents: () => readFileSync('./src/runtime/types/fields.d.ts') as any || '',
+      filename: 'base/types/fields.d.ts',
+      getContents: () => [
+        'type SimpleTypes = string | number | boolean | Date | string[] | number[] | boolean[] | Date[];',
+        'type UnArray<T> = T extends Array<infer U> ? UnArray<U> : T;',
+        'type SimpleKeysFromObject<T> = { [K in keyof T]: T[K] extends SimpleTypes ? K : never; }[keyof T];',
+        'type SubFields<T extends object, K extends keyof T = "keyof" T> =',
+        '    K extends SimpleKeysFromObject<T> ?',
+        '      K :',
+        '      T[K] extends any[] ?',
+        '          { [P in K]: UnArray<T[P]> extends object ?',
+        '            SubFields<Required<UnArray<T[P]>>>[] :',
+        '            never } :',
+        '          {',
+        '            [P in K]: T[P] extends object ?',
+        '              SubFields<Required<T[P]>>[] :',
+        '              never',
+        '          };',
+        'export type InputFields<T> = SubFields<Required<T>>;',
+      ].join('\n'),
     });
 
-    nuxt.options.alias['#base-types'] = resolver.resolve(
+    nuxt.options.alias['#base'] = resolver.resolve(
       nuxt.options.buildDir,
       'base',
     );
 
-    nuxt.options.alias['#base-types/*'] = resolver.resolve(
+    nuxt.options.alias['#base/*'] = resolver.resolve(
       nuxt.options.buildDir,
       'base',
       '*',
