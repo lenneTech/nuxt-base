@@ -89,11 +89,12 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
     for (const query of methods.query) {
       const types = meta.getTypesForMethod(query, 'Query');
       customTypes.push(types.customTypes);
+      const inputFieldsType = types.returnType.replace('[]', '');
 
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${types.returnType}>[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
+        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? 'variables: variables,' : ''
@@ -106,11 +107,11 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
     for (const mutation of methods.mutation) {
       const types = meta.getTypesForMethod(mutation, 'Mutation');
       customTypes.push(types.customTypes);
-
+      const inputFieldsType = types.returnType.replace('[]', '');
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${types.returnType}>[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
+        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${
           types.returnType
         }}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
@@ -125,13 +126,14 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
     for (const subscription of methods.subscription) {
       const types = meta.getTypesForMethod(subscription, 'Subscription');
       customTypes.push(types.customTypes);
+      const inputFieldsType = types.returnType.replace('[]', '');
 
       template.push(
         `export const use${capitalizeFirstLetter(
           subscription,
         )}Subscription = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${types.returnType}>[] | null, log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
           types.returnType
         }}, any>> => gqlSubscription<{${subscription}: ${
           types.returnType
