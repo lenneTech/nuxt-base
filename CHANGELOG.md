@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/lenneTech/nuxt-base/compare/v2.0.2-dev.0...v3.0.0) (2023-09-26)
+
+
+### Features
+
+* add auto fields to mutation and subscription ([d2467e6](https://github.com/lenneTech/nuxt-base/commit/d2467e63be55e2cae1a61fc5cbd060beb4211d52))
+* add auto import for types ([ddd23d3](https://github.com/lenneTech/nuxt-base/commit/ddd23d3307a8ac386d7c5a5a58a31bd405057224))
+* add better error message for invalid host connection ([be4d399](https://github.com/lenneTech/nuxt-base/commit/be4d399cbef68fd7ffe3dd984179a49311b3a77d))
+* add error handling ([eba25f2](https://github.com/lenneTech/nuxt-base/commit/eba25f21d0e107319ccaac609305402a198e33d7))
+* add eslint config ([9e7d537](https://github.com/lenneTech/nuxt-base/commit/9e7d537792eefae7c7e8f5677120d14dbad40165))
+* add list support on query build ([2a3fdf4](https://github.com/lenneTech/nuxt-base/commit/2a3fdf4c1e758c99d67f010dfa8e4d847727c8a8))
+* Add storagePrefix ([61a04e8](https://github.com/lenneTech/nuxt-base/commit/61a04e8f396429dcf63838ac3a3cf47af7fc9644))
+* add timeout ([07e27a2](https://github.com/lenneTech/nuxt-base/commit/07e27a2bfc1bf1736851f08842088dd441fda4f5))
+* refactor auth nuxt handling ([f1bb174](https://github.com/lenneTech/nuxt-base/commit/f1bb174e11e4013bd347d9c7ce03a4e0a2778fc3))
+* update nuxt ([f5265a8](https://github.com/lenneTech/nuxt-base/commit/f5265a8acb121efd7bfd92168c12d1b4c6079154))
+* update nuxt ([648229a](https://github.com/lenneTech/nuxt-base/commit/648229af5002d6e3289919db9f22eb5eb304b74e))
+* Update packages ([4182a3b](https://github.com/lenneTech/nuxt-base/commit/4182a3bc9a2b3f590cbfdbd84c399315076cb48e))
+
+
+### Bug Fixes
+
+* add lock file ([69e129a](https://github.com/lenneTech/nuxt-base/commit/69e129a030d3696e35aa3a6eccf0e60eb31fc813))
+* fix args type for query and subscription ([cf0df80](https://github.com/lenneTech/nuxt-base/commit/cf0df80b58994010f1a0069fb1e26af5ff1e4928))
+* fix dev action ([e9ae18d](https://github.com/lenneTech/nuxt-base/commit/e9ae18d6e20d96bbc7fb7b3a6d17fdba06084e2b))
+* fix lock file ([f441f08](https://github.com/lenneTech/nuxt-base/commit/f441f08e3027ff0b0fbfdbedb44e458beb23d0ed))
+* fix mutation ([964b98f](https://github.com/lenneTech/nuxt-base/commit/964b98feacfd0dbbc099c083cd3faaed64b1bc80))
+* fix release workflow ([d22c2fd](https://github.com/lenneTech/nuxt-base/commit/d22c2fd7168c5b9c2d58d70cefd316a2fd6d5ec2))
+* fix rename args to variables ([4ba8739](https://github.com/lenneTech/nuxt-base/commit/4ba87396ccfebba4d86c22b5284fa0659a92a185))
+* fix required for list arg ([be22ce6](https://github.com/lenneTech/nuxt-base/commit/be22ce69c0aff99abce1c72469fc58f73b93861f))
+* fix return type of mutation ([ea24b57](https://github.com/lenneTech/nuxt-base/commit/ea24b57dd85500957e77a826b8fcf56008ea7ca1))
+* pnpm lock ([e039736](https://github.com/lenneTech/nuxt-base/commit/e03973635b3e54b54ba147ec546d355db579f5e9))
+* refresh pnpm ([d22cf26](https://github.com/lenneTech/nuxt-base/commit/d22cf2604c92413feee783afa8acddab12fa0dd6))
+* storagePrefix ([3373efc](https://github.com/lenneTech/nuxt-base/commit/3373efc10b5185f854bd884e60e87ac448f2e7dc))
+
 ## [2.0.0](https://github.com/lenneTech/nuxt-base/compare/v1.14.3...v2.0.0) (2023-06-26)
 
 ### [1.14.3](https://github.com/lenneTech/nuxt-base/compare/v1.14.2...v1.14.3) (2023-06-26)
