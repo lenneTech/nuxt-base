@@ -65,9 +65,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       let token: string;
 
       if (operationName === 'refreshToken') {
-        token = accessTokenState.value || null;
-      } else {
         token = refreshTokenState.value || null;
+      } else {
+        token = accessTokenState.value || null;
       }
 
       if (token) {
