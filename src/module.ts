@@ -14,10 +14,8 @@ import { generateFiles } from './generate';
 export interface ModuleOptions {
   host: string;
   schema?: string;
-  watch: boolean;
   autoImport?: boolean;
   generateTypes?: boolean;
-  exitAfterGeneration?: boolean;
   storagePrefix?: string;
   apollo?: {
     browserHttpEndpoint?: string;
@@ -50,10 +48,8 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: (_nuxt) => ({
     host: '',
     schema: null,
-    watch: true,
     autoImport: false,
     generateTypes: true,
-    exitAfterGeneration: false,
     storagePrefix: '',
     apollo: {
       authType: 'Bearer',
@@ -117,14 +113,15 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir(resolver.resolve('runtime/enums'));
     addImportsDir(resolver.resolve('runtime/classes'));
     addImportsDir(resolver.resolve('runtime/functions'));
+
     logger.success('[@lenne.tech/nuxt-base] Added imports');
 
     if (options.generateTypes) {
       await generateFiles(options, logger, nuxt, resolver);
-
-      if (options.exitAfterGeneration) {
-        setTimeout(() => process.exit(), 2000);
-      }
+      setTimeout(() => {
+        logger.info('[@lenne.tech/nuxt-base] Exit after generation');
+        return process.exit(1);
+      }, 2000);
     }
 
     // TODO: Remove when package fixed with valid ESM exports
@@ -150,22 +147,6 @@ export default defineNuxtModule<ModuleOptions>({
       nitro.externals.inline.push(resolver.resolve('runtime'));
     });
 
-    if (options.watch) {
-      nuxt.hook('builder:watch', async () => {
-        const start = Date.now();
-
-        if (options.generateTypes && !options.exitAfterGeneration) {
-          await generateFiles(options, logger, nuxt, resolver);
-        }
-
-        await nuxt.callHook('builder:generateApp');
-        const time = Date.now() - start;
-        logger.success(
-          `[@lenne.tech/nuxt-base] Generation completed in ${time}ms`,
-        );
-      });
-    }
-
     await installModule(await resolver.resolvePath('@nuxtjs/apollo'), {
       autoImports: true,
       clients: {
@@ -175,13 +156,14 @@ export default defineNuxtModule<ModuleOptions>({
         },
       },
     });
+
     logger.success('[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo');
 
     await installModule(await resolver.resolvePath('@pinia/nuxt'), {
       autoImports: ['defineStore'],
     });
-    logger.success('[@lenne.tech/nuxt-base] Installed @pinia/nuxt');
 
-    logger.info('[@lenne.tech/nuxt-base] Initialize done!');
+    logger.success('[@lenne.tech/nuxt-base] Installed @pinia/nuxt');
+    logger.success('[@lenne.tech/nuxt-base] Initialize done!');
   },
 });
