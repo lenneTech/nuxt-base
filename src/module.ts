@@ -120,7 +120,7 @@ export default defineNuxtModule<ModuleOptions>({
       await generateFiles(options, logger, nuxt, resolver);
       setTimeout(() => {
         logger.info('[@lenne.tech/nuxt-base] Exit after generation');
-        return process.exit(0);
+        return process.exit(1);
       }, 2000);
     }
 
