@@ -45,7 +45,7 @@ export default defineNuxtPlugin({
       }).catch((err) => {
         console.error('02.auth.server.ts::getUser::catch', err.data);
       });
-      if (getUserData) {
+      if (getUserData?.getUser) {
         console.debug('02.auth.server.ts::getUserData', getUserData);
         setCurrentUser(getUserData.getUser);
       }

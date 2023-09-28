@@ -34,6 +34,7 @@ export default defineNuxtPlugin({
               }
 
               if (error.message === 'Expired refresh token' || error.message === 'Invalid token') {
+                console.debug('03.apollo.ts::init::clearSession::cause', error.message);
                 clearSession();
                 return;
               }
