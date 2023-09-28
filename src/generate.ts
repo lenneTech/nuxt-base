@@ -229,23 +229,25 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
     logger.success('[@lenne.tech/nuxt-base] Generated base/index.ts');
 
     // Generate imports
-    nuxt.hook('imports:extend', async (imports) => {
-      const methods = await getAllImports(meta);
-      imports.push(...(methods || []));
-    });
+    if (options?.autoImport) {
+      nuxt.hook('imports:extend', async (imports) => {
+        const methods = await getAllImports(meta);
+        imports.push(...(methods || []));
+      });
 
-    nuxt.options.alias['#base'] = resolver.resolve(
-      nuxt.options.rootDir,
-      'src',
-      'base',
-    );
+      nuxt.options.alias['#base'] = resolver.resolve(
+        nuxt.options.rootDir,
+        'src',
+        'base',
+      );
 
-    nuxt.options.alias['#base/*'] = resolver.resolve(
-      nuxt.options.rootDir,
-      'src',
-      'base',
-      '*',
-    );
+      nuxt.options.alias['#base/*'] = resolver.resolve(
+        nuxt.options.rootDir,
+        'src',
+        'base',
+        '*',
+      );
+    }
   } catch (e) {
     console.error(e);
     logger.warn(

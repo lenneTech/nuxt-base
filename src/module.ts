@@ -15,6 +15,7 @@ export interface ModuleOptions {
   host: string;
   schema?: string;
   watch: boolean;
+  autoImport?: boolean;
   generateTypes?: boolean;
   exitAfterGeneration?: boolean;
   storagePrefix?: string;
@@ -50,6 +51,7 @@ export default defineNuxtModule<ModuleOptions>({
     host: '',
     schema: null,
     watch: true,
+    autoImport: false,
     generateTypes: true,
     exitAfterGeneration: false,
     storagePrefix: '',
