@@ -22,6 +22,7 @@
     "build": "nuxt-module-build",
     "prepack": "pnpm build",
     "dev": "nuxi dev playground",
+    "dev:generate-types": "GENERATE_TYPES=1 nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
     "release": "standard-version && git push --follow-tags origin main",

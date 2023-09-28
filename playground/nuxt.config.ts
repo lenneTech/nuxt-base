@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   nuxtBase: {
     host: 'http://localhost:3000/graphql',
     schema: './playground/schema.gql',
-    generateTypes: true,
+    generateTypes:  process.env['GENERATE_TYPES'] === '1',
     apollo: {
       authType: 'Bearer',
       authHeader: 'Authorization',
