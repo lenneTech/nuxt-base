@@ -7,6 +7,7 @@ export default defineNuxtPlugin({
   name: 'auth-server',
   enforce: 'post',
   async setup() {
+    console.debug('02.auth.server.ts::init');
     const _nuxt = useNuxtApp();
     const config = await callWithNuxt(_nuxt, useRuntimeConfig);
     const { getDecodedAccessToken, setTokens, setCurrentUser } = await callWithNuxt(_nuxt, useAuth);
@@ -24,7 +25,10 @@ export default defineNuxtPlugin({
       console.error('02.auth.server.ts::refreshToken::catch', err.data);
     });
 
+
     if (refreshTokenResult) {
+      console.debug('02.auth.server.ts::token', refreshTokenResult.refreshToken?.token);
+      console.debug('02.auth.server.ts::refreshToken', refreshTokenResult.refreshToken?.refreshToken);
       setTokens(refreshTokenResult.refreshToken?.token, refreshTokenResult.refreshToken?.refreshToken);
       const payload = getDecodedAccessToken(accessTokenState?.value);
       const { data: getUserData } = await ofetch(config.public.host, {
@@ -42,7 +46,7 @@ export default defineNuxtPlugin({
         console.error('02.auth.server.ts::getUser::catch', err.data);
       });
       if (getUserData) {
-        //console.debug('02.auth.server.ts::getUserData', getUserData);
+        console.debug('02.auth.server.ts::getUserData', getUserData);
         setCurrentUser(getUserData.getUser);
       }
     }

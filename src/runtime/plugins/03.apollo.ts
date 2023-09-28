@@ -10,6 +10,7 @@ import { useAuth } from '../composables/use-auth';
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
 export default defineNuxtPlugin((nuxtApp) => {
+  console.debug('03.apollo.ts::init');
   const { $apollo } = nuxtApp;
   const defaultClient = ($apollo as any).defaultClient as unknown as ApolloClient<any>;
 
@@ -37,6 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             return fromPromise(callWithNuxt(nuxtApp, requestNewToken) as any)
               .filter((value) => Boolean(value))
               .flatMap((response: any) => {
+                console.debug('03.apollo.ts::errorLink::retryRequest', response.token);
                 const oldHeaders = err.operation.getContext().headers;
 
                 // modify the operation context with a new token
