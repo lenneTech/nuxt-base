@@ -69,9 +69,9 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
-    addPlugin(resolver.resolve('runtime/plugins/01.graphql'));
-    addPlugin(resolver.resolve('runtime/plugins/02.auth.server'));
-    addPlugin(resolver.resolve('runtime/plugins/03.apollo'));
+    addPlugin(resolver.resolve('runtime/plugins/1.graphql'));
+    addPlugin(resolver.resolve('runtime/plugins/2.auth.server'));
+    addPlugin(resolver.resolve('runtime/plugins/3.apollo'));
 
     addTemplate({
       filename: 'base-types/fields.d.ts',
