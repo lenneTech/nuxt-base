@@ -34,13 +34,13 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.4",
+    "@apollo/client": "3.8.5",
     "@babel/core": "7.23.0",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/client-preset": "4.1.0",
     "@graphql-codegen/typescript": "4.0.1",
     "@nuxt/kit": "3.7.4",
-    "@nuxtjs/apollo": "5.0.0-alpha.6",
+    "@nuxtjs/apollo": "5.0.0-alpha.7",
     "@pinia/nuxt": "0.4.11",
     "@vue/apollo-composable": "4.0.0-beta.11",
     "gql-query-builder": "3.8.0",
@@ -57,12 +57,12 @@
     "@nuxt/module-builder": "0.5.2",
     "@nuxt/schema": "3.7.4",
     "@nuxt/test-utils": "3.7.4",
-    "@types/node": "20.7.1",
+    "@types/node": "20.8.2",
     "eslint": "8.50.0",
     "nuxt": "3.7.4",
     "standard-version": "9.5.0",
     "typescript": "5.2.2",
-    "vitest": "0.34.5"
+    "vitest": "0.34.6"
   },
   "overrides": {
     "@nuxt/test-utils": {

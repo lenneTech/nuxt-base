@@ -10,7 +10,7 @@ export default defineNuxtPlugin({
     const config = await callWithNuxt(nuxt, useRuntimeConfig);
     let meta: GraphQLMeta | null = null;
 
-    console.debug('01.graphql.ts::init');
+    console.debug('1.graphql.ts::init');
 
     try {
       meta = await callWithNuxt(nuxt, loadMeta, [{ public: config.public }]);

@@ -13,7 +13,7 @@ export default defineNuxtPlugin({
   name: 'apollo',
   enforce: 'post',
   async setup() {
-    console.debug('03.apollo.ts::init');
+    console.debug('3.apollo.ts::init');
     const nuxtApp = useNuxtApp();
     const defaultClient = (nuxtApp.$apollo as any).defaultClient as unknown as ApolloClient<any>;
 
@@ -34,7 +34,7 @@ export default defineNuxtPlugin({
               }
 
               if (error.message === 'Expired refresh token' || error.message === 'Invalid token') {
-                console.debug('03.apollo.ts::init::clearSession::cause', error.message);
+                console.debug('3.apollo.ts::init::clearSession::cause', error.message);
                 clearSession();
                 return;
               }
@@ -42,7 +42,7 @@ export default defineNuxtPlugin({
               return fromPromise(callWithNuxt(nuxtApp, requestNewToken) as any)
                 .filter((value) => Boolean(value))
                 .flatMap((response: any) => {
-                  console.debug('03.apollo.ts::errorLink::retryRequest', response.token);
+                  console.debug('3.apollo.ts::errorLink::retryRequest', response.token);
                   const oldHeaders = err.operation.getContext().headers;
 
                   // modify the operation context with a new token

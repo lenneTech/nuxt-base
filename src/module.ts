@@ -8,7 +8,7 @@ import {
   installModule,
   useLogger,
 } from '@nuxt/kit';
-import { generateFiles } from './generate';
+import {generateFiles} from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -16,6 +16,7 @@ export interface ModuleOptions {
   schema?: string;
   autoImport?: boolean;
   generateTypes?: boolean;
+  registerAuthPlugins?: boolean;
   storagePrefix?: string;
   apollo?: {
     browserHttpEndpoint?: string;
@@ -50,6 +51,7 @@ export default defineNuxtModule<ModuleOptions>({
     schema: null,
     autoImport: false,
     generateTypes: true,
+    registerAuthPlugins: true,
     storagePrefix: '',
     apollo: {
       authType: 'Bearer',
@@ -70,7 +72,11 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
     addPlugin(resolver.resolve('runtime/plugins/1.graphql'));
-    addPlugin(resolver.resolve('runtime/plugins/2.auth.server'));
+
+    if (options.registerAuthPlugins) {
+      addPlugin(resolver.resolve('runtime/plugins/2.auth.server'));
+    }
+
     addPlugin(resolver.resolve('runtime/plugins/3.apollo'));
 
     addTemplate({
