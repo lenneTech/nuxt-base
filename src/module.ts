@@ -8,7 +8,7 @@ import {
   installModule,
   useLogger,
 } from '@nuxt/kit';
-import {generateFiles} from './generate';
+import { generateFiles } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -51,7 +51,7 @@ export default defineNuxtModule<ModuleOptions>({
     schema: null,
     autoImport: false,
     generateTypes: true,
-    registerAuthPlugins: true,
+    registerAuthPlugins: false,
     storagePrefix: '',
     apollo: {
       authType: 'Bearer',
