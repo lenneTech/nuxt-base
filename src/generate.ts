@@ -97,7 +97,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
         } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
-          types.argType ? 'variables: variables,' : ''
+          types.argType ? 'variables,' : ''
         } fields, log})`,
       );
     }
@@ -116,7 +116,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
         }}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
         }}>('${mutation}', {${
-          types.argType ? 'variables: variables,' : ''
+          types.argType ? 'variables,' : ''
         } fields, log})`,
       );
     }
@@ -138,7 +138,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
         }}, any>> => gqlSubscription<{${subscription}: ${
           types.returnType
         }}>('${subscription}', {${
-          types.argType ? 'variables: variables,' : ''
+          types.argType ? 'variables,' : ''
         } fields, log})`,
       );
     }

@@ -1,16 +1,18 @@
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
-import { useSubscription } from '#imports';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
+import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
+import { callWithNuxt } from 'nuxt/dist/app';
 
 export async function gqlSubscription<T = any>(
   method: string,
   options: IGraphQLOptions = {},
 ): Promise<UseSubscriptionReturn<T, any>> {
-  const { $graphQl } = useNuxtApp();
+  const _nuxt = useNuxtApp();
+  const { $graphQl } = _nuxt;
 
   // Check parameters
   if (!method) {
@@ -96,5 +98,5 @@ export async function gqlSubscription<T = any>(
     console.debug('gqlSubscription::documentNode ', documentNode);
   }
 
-  return useSubscription<T>(documentNode, config.variables ?? {});
+  return callWithNuxt(_nuxt, useSubscription<T>, [documentNode, config.variables ?? {}, null]);
 }

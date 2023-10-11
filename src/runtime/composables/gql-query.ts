@@ -1,16 +1,18 @@
-import { useAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import type { AsyncData } from 'nuxt/app';
 import { useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
+import type { UseQueryReturn } from '@vue/apollo-composable';
+import { useQuery } from '@vue/apollo-composable';
+import { callWithNuxt } from 'nuxt/dist/app';
 
 export async function gqlQuery<T = any>(
   method: string,
   options: IGraphQLOptions = {},
-): Promise<AsyncData<T, any>> {
-  const { $graphQl } = useNuxtApp();
+): Promise<UseQueryReturn<T, any>> {
+  const _nuxt = useNuxtApp();
+  const { $graphQl } = _nuxt;
 
   // Check parameters
   if (!method) {
@@ -101,5 +103,5 @@ export async function gqlQuery<T = any>(
     console.debug('gqlQuery::documentNode ', documentNode);
   }
 
-  return useAsyncQuery<T>(documentNode, config.variables ?? {});
+  return callWithNuxt(_nuxt, useQuery<T>, [documentNode, config.variables ?? {}, null]);
 }
