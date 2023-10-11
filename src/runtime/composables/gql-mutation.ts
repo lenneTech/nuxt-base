@@ -1,11 +1,10 @@
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import type { UseMutationReturn } from '@vue/apollo-composable';
+import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useNuxtApp } from '#app';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
-import { callWithNuxt } from 'nuxt/app';
-import {useMutation} from "@vue/apollo-composable";
 
 export async function gqlMutation<T = any>(
   method: string,

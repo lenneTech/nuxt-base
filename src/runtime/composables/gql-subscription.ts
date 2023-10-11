@@ -3,9 +3,8 @@ import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useNuxtApp } from 'nuxt/app';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
-import { callWithNuxt } from 'nuxt/dist/app';
 
 export async function gqlSubscription<T = any>(
   method: string,
