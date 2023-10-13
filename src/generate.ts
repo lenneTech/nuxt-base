@@ -81,7 +81,10 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
     'import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n',
   );
   template.push(
-    'import { UseMutationReturn, UseSubscriptionReturn, UseQueryReturn } from \'@vue/apollo-composable\';\n',
+    'import { UseMutationReturn, UseSubscriptionReturn } from \'@vue/apollo-composable\';\n',
+  );
+  template.push(
+    'import type { AsyncData } from \'nuxt/app\';',
   );
 
   if (methods?.query) {
@@ -93,7 +96,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<UseQueryReturn<{${query}: ${
+        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? 'variables,' : ''
