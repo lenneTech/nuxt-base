@@ -1,7 +1,6 @@
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import type { AsyncData } from 'nuxt/app';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useAsyncData, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { useAsyncQuery } from '#imports';
@@ -9,7 +8,7 @@ import { useAsyncQuery } from '#imports';
 export async function gqlQuery<T = any>(
   method: string,
   options: IGraphQLOptions = {},
-): Promise<AsyncData<T, any>> {
+) {
   const _nuxt = useNuxtApp();
   const { $graphQl } = _nuxt;
 
@@ -23,6 +22,7 @@ export async function gqlQuery<T = any>(
     variables: null,
     fields: null,
     log: false,
+    asyncDataOptions: {},
     ...options,
   };
 
@@ -102,5 +102,8 @@ export async function gqlQuery<T = any>(
     console.debug('gqlQuery::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useAsyncQuery<T>, [documentNode, config.variables ?? {}, null]);
+  return useAsyncData<T>(async () => {
+    const { data } = await useAsyncQuery<T>(documentNode, config.variables ?? {});
+    return data?.value || null;
+  }, options.asyncDataOptions);
 }
