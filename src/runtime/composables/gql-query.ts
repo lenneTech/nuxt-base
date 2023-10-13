@@ -102,7 +102,7 @@ export async function gqlQuery<T = any>(
     console.debug('gqlQuery::documentNode ', documentNode);
   }
 
-  callWithNuxt(_nuxt, () => {
+  return callWithNuxt(_nuxt, () => {
     return useAsyncData<T>(async () => {
       const { data } = await useAsyncQuery<T>(documentNode, config.variables ?? {});
       return data?.value || null;
