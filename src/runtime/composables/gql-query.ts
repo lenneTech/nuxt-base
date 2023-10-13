@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { useAsyncData, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
-import { useAsyncQuery } from '#imports';
+import { useQuery } from '@vue/apollo-composable';
 
 export async function gqlQuery<T = any>(
   method: string,
@@ -103,7 +103,7 @@ export async function gqlQuery<T = any>(
   }
 
   return useAsyncData<T>(async () => {
-    const { data } = await useAsyncQuery<T>(documentNode, config.variables ?? {});
-    return data?.value || null;
+    const { result } = useQuery<T>(documentNode, config.variables ?? {}, null);
+    return result?.value || null;
   }, options.asyncDataOptions);
 }
