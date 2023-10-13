@@ -103,7 +103,7 @@ export async function gqlQuery<T = any>(
   }
 
   return useAsyncData<T>(async () => {
-    const { data } = await useAsyncQuery<T>(documentNode, config.variables ?? {});
+    const { data } = await useAsyncQuery<T>({ query: documentNode, cache: false }, config.variables ?? {});
     return data?.value || null;
   }, options.asyncDataOptions);
 }
