@@ -27,8 +27,8 @@ importers:
         specifier: 3.7.4
         version: 3.7.4(rollup@3.29.0)
       '@nuxtjs/apollo':
-        specifier: 5.0.0-alpha.7
-        version: 5.0.0-alpha.7(rollup@3.29.0)(typescript@5.2.2)(vue@3.3.4)
+        specifier: 5.0.0-alpha.6
+        version: 5.0.0-alpha.6(rollup@3.29.0)(typescript@5.2.2)(vue@3.3.4)
       '@pinia/nuxt':
         specifier: 0.4.11
         version: 0.4.11(rollup@3.29.0)(typescript@5.2.2)(vue@3.3.4)
@@ -2246,8 +2246,8 @@ packages:
       - vue-tsc
     dev: true
 
-  /@nuxtjs/apollo@5.0.0-alpha.7(rollup@3.29.0)(typescript@5.2.2)(vue@3.3.4):
-    resolution: {integrity: sha512-H1ouaA8b+akEdk8fTs43iIpx5bXCjvYYt0lJz0clXsGIZJaPGJPvX2mS6m2dFtfz6f2kU4AP+uSN/3Eyh3w1NA==}
+  /@nuxtjs/apollo@5.0.0-alpha.6(rollup@3.29.0)(typescript@5.2.2)(vue@3.3.4):
+    resolution: {integrity: sha512-CRosywHMy5UUiXxNm7ji2QztyRWTYSvNXXnXS7WENtONG8molHABe72PCfMpRSPzeJu7JYb9S03dcZkLBirAJQ==}
     dependencies:
       '@apollo/client': 3.8.5(graphql-ws@5.13.1)(graphql@16.8.1)
       '@nuxt/kit': 3.7.4(rollup@3.29.0)
