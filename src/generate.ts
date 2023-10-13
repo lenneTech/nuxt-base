@@ -96,11 +96,11 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<AsyncData<{${query}: ${
+        } fields?: InputFields<${inputFieldsType}>[] | null, lazy?: boolean, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
         }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${
           types.argType ? 'variables,' : ''
-        } fields, log})`,
+        } fields, lazy, log})`,
       );
     }
   }
