@@ -1,5 +1,3 @@
-import type { AsyncDataOptions } from 'nuxt/app';
-
 /**
  * Options for graphql requests
  */
@@ -8,5 +6,4 @@ export interface IGraphQLOptions {
   arguments?: any;
   fields?: any;
   log?: boolean;
-  asyncDataOptions?: AsyncDataOptions<any>;
 }
