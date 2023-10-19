@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/lenneTech/nuxt-base/compare/v3.0.0...v3.1.0) (2023-10-19)
+
+
+### Features
+
+* add debug logs ([70eb56f](https://github.com/lenneTech/nuxt-base/commit/70eb56fed673baddc0fba0551993cc9d64c80beb))
+* change default value for registerAuthPlugins ([95f8f7b](https://github.com/lenneTech/nuxt-base/commit/95f8f7ba73642f3f5fd9082535b4235303135927))
+* change order of plugins ([40dd0c7](https://github.com/lenneTech/nuxt-base/commit/40dd0c7117965b8c90ff96489cebf7e1360826a7))
+* option for plugins ([0f327ad](https://github.com/lenneTech/nuxt-base/commit/0f327adfd9705d420a848f04d6973a87daa2300f))
+
+
+### Bug Fixes
+
+* adjust generation of composables ([c278e92](https://github.com/lenneTech/nuxt-base/commit/c278e92dce13d64e69481e37868f044863fda142))
+* Change return type of query ([48caf44](https://github.com/lenneTech/nuxt-base/commit/48caf445e83b37099f479c617786728796f87802))
+* deactivate auto import for generated files ([e387641](https://github.com/lenneTech/nuxt-base/commit/e387641314051e4bad68af48d9a7280bc6f0303d))
+* fix fields type if is array ([d25f50a](https://github.com/lenneTech/nuxt-base/commit/d25f50af125ef6aa2141aeffa126a80b68703284))
+* Fix grahpql options type ([c3bf6f1](https://github.com/lenneTech/nuxt-base/commit/c3bf6f16c61bae94645c75d71ff2f2c69d7be61c))
+* fix wrong imports ([5e1ad1d](https://github.com/lenneTech/nuxt-base/commit/5e1ad1db2f79fdff8aa9e9e5bc2a3673c9e08fe2))
+* remove duplicated imports ([19ca99f](https://github.com/lenneTech/nuxt-base/commit/19ca99ff9b9250e27e24361e5e3f22efc38ee893))
+
 ## [3.0.0](https://github.com/lenneTech/nuxt-base/compare/v2.0.2-dev.0...v3.0.0) (2023-09-26)
 
 
