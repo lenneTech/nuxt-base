@@ -1,5 +1,5 @@
 import { defineNuxtPlugin, useCookie } from 'nuxt/app';
-import { useAuthState } from '#build/playground/.nuxt/imports';
+import { useAuthState } from '../states/auth';
 
 export default defineNuxtPlugin({
   name: 'cookies',
