@@ -15,7 +15,12 @@ export default defineNuxtPlugin({
   async setup() {
     console.debug('3.apollo.ts::init');
     const nuxtApp = useNuxtApp();
-    const defaultClient = (nuxtApp.$apollo as any).defaultClient as unknown as ApolloClient<any>;
+    const defaultClient = (nuxtApp.$apollo as any)?.defaultClient as unknown as ApolloClient<any>;
+
+    if (!defaultClient) {
+      console.error('No defaultClient available');
+      return;
+    }
 
     // trigger the error hook on an error
     const errorLink = onError((err) => {
