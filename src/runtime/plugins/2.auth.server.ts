@@ -5,7 +5,7 @@ import { useAuth } from '../composables/use-auth';
 
 export default defineNuxtPlugin({
   name: 'auth-server',
-  enforce: 'prepost',
+  enforce: 'post',
   async setup() {
     console.debug('2.auth.server.ts::init');
     const _nuxt = useNuxtApp();
@@ -24,7 +24,6 @@ export default defineNuxtPlugin({
     }).catch((err) => {
       console.error('2.auth.server.ts::refreshToken::catch', err.data);
     });
-
 
     if (refreshTokenResult) {
       console.debug('2.auth.server.ts::token', refreshTokenResult.refreshToken?.token);

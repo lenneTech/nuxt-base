@@ -11,7 +11,7 @@ import { useAuth } from '../composables/use-auth';
  */
 export default defineNuxtPlugin({
   name: 'apollo',
-  enforce: 'pre',
+  enforce: 'post',
   async setup() {
     console.debug('3.apollo.ts::init');
     const nuxtApp = useNuxtApp();
