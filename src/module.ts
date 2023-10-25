@@ -52,7 +52,7 @@ export default defineNuxtModule<ModuleOptions>({
     autoImport: false,
     generateTypes: true,
     registerAuthPlugins: false,
-    storagePrefix: '',
+    storagePrefix: 'base',
     apollo: {
       authType: 'Bearer',
       authHeader: 'Authorization',
@@ -71,6 +71,7 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
+    addPlugin(resolver.resolve('runtime/plugins/0.cookies'));
     addPlugin(resolver.resolve('runtime/plugins/1.graphql'));
 
     if (options.registerAuthPlugins) {

@@ -4,7 +4,7 @@ import { loadMeta } from '../functions/graphql-meta';
 
 export default defineNuxtPlugin({
   name: 'graphql',
-  enforce: 'post',
+  enforce: 'pre',
   async setup() {
     const nuxt = useNuxtApp();
     const config = await callWithNuxt(nuxt, useRuntimeConfig);

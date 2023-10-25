@@ -5,7 +5,7 @@ import { useAuth } from '../composables/use-auth';
 
 export default defineNuxtPlugin({
   name: 'auth-server',
-  enforce: 'post',
+  enforce: 'pre',
   async setup() {
     console.debug('2.auth.server.ts::init');
     const _nuxt = useNuxtApp();
