@@ -5,17 +5,17 @@ import { useAuth } from '../composables/use-auth';
 
 export default defineNuxtPlugin({
   name: 'auth-server',
-  enforce: 'pre',
+  enforce: 'prepost',
   async setup() {
     console.debug('2.auth.server.ts::init');
     const _nuxt = useNuxtApp();
     const config = await callWithNuxt(_nuxt, useRuntimeConfig);
     const { getDecodedAccessToken, setTokens, setCurrentUser } = await callWithNuxt(_nuxt, useAuth);
-    const { accessTokenState, refreshToken } = await callWithNuxt(_nuxt, useAuthState);
+    const { accessTokenState, refreshTokenState } = await callWithNuxt(_nuxt, useAuthState);
     const { data: refreshTokenResult } = await ofetch(config.public.host, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${refreshToken.value}`,
+        Authorization: `Bearer ${refreshTokenState.value}`,
       },
       body: JSON.stringify({
         query: 'mutation refreshToken {refreshToken {token, refreshToken}}',

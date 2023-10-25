@@ -29,11 +29,11 @@ export function useAuth() {
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
-    const { accessToken, accessTokenState, refreshToken, refreshTokenState } = useAuthState();
-    accessToken.value = newToken;
+    const { accessTokenState, refreshTokenState } = useAuthState();
+    const { $setAuthCookies } = useNuxtApp();
     accessTokenState.value = newToken;
-    refreshToken.value = newRefreshToken;
     refreshTokenState.value = newRefreshToken;
+    $setAuthCookies(newToken, newRefreshToken);
   }
 
   function setCurrentUser<T>(user: T) {
@@ -42,12 +42,12 @@ export function useAuth() {
   }
 
   function clearSession() {
-    const { accessToken, accessTokenState, refreshToken, refreshTokenState, currentUserState } = useAuthState();
-    accessToken.value = null;
+    const { accessTokenState, refreshTokenState, currentUserState } = useAuthState();
+    const { $setAuthCookies } = useNuxtApp();
     accessTokenState.value = null;
-    refreshToken.value = null;
     refreshTokenState.value = null;
     currentUserState.value = null;
+    $setAuthCookies(null, null);
   }
 
   function getDecodedAccessToken(token: string): any {

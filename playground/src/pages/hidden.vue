@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useAuthState } from '#imports';
 
-const { currentUserState, accessToken, refreshToken, accessTokenState, refreshTokenState } = useAuthState();
+const { currentUserState, accessTokenState, refreshTokenState } = useAuthState();
 </script>
 
 <template>
   <div>
     <pre> {{ { currentUserState } }}</pre>
-    <pre> {{ { accessToken, accessTokenState, same: accessToken === accessTokenState } }}</pre>
-    <pre> {{ { refreshToken, refreshTokenState, same: refreshToken === refreshTokenState } }}</pre>
+    <pre> {{ { accessTokenState } }}</pre>
+    <pre> {{ { refreshTokenState } }}</pre>
   </div>
 </template>
 
