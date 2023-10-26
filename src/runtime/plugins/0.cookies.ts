@@ -13,7 +13,10 @@ export default defineNuxtPlugin({
     const ONE_WEEK = 60 * 60 * 24 * 7;
     const token = useCookie<string | null>(`${storagePrefix}_access_token`, { default: () => null, sameSite: 'strict', maxAge: ONE_WEEK, watch: 'shallow' });
     const refreshToken = useCookie<string | null>(`${storagePrefix}_refresh_token`, { default: () => null, sameSite: 'strict', maxAge: ONE_WEEK, watch: 'shallow' });
-    sync(token.value, refreshToken.value);
+
+    if (token.value && refreshToken.value) {
+      sync(token.value, refreshToken.value);
+    }
 
     function setCookies(newToken: string, newRefreshToken: string) {
       token.value = newToken;
