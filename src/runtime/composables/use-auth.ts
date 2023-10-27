@@ -16,10 +16,7 @@ export function useAuth() {
     const result: any = await callWithNuxt(_nuxt, mutate);
 
     if (result?.data?.refreshToken) {
-      await callWithNuxt(_nuxt, setTokens, [
-        result.data.refreshToken.token,
-        result.data.refreshToken.refreshToken,
-      ]);
+      setTokens(result.data.refreshToken.token, result.data.refreshToken.refreshToken);
     }
 
     return {
