@@ -19,19 +19,10 @@ export interface ModuleOptions {
   registerAuthPlugins?: boolean;
   storagePrefix?: string;
   apollo?: {
-    browserHttpEndpoint?: string;
     wsEndpoint?: string;
     httpLinkOptions?: any;
     wsLinkOptions?: any;
     websocketsOnly?: boolean;
-    connectToDevTools?: boolean;
-    proxyCookies?: boolean;
-    defaultOptions?: any;
-    inMemoryCacheOptions?: any;
-    tokenName?: string;
-    tokenStorage?: string;
-    authType?: string;
-    authHeader?: string;
   };
 }
 
@@ -53,12 +44,6 @@ export default defineNuxtModule<ModuleOptions>({
     generateTypes: true,
     registerAuthPlugins: false,
     storagePrefix: 'base',
-    apollo: {
-      authType: 'Bearer',
-      authHeader: 'Authorization',
-      tokenStorage: 'cookie',
-      proxyCookies: true,
-    },
   }),
   async setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
@@ -159,6 +144,12 @@ export default defineNuxtModule<ModuleOptions>({
       clients: {
         default: {
           httpEndpoint: options.host || null,
+          wsEndpoint: options.host || null,
+          tokenName: `apollo:${options.storagePrefix}.token`,
+          tokenStorage: 'cookie',
+          authType: 'Bearer',
+          authHeader: 'Authorization',
+          proxyCookies: true,
           ...options.apollo,
         },
       },
