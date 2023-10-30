@@ -6,8 +6,8 @@ import { provideApolloClient } from '@vue/apollo-composable';
 import { useAuthState } from '../states/auth';
 import { useAuth } from '../composables/use-auth';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import createRestartableClient from '@nuxtjs/apollo/dist/runtime/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createClient } from 'graphql-ws';
 
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
@@ -104,8 +104,9 @@ export default defineNuxtPlugin({
     });
 
     const wsLink = new GraphQLWsLink(
-      createRestartableClient({
+      createClient({
         url: wsUrl as string || '',
+        lazy: true,
         connectionParams: () => {
           const { accessTokenState } = useAuthState();
           return {
