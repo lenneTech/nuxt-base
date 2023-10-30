@@ -1,6 +1,6 @@
 import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import type { ApolloClient } from '@apollo/client/core';
-import { ApolloLink, createHttpLink, from, fromPromise, split } from '@apollo/client/core';
+import { ApolloLink, HttpLink, from, fromPromise, split } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { useAuthState } from '../states/auth';
@@ -98,7 +98,7 @@ export default defineNuxtPlugin({
       return forward(operation);
     });
 
-    const httpLink = createHttpLink({
+    const httpLink = new HttpLink({
       uri: host as string || '',
     });
 
@@ -115,17 +115,20 @@ export default defineNuxtPlugin({
       }),
     ) : null;
 
-    const splitLink = split(
-      ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        );
-      },
-      wsLink,
-      httpLink,
-    );
+    const splitLink =
+      typeof window !== 'undefined' && wsLink != null
+        ? split(
+          ({ query }) => {
+            const def = getMainDefinition(query);
+            return (
+              def.kind === 'OperationDefinition' &&
+              def.operation === 'subscription'
+            );
+          },
+          wsLink,
+          httpLink,
+        )
+        : httpLink;
 
     defaultClient.setLink(
       from([authMiddleware, errorLink, splitLink]),
