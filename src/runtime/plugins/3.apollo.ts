@@ -27,7 +27,6 @@ export default defineNuxtPlugin({
       return;
     }
 
-    // trigger the error hook on an error
     const errorLink = onError((err) => {
       const { requestNewToken, clearSession } = useAuth();
 
@@ -103,7 +102,7 @@ export default defineNuxtPlugin({
       uri: host as string || '',
     });
 
-    const wsLink = new GraphQLWsLink(
+    const wsLink = typeof window !== 'undefined' ? new GraphQLWsLink(
       createClient({
         url: wsUrl as string || '',
         lazy: true,
@@ -114,7 +113,7 @@ export default defineNuxtPlugin({
           };
         },
       }),
-    );
+    ) : null;
 
     const splitLink = split(
       ({ query }) => {
@@ -128,14 +127,10 @@ export default defineNuxtPlugin({
       httpLink,
     );
 
-    // Set custom links in the apollo client.
-    // This is the link chain. Will be walked through from top to bottom. It can only contain 1 terminating
-    // Apollo link, see: https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link
     defaultClient.setLink(
       from([authMiddleware, errorLink, splitLink]),
     );
 
-    // For using useQuery in `@vue/apollo-composable`
     provideApolloClient(defaultClient);
   },
 });

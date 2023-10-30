@@ -141,7 +141,7 @@ export default defineNuxtModule<ModuleOptions>({
       nitro.externals.inline.push(resolver.resolve('runtime'));
     });
 
-    logger.success('[@lenne.tech/nuxt-base] Starting WebSocket with url:', wsUrl);
+    logger.success('[@lenne.tech/nuxt-base] Set WebSocket url:', wsUrl);
     await installModule(await resolver.resolvePath('@nuxtjs/apollo'), {
       autoImports: true,
       clients: {
