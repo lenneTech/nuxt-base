@@ -1,10 +1,13 @@
-import { callWithNuxt, defineNuxtPlugin, useNuxtApp } from 'nuxt/app';
+import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import type { ApolloClient } from '@apollo/client/core';
-import { ApolloLink, from, fromPromise } from '@apollo/client/core';
+import { ApolloLink, createHttpLink, from, fromPromise, split } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { useAuthState } from '../states/auth';
 import { useAuth } from '../composables/use-auth';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import createRestartableClient from '@nuxtjs/apollo/dist/runtime/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
@@ -14,7 +17,9 @@ export default defineNuxtPlugin({
   enforce: 'post',
   async setup() {
     console.debug('3.apollo.ts::init');
+    const links = [];
     const nuxtApp = useNuxtApp();
+    const { host, wsUrl } = useRuntimeConfig().public;
     const defaultClient = (nuxtApp.$apollo as any)?.defaultClient as unknown as ApolloClient<any>;
 
     if (!defaultClient) {
@@ -94,14 +99,40 @@ export default defineNuxtPlugin({
       return forward(operation);
     });
 
+    const httpLink = createHttpLink({
+      uri: host as string || '',
+    });
+
+    const wsLink = new GraphQLWsLink(
+      createRestartableClient({
+        url: wsUrl as string || '',
+        connectionParams: () => {
+          const { accessTokenState } = useAuthState();
+          return {
+            Authorization: accessTokenState.value ? 'Bearer ' + accessTokenState.value : undefined,
+          };
+        },
+      }),
+    );
+
+    const splitLink = split(
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      wsLink,
+      httpLink,
+    );
+
     // Set custom links in the apollo client.
     // This is the link chain. Will be walked through from top to bottom. It can only contain 1 terminating
     // Apollo link, see: https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link
-    defaultClient.setLink(from([
-      authMiddleware,
-      errorLink,
-      defaultClient.link,
-    ]));
+    defaultClient.setLink(
+      from([authMiddleware, errorLink, splitLink]),
+    );
 
     // For using useQuery in `@vue/apollo-composable`
     provideApolloClient(defaultClient);
