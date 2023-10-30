@@ -144,7 +144,7 @@ export default defineNuxtModule<ModuleOptions>({
       clients: {
         default: {
           httpEndpoint: options.host || null,
-          wsEndpoint: options.host || null,
+          wsEndpoint: options.host?.replace('https://', 'wss://').replace('https://', 'ws://') || null,
           tokenName: `apollo:${options.storagePrefix}.token`,
           tokenStorage: 'cookie',
           authType: 'Bearer',
