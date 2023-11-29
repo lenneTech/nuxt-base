@@ -9,7 +9,7 @@ import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
 export async function gqlQuery<T = any>(
   method: string,
   options: IGraphQLOptions = {},
-): Promise<AsyncData<T, any>> {
+): AsyncData<T, any> {
   const _nuxt = useNuxtApp();
   const { $graphQl } = _nuxt;
 

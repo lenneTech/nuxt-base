@@ -115,7 +115,7 @@ export default defineNuxtModule<ModuleOptions>({
       setTimeout(() => {
         logger.info('[@lenne.tech/nuxt-base] Exit after generation');
         return process.exit(1);
-      }, 2000);
+      }, 5000);
     }
 
     // TODO: Remove when package fixed with valid ESM exports
