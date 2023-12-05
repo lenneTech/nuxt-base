@@ -1,3 +1,4 @@
+import { sha256 } from 'js-sha256';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import type { UseMutationReturn } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
@@ -79,6 +80,10 @@ export async function gqlMutation<T = any>(
       type = value.isItemRequired ? `${value.type}!` : value.type;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
+    }
+
+    if (key === 'password') {
+      config.variables[key] = sha256(config.variables[key]);
     }
 
     builderInput[key] = {

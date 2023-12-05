@@ -1,5 +1,6 @@
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
+import { sha256 } from 'js-sha256';
 import type { AsyncData } from 'nuxt/app';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
@@ -76,6 +77,10 @@ export async function gqlQuery<T = any>(
       type = value.isItemRequired ? `${value.type}!` : value.type;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
+    }
+
+    if (key === 'password') {
+      config.variables[key] = sha256(config.variables[key]);
     }
 
     builderInput[key] = {
