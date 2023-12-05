@@ -1,4 +1,4 @@
-import { hashPasswords } from '#build/src/runtime/functions/graphql-meta';
+import { hashPasswords } from '../functions/graphql-meta';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';

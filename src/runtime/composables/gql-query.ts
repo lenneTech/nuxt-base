@@ -1,4 +1,4 @@
-import { hashPasswords } from '#build/src/runtime/functions/graphql-meta';
+import { hashPasswords } from '../functions/graphql-meta';
 import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';

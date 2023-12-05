@@ -1,4 +1,4 @@
-import { hashPasswords } from '#build/src/runtime/functions/graphql-meta';
+import { hashPasswords } from '../functions/graphql-meta';
 import type { UseMutationReturn } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
@@ -8,109 +8,109 @@ import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 export async function gqlMutation<T = any>(
-    method: string,
-    options: IGraphQLOptions = {},
+  method: string,
+  options: IGraphQLOptions = {},
 ): Promise<UseMutationReturn<T, any>> {
-    const _nuxt = useNuxtApp();
-    const { $graphQl } = _nuxt;
+  const _nuxt = useNuxtApp();
+  const { $graphQl } = _nuxt;
 
-    // Check parameters
-    if (!method) {
-        throw new Error('No method detected');
-    }
+  // Check parameters
+  if (!method) {
+    throw new Error('No method detected');
+  }
 
-    // Get config
-    const config = {
-        variables: null,
-        fields: null,
-        log: false,
-        ...options,
-        hashPasswords: options.hashPasswords ?? true,
-    };
+  // Get config
+  const config = {
+    variables: null,
+    fields: null,
+    log: false,
+    ...options,
+    hashPasswords: options.hashPasswords ?? true,
+  };
 
-    const fields = config.fields as unknown as string[];
+  const fields = config.fields as unknown as string[];
 
-    if (config.log) {
-        console.debug('gqlMutation::fields ', fields);
-    }
+  if (config.log) {
+    console.debug('gqlMutation::fields ', fields);
+  }
 
-    const meta = $graphQl() as GraphQLMeta;
+  const meta = $graphQl() as GraphQLMeta;
 
-    if (!meta) {
-        return;
-    }
+  if (!meta) {
+    return;
+  }
 
-    if (config.hashPasswords) {
-        config.variables = await hashPasswords(config.variables);
-    }
+  if (config.hashPasswords) {
+    config.variables = await hashPasswords(config.variables);
+  }
 
-    const argType = meta.getArgs(method);
-    const builderInput = {};
-    const metaFields = meta.getFields(method);
-    const availableFields = [];
+  const argType = meta.getArgs(method);
+  const builderInput = {};
+  const metaFields = meta.getFields(method);
+  const availableFields = [];
 
-    if (!fields) {
-        for (const [key] of Object.entries(metaFields.fields)) {
-            if (Object.keys(metaFields.fields[key].fields).length) {
-                if (metaFields.fields[key].fields['id']) {
-                    const subObject = {};
-                    subObject[key] = ['id'];
-                    availableFields.push(subObject);
-                } else {
-                    const subObject = {};
-                    const subFields = [];
-                    for (const [subKey] of Object.entries(metaFields.fields[key].fields)) {
-                        if (!Object.keys(metaFields.fields[key].fields[subKey].fields).length) {
-                            subFields.push(subKey);
-                        }
-                    }
-                    subObject[key] = subFields;
-                    availableFields.push(subObject);
-                }
-            } else {
-                availableFields.push(key);
-            }
-        }
-    }
-
-    if (config.log) {
-        console.debug('gqlMutation::variables ', config.variables);
-        console.debug('gqlMutation::argType ', argType);
-    }
-
-    for (const [key, value] of Object.entries(argType.fields)) {
-        let type: string;
-
-        if (value.isList) {
-            type = value.isItemRequired ? `${value.type}!` : value.type;
+  if (!fields) {
+    for (const [key] of Object.entries(metaFields.fields)) {
+      if (Object.keys(metaFields.fields[key].fields).length) {
+        if (metaFields.fields[key].fields['id']) {
+          const subObject = {};
+          subObject[key] = ['id'];
+          availableFields.push(subObject);
         } else {
-            type = value.isRequired ? `${value.type}!` : value.type;
+          const subObject = {};
+          const subFields = [];
+          for (const [subKey] of Object.entries(metaFields.fields[key].fields)) {
+            if (!Object.keys(metaFields.fields[key].fields[subKey].fields).length) {
+              subFields.push(subKey);
+            }
+          }
+          subObject[key] = subFields;
+          availableFields.push(subObject);
         }
+      } else {
+        availableFields.push(key);
+      }
+    }
+  }
 
-        builderInput[key] = {
-            type,
-            list: value.isList,
-            value: config.variables[key],
-        };
+  if (config.log) {
+    console.debug('gqlMutation::variables ', config.variables);
+    console.debug('gqlMutation::argType ', argType);
+  }
+
+  for (const [key, value] of Object.entries(argType.fields)) {
+    let type: string;
+
+    if (value.isList) {
+      type = value.isItemRequired ? `${value.type}!` : value.type;
+    } else {
+      type = value.isRequired ? `${value.type}!` : value.type;
     }
 
-    if (config.log) {
-        console.debug('gqlMutation::builderInput ', builderInput);
-        console.debug('gqlMutation::availableFields ', availableFields);
-    }
+    builderInput[key] = {
+      type,
+      list: value.isList,
+      value: config.variables[key],
+    };
+  }
 
-    const queryBody = mutation({
-        operation: method,
-        variables: builderInput,
-        fields: fields !== null ? fields : availableFields,
-    });
-    const documentNode = gql(queryBody.query);
+  if (config.log) {
+    console.debug('gqlMutation::builderInput ', builderInput);
+    console.debug('gqlMutation::availableFields ', availableFields);
+  }
 
-    if (config.log) {
-        console.debug('gqlMutation::queryBody ', queryBody);
-        console.debug('gqlMutation::query ', queryBody.query);
-        console.debug('gqlMutation::documentNode ', documentNode);
-    }
+  const queryBody = mutation({
+    operation: method,
+    variables: builderInput,
+    fields: fields !== null ? fields : availableFields,
+  });
+  const documentNode = gql(queryBody.query);
 
-    return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { variables: config.variables }]);
+  if (config.log) {
+    console.debug('gqlMutation::queryBody ', queryBody);
+    console.debug('gqlMutation::query ', queryBody.query);
+    console.debug('gqlMutation::documentNode ', documentNode);
+  }
+
+  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { variables: config.variables }]);
 }
