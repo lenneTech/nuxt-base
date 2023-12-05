@@ -7,4 +7,5 @@ export interface IGraphQLOptions {
   fields?: any;
   log?: boolean;
   lazy?: boolean;
+  hashPasswords?: boolean;
 }

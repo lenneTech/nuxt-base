@@ -1,4 +1,4 @@
-import { Sha256 } from '@aws-crypto/sha256-js';
+import { hashPasswords } from '#build/src/runtime/functions/graphql-meta';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
@@ -25,6 +25,7 @@ export async function gqlSubscription<T = any>(
     fields: null,
     log: false,
     ...options,
+    hashPasswords: options.hashPasswords ?? true,
   };
 
   const fields = config.fields as unknown as string[];
@@ -32,6 +33,10 @@ export async function gqlSubscription<T = any>(
 
   if (!meta) {
     return;
+  }
+
+  if (config.hashPasswords) {
+    config.variables = await hashPasswords(config.variables);
   }
 
   const argType = meta.getArgs(method);
@@ -70,12 +75,6 @@ export async function gqlSubscription<T = any>(
       type = value.isItemRequired ? `${value.type}!` : value.type;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
-    }
-
-    if (key === 'password') {
-      const hash = new Sha256();
-      hash.update(config.variables[key]);
-      config.variables[key] = await hash.digest();
     }
 
     builderInput[key] = {

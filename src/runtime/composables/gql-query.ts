@@ -1,5 +1,5 @@
+import { hashPasswords } from '#build/src/runtime/functions/graphql-meta';
 import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
-import { Sha256 } from '@aws-crypto/sha256-js';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import type { AsyncData } from 'nuxt/app';
@@ -26,6 +26,7 @@ export async function gqlQuery<T = any>(
     log: false,
     lazy: false,
     ...options,
+    hashPasswords: options.hashPasswords ?? true,
   };
 
   const fields = config.fields as unknown as string[];
@@ -39,6 +40,10 @@ export async function gqlQuery<T = any>(
 
   if (!meta) {
     return;
+  }
+
+  if (config.hashPasswords) {
+    config.variables = await hashPasswords(config.variables);
   }
 
   const argType = meta.getArgs(method);
@@ -77,12 +82,6 @@ export async function gqlQuery<T = any>(
       type = value.isItemRequired ? `${value.type}!` : value.type;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
-    }
-
-    if (key === 'password') {
-      const hash = new Sha256();
-      hash.update(config.variables[key]);
-      config.variables[key] = await hash.digest();
     }
 
     builderInput[key] = {
