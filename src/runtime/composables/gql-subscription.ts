@@ -1,11 +1,11 @@
-import { sha256 } from 'js-sha256';
-import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
+import { Sha256 } from '@aws-crypto/sha256-js';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
+import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 export async function gqlSubscription<T = any>(
   method: string,
@@ -73,7 +73,9 @@ export async function gqlSubscription<T = any>(
     }
 
     if (key === 'password') {
-      config.variables[key] = sha256(config.variables[key]);
+      const hash = new Sha256();
+      hash.update(config.variables[key]);
+      config.variables[key] = await hash.digest();
     }
 
     builderInput[key] = {
