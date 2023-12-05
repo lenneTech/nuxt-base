@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/lenneTech/nuxt-base/compare/v3.1.1...v3.2.0) (2023-12-05)
+
+
+### Features
+
+* **TEC-2:** Fixed import of graphql-meta ([f933866](https://github.com/lenneTech/nuxt-base/commit/f93386690032624c9bf8dae77cd11120a0ee88f0))
+* **TEC-2:** Password hashing implemented ([c574c31](https://github.com/lenneTech/nuxt-base/commit/c574c31c2552fe02e3be9f2bafcda93ced34e3e5))
+* **TEC-2:** Password hashing implemented via @aws-crypto/sha256-js ([1014aa3](https://github.com/lenneTech/nuxt-base/commit/1014aa361e072c83bd2b11d71293d8a0edff10fa))
+* **TEC-2:** Password hashing implemented via crypto ([0c9e09d](https://github.com/lenneTech/nuxt-base/commit/0c9e09d0f8bd7a43283dba712c1e708204cc46c9))
+
 ### [3.1.1](https://github.com/lenneTech/nuxt-base/compare/v3.1.0...v3.1.1) (2023-10-31)
 
 ## [3.1.0](https://github.com/lenneTech/nuxt-base/compare/v3.0.0...v3.1.0) (2023-10-19)
