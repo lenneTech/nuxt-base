@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/lenneTech/nuxt-base/compare/v3.2.0...v3.2.1) (2023-12-06)
+
+
+### Bug Fixes
+
+* **TEC-2:** Fixed null elements ([8517be7](https://github.com/lenneTech/nuxt-base/commit/8517be732f7689f27051486d542fd995b753e6b0))
+
 ## [3.2.0](https://github.com/lenneTech/nuxt-base/compare/v3.1.1...v3.2.0) (2023-12-05)
 
 
