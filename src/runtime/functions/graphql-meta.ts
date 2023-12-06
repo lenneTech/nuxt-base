@@ -46,8 +46,10 @@ export async function hash(string: string): Promise<string> {
  * All (deep) entries with the key 'password' and a string as value are hashed
  */
 export async function hashPasswords<T = unknown>(element: T): Promise<T> {
-  if (Array.isArray(element)) {
-    return await Promise.all(element.map((item) => hashPasswords(item)));
+  if (!element) {
+    return element;
+  } else if (Array.isArray(element)) {
+    return (await Promise.all(element.map((item) => hashPasswords(item)))) as T;
   } else if (typeof element === 'object') {
     for (const [key, value] of Object.entries(element)) {
       if (key === 'password' && value && typeof value === 'string') {
