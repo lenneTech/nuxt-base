@@ -1,50 +1,42 @@
-import {
-  addImportsDir,
-  addPlugin,
-  addTemplate,
-  createResolver,
-  defineNuxtModule,
-  extendViteConfig,
-  installModule,
-  useLogger,
-} from '@nuxt/kit';
+import { addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, extendViteConfig, installModule, useLogger } from '@nuxt/kit';
+
 import { generateFiles } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
-  host: string;
-  schema?: string;
+  apollo?: {
+    httpLinkOptions?: any;
+    websocketsOnly?: boolean;
+    wsEndpoint?: string;
+    wsLinkOptions?: any;
+  };
   autoImport?: boolean;
   generateTypes?: boolean;
+  host: string;
   registerAuthPlugins?: boolean;
+  schema?: string;
   storagePrefix?: string;
-  apollo?: {
-    wsEndpoint?: string;
-    httpLinkOptions?: any;
-    wsLinkOptions?: any;
-    websocketsOnly?: boolean;
-  };
 }
 
 const logger = useLogger('[@lenne.tech/nuxt-base] ');
 
 export default defineNuxtModule<ModuleOptions>({
-  meta: {
-    name: '@lenne.tech/nuxt-base',
-    configKey: 'nuxtBase',
-    compatibility: {
-      nuxt: '3.7.4',
-    },
-  },
   // Default configuration options of the Nuxt module
   defaults: (_nuxt) => ({
-    host: '',
-    schema: null,
     autoImport: false,
     generateTypes: true,
+    host: '',
     registerAuthPlugins: false,
+    schema: null,
     storagePrefix: 'base',
   }),
+  meta: {
+    compatibility: {
+      nuxt: '3.8.2',
+    },
+    configKey: 'nuxtBase',
+    name: '@lenne.tech/nuxt-base',
+  },
   async setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
 
@@ -67,6 +59,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     addPlugin(resolver.resolve('runtime/plugins/3.apollo'));
 
+    // prettier-ignore
     addTemplate({
       filename: 'base-types/fields.d.ts',
       getContents: () => [
@@ -89,17 +82,9 @@ export default defineNuxtModule<ModuleOptions>({
         'export { InputFields };',
       ].join('\n'),
     });
+    nuxt.options.alias['#base-types'] = resolver.resolve(nuxt.options.buildDir, 'base-types');
 
-    nuxt.options.alias['#base-types'] = resolver.resolve(
-      nuxt.options.buildDir,
-      'base-types',
-    );
-
-    nuxt.options.alias['#base-types/*'] = resolver.resolve(
-      nuxt.options.buildDir,
-      'base-types',
-      '*',
-    );
+    nuxt.options.alias['#base-types/*'] = resolver.resolve(nuxt.options.buildDir, 'base-types', '*');
 
     addImportsDir(resolver.resolve('runtime/composables'));
     addImportsDir(resolver.resolve('runtime/states'));
@@ -119,9 +104,7 @@ export default defineNuxtModule<ModuleOptions>({
     }
 
     // TODO: Remove when package fixed with valid ESM exports
-    nuxt.options.build.transpile.push(
-      ({ isServer }) => !isServer && 'gql-query-builder',
-    );
+    nuxt.options.build.transpile.push(({ isServer }) => !isServer && 'gql-query-builder');
 
     // TODO: Remove when package fixed with valid ESM exports
     extendViteConfig((config) => {
@@ -146,13 +129,13 @@ export default defineNuxtModule<ModuleOptions>({
       autoImports: true,
       clients: {
         default: {
+          authHeader: 'Authorization',
+          authType: 'Bearer',
           httpEndpoint: options.host || null,
-          wsEndpoint: wsUrl || null,
+          proxyCookies: true,
           tokenName: `apollo:${options.storagePrefix}.token`,
           tokenStorage: 'cookie',
-          authType: 'Bearer',
-          authHeader: 'Authorization',
-          proxyCookies: true,
+          wsEndpoint: wsUrl || null,
           ...options.apollo,
         },
       },
