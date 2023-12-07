@@ -1,16 +1,16 @@
-import { hashPasswords } from '../functions/graphql-meta';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
+
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
-export async function gqlSubscription<T = any>(
-  method: string,
-  options: IGraphQLOptions = {},
-): Promise<UseSubscriptionReturn<T, any>> {
+import { hashPasswords } from '../functions/graphql-meta';
+
+export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseSubscriptionReturn<T, any>> {
   const _nuxt = useNuxtApp();
   const { $graphQl } = _nuxt;
 
@@ -21,9 +21,9 @@ export async function gqlSubscription<T = any>(
 
   // Get config
   const config = {
-    variables: null,
     fields: null,
     log: false,
+    variables: null,
     ...options,
     hashPasswords: options.hashPasswords ?? true,
   };
@@ -78,8 +78,8 @@ export async function gqlSubscription<T = any>(
     }
 
     builderInput[key] = {
-      type,
       list: value.isList,
+      type,
       value: config.variables[key],
     };
   }
@@ -89,11 +89,24 @@ export async function gqlSubscription<T = any>(
     console.debug('gqlSubscription::availableFields ', availableFields);
   }
 
-  const queryBody = subscription({
+  const subOptions: any = {
     operation: method,
-    variables: builderInput,
-    fields: fields !== null ? fields : availableFields,
-  });
+  };
+
+  if (Object.keys(builderInput)) {
+    subOptions.variables = builderInput;
+  }
+
+  if (fields || availableFields) {
+    subOptions.fields = fields !== null ? fields : availableFields;
+  }
+
+  const queryBody = subscription(subOptions);
+  if (config.log) {
+    console.debug('gqlSubscription::subOptions ', subOptions);
+    console.debug('gqlSubscription::queryBody ', queryBody);
+  }
+
   const documentNode = gql(queryBody.query);
 
   if (config.log) {
