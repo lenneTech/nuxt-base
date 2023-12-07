@@ -91,19 +91,19 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
 
   const subOptions: any = {
     operation: method,
+    variables: builderInput,
   };
 
-  if (Object.keys(builderInput)?.length) {
-    subOptions.variables = builderInput;
+  if (fields?.length || availableFields?.length) {
+    subOptions.fields = fields !== null ? fields : availableFields;
   }
 
-  if (fields?.length || availableFields.length) {
-    subOptions.fields = fields !== null ? fields : availableFields;
+  if (config.log) {
+    console.debug('gqlSubscription::subOptions ', subOptions);
   }
 
   const queryBody = subscription(subOptions);
   if (config.log) {
-    console.debug('gqlSubscription::subOptions ', subOptions);
     console.debug('gqlSubscription::queryBody ', queryBody);
   }
 
