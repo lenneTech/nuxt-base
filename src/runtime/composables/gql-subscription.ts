@@ -93,11 +93,11 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     operation: method,
   };
 
-  if (Object.keys(builderInput)) {
+  if (Object.keys(builderInput)?.length) {
     subOptions.variables = builderInput;
   }
 
-  if (fields || availableFields) {
+  if (fields?.length || availableFields.length) {
     subOptions.fields = fields !== null ? fields : availableFields;
   }
 
