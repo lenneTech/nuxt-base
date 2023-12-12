@@ -3,26 +3,56 @@ import { useAuthState } from '../states/auth';
 import jwt_decode from 'jwt-decode';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
+// Protection against multiple API calls
+let inProgress = false;
+let progressResult: {
+  token: string;
+  refreshToken: string;
+};
+
 export function useAuth() {
+
+  /**
+   * Request a new token
+   *
+   * With protection against multiple API calls to avoid invalid tokens
+   */
   async function requestNewToken(): Promise<{
     token: string;
     refreshToken: string;
   }> {
+    // Check if already in progress
+    if (inProgress) {
+
+      // Wait for result
+      while (!progressResult) {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      }
+
+      // Return result
+      return progressResult;
+    }
+    [inProgress, progressResult] = [true, null];
+
+    // Get and set new tokens
     const _nuxt = useNuxtApp();
     const { mutate } = await callWithNuxt(_nuxt, gqlMutation, ['refreshToken', {
       fields: ['token', 'refreshToken'],
     }]);
-
-    const result: any = await callWithNuxt(_nuxt, mutate);
-
-    if (result?.data?.refreshToken) {
-      setTokens(result.data.refreshToken.token, result.data.refreshToken.refreshToken);
+    const response: any = await callWithNuxt(_nuxt, mutate);
+    if (response?.data?.refreshToken) {
+      setTokens(response.data.refreshToken.token, response.data.refreshToken.refreshToken);
     }
-
-    return {
-      token: result.data.refreshToken.token,
-      refreshToken: result.data.refreshToken.refreshToken,
+    const result = {
+      token: response.data.refreshToken.token,
+      refreshToken: response.data.refreshToken.refreshToken,
     };
+
+    // Allow further calls again and transfer the result to waiting processes
+    [inProgress, progressResult] = [false, result];
+
+    // Return result
+    return result;
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
