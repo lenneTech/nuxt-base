@@ -1,26 +1,26 @@
 import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import { ofetch } from 'ofetch';
-import { useAuthState } from '../states/auth';
+
 import { useAuth } from '../composables/use-auth';
+import { useAuthState } from '../states/auth';
 
 export default defineNuxtPlugin({
-  name: 'auth-server',
   enforce: 'post',
+  name: 'auth-server',
   async setup() {
-    console.debug('2.auth.server.ts::init');
     const _nuxt = useNuxtApp();
     const config = await callWithNuxt(_nuxt, useRuntimeConfig);
-    const { getDecodedAccessToken, setTokens, setCurrentUser } = await callWithNuxt(_nuxt, useAuth);
+    const { getDecodedAccessToken, setCurrentUser, setTokens } = await callWithNuxt(_nuxt, useAuth);
     const { accessTokenState, refreshTokenState } = await callWithNuxt(_nuxt, useAuthState);
     const { data: refreshTokenResult } = await ofetch(config.public.host, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${refreshTokenState.value}`,
-      },
       body: JSON.stringify({
         query: 'mutation refreshToken {refreshToken {token, refreshToken}}',
         variables: {},
       }),
+      headers: {
+        Authorization: `Bearer ${refreshTokenState.value}`,
+      },
+      method: 'POST',
     }).catch((err) => {
       console.error('2.auth.server.ts::refreshToken::catch', err.data);
     });
@@ -31,16 +31,16 @@ export default defineNuxtPlugin({
       setTokens(refreshTokenResult.refreshToken?.token, refreshTokenResult.refreshToken?.refreshToken);
       const payload = getDecodedAccessToken(accessTokenState?.value);
       const { data: getUserData } = await ofetch(config.public.host, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessTokenState?.value}`,
-        },
         body: JSON.stringify({
           query: 'query getUser($id: String!){getUser(id: $id){id firstName lastName email avatar verified}}',
           variables: {
             id: payload.id,
           },
         }),
+        headers: {
+          Authorization: `Bearer ${accessTokenState?.value}`,
+        },
+        method: 'POST',
       }).catch((err) => {
         console.error('2.auth.server.ts::getUser::catch', err.data);
       });

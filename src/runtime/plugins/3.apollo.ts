@@ -1,22 +1,23 @@
-import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import type { ApolloClient } from '@apollo/client/core';
+
 import { ApolloLink, HttpLink, from, fromPromise, split } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
-import { provideApolloClient } from '@vue/apollo-composable';
-import { useAuthState } from '../states/auth';
-import { useAuth } from '../composables/use-auth';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { provideApolloClient } from '@vue/apollo-composable';
 import { createClient } from 'graphql-ws';
+import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
+
+import { useAuth } from '../composables/use-auth';
+import { useAuthState } from '../states/auth';
 
 /**
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
 export default defineNuxtPlugin({
-  name: 'apollo',
   enforce: 'post',
+  name: 'apollo',
   async setup() {
-    console.debug('3.apollo.ts::init');
     const links = [];
     const nuxtApp = useNuxtApp();
     const { host, wsUrl } = useRuntimeConfig().public;
@@ -28,17 +29,13 @@ export default defineNuxtPlugin({
     }
 
     const errorLink = onError((err) => {
-      const { requestNewToken, clearSession } = useAuth();
+      const { clearSession, requestNewToken } = useAuth();
 
       if (err.graphQLErrors) {
         for (const error of err.graphQLErrors) {
           switch (error.extensions.code) {
             case 'UNAUTHENTICATED': {
-              if (
-                error.message !== 'Expired refresh token' &&
-                error.message !== 'Expired token' &&
-                error.message !== 'Invalid token'
-              ) {
+              if (error.message !== 'Expired refresh token' && error.message !== 'Expired token' && error.message !== 'Invalid token') {
                 return;
               }
 
@@ -99,40 +96,40 @@ export default defineNuxtPlugin({
     });
 
     const httpLink = new HttpLink({
-      uri: host as string || '',
+      uri: (host as string) || '',
     });
 
-    const wsLink = typeof window !== 'undefined' ? new GraphQLWsLink(
-      createClient({
-        url: wsUrl as string || '',
-        lazy: true,
-        connectionParams: () => {
-          const { accessTokenState } = useAuthState();
-          return {
-            Authorization: accessTokenState.value ? 'Bearer ' + accessTokenState.value : undefined,
-          };
-        },
-      }),
-    ) : null;
+    /* eslint-disable */
+    const wsLink =
+      typeof window !== 'undefined'
+        ? new GraphQLWsLink(
+            createClient({
+              connectionParams: () => {
+              const { accessTokenState } = useAuthState();
+              return {
+                Authorization: accessTokenState.value ? 'Bearer ' + accessTokenState.value : undefined,
+              };
+            },
+            lazy: true,
+            url: (wsUrl as string) || '',
+            }),
+          )
+        : null;
 
     const splitLink =
       typeof window !== 'undefined' && wsLink != null
         ? split(
-          ({ query }) => {
-            const def = getMainDefinition(query);
-            return (
-              def.kind === 'OperationDefinition' &&
-              def.operation === 'subscription'
-            );
-          },
-          wsLink,
-          httpLink,
-        )
+            ({ query }) => {
+              const def = getMainDefinition(query);
+              return def.kind === 'OperationDefinition' && def.operation === 'subscription';
+            },
+            wsLink,
+            httpLink,
+          )
         : httpLink;
+    /* eslint-enable */
 
-    defaultClient.setLink(
-      from([authMiddleware, errorLink, splitLink]),
-    );
+    defaultClient.setLink(from([authMiddleware, errorLink, splitLink]));
 
     provideApolloClient(defaultClient);
   },
