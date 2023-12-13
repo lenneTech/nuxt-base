@@ -1,16 +1,16 @@
-import { hashPasswords } from '../functions/graphql-meta';
 import type { UseMutationReturn } from '@vue/apollo-composable';
+
 import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
-export async function gqlMutation<T = any>(
-  method: string,
-  options: IGraphQLOptions = {},
-): Promise<UseMutationReturn<T, any>> {
+import { hashPasswords } from '../functions/graphql-meta';
+
+export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
   const _nuxt = useNuxtApp();
   const { $graphQl } = _nuxt;
 
@@ -21,9 +21,9 @@ export async function gqlMutation<T = any>(
 
   // Get config
   const config = {
-    variables: null,
     fields: null,
     log: false,
+    variables: null,
     ...options,
     hashPasswords: options.hashPasswords ?? true,
   };
@@ -88,8 +88,8 @@ export async function gqlMutation<T = any>(
     }
 
     builderInput[key] = {
-      type,
       list: value.isList,
+      type,
       value: config.variables[key],
     };
   }
@@ -100,9 +100,9 @@ export async function gqlMutation<T = any>(
   }
 
   const queryBody = mutation({
+    fields: fields !== null ? fields : availableFields,
     operation: method,
     variables: builderInput,
-    fields: fields !== null ? fields : availableFields,
   });
   const documentNode = gql(queryBody.query);
 

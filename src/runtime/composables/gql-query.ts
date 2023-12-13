@@ -1,16 +1,16 @@
-import { hashPasswords } from '../functions/graphql-meta';
+import type { AsyncData } from 'nuxt/app';
+
 import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import type { AsyncData } from 'nuxt/app';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
-export async function gqlQuery<T = any>(
-  method: string,
-  options: IGraphQLOptions = {},
-): AsyncData<T, any> {
+import { hashPasswords } from '../functions/graphql-meta';
+
+export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): AsyncData<T, any> {
   const _nuxt = useNuxtApp();
   const { $graphQl } = _nuxt;
 
@@ -21,10 +21,10 @@ export async function gqlQuery<T = any>(
 
   // Get config
   const config = {
-    variables: null,
     fields: null,
-    log: false,
     lazy: false,
+    log: false,
+    variables: null,
     ...options,
     hashPasswords: options.hashPasswords ?? true,
   };
@@ -85,8 +85,8 @@ export async function gqlQuery<T = any>(
     }
 
     builderInput[key] = {
-      type,
       list: value.isList,
+      type,
       value: config.variables[key],
     };
   }
@@ -97,9 +97,9 @@ export async function gqlQuery<T = any>(
   }
 
   const queryBody = query({
+    fields: fields !== null ? fields : availableFields,
     operation: method,
     variables: builderInput,
-    fields: fields !== null ? fields : availableFields,
   });
   const documentNode = gql(queryBody.query);
 
@@ -109,5 +109,11 @@ export async function gqlQuery<T = any>(
     console.debug('gqlQuery::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [documentNode, config.variables ?? {}, null]);
+  const queryConfig = {
+    cache: false,
+    query: documentNode,
+    variables: config.variables,
+  };
+
+  return callWithNuxt(_nuxt, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [queryConfig]);
 }
