@@ -1,7 +1,7 @@
-import { useCookie, useState } from 'nuxt/app';
+import { useState } from 'nuxt/app';
 
-const accessTokenState = () => useState<string | null>('access_token_state', () => null);
-const refreshTokenState = () => useState<string | null>('refresh_token_state', () => null);
+const accessTokenState = () => useState<null | string>('access_token_state', () => null);
+const refreshTokenState = () => useState<null | string>('refresh_token_state', () => null);
 const currentUserState = () => useState<any | null>('current_user_state', () => null);
 
 export function useAuthState() {
@@ -12,8 +12,8 @@ export function useAuthState() {
 
   return {
     accessTokenState: accessTokenState(),
-    refreshTokenState: refreshTokenState(),
     currentUserState: currentUserState(),
+    refreshTokenState: refreshTokenState(),
     sync,
   };
 }
