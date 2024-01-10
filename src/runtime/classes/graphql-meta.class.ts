@@ -1,7 +1,10 @@
 import type { GraphQLSchema } from 'graphql';
+
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType } from 'graphql';
+
 import type { GraphQLRequestType } from '../enums/graphql-request-type.enum';
 import type { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
+
 import { GraphQLType } from './graphql-type.class';
 import { Helper } from './helper.class';
 
@@ -27,25 +30,17 @@ export class GraphQLMeta {
    */
   getMethodNames(): Record<string, string[]> {
     return {
-      query: Object.keys(this.schema.getQueryType()?.getFields() || {}),
       mutation: Object.keys(this.schema.getMutationType()?.getFields() || {}),
-      subscription: Object.keys(
-        this.schema.getSubscriptionType()?.getFields() || {},
-      ),
+      query: Object.keys(this.schema.getQueryType()?.getFields() || {}),
+      subscription: Object.keys(this.schema.getSubscriptionType()?.getFields() || {}),
     };
   }
 
-  getTypesForMethod(
-    method: string,
-    type: 'Query' | 'Mutation' | 'Subscription',
-  ) {
+  getTypesForMethod(method: string, type: 'Mutation' | 'Query' | 'Subscription') {
     let returnType: string = null;
     let argType: string = null;
     const customTypes: string[] = [];
-    const returnDeepType = this.getDeepType(
-      this.schema['get' + type + 'Type']()['_fields'][method],
-      {},
-    );
+    const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method], {});
     const argsDeepType = this.getArgs(method);
 
     if (returnDeepType) {
@@ -59,13 +54,7 @@ export class GraphQLMeta {
     if (argsDeepType) {
       const result = [];
       for (const [key, value] of Object.entries(argsDeepType.fields)) {
-        result.push(
-          key +
-          (argsDeepType.fields[key].isRequired ? '' : '?') +
-          ': ' +
-          argsDeepType.fields[key].type +
-          (argsDeepType.fields[key].isList ? '[]' : ''),
-        );
+        result.push(key + (argsDeepType.fields[key].isRequired ? '' : '?') + ': ' + argsDeepType.fields[key].type + (argsDeepType.fields[key].isList ? '[]' : ''));
         if (this.checkCustomTyp(argsDeepType.fields[key].type)) {
           customTypes.push(argsDeepType.fields[key].type);
         }
@@ -80,19 +69,56 @@ export class GraphQLMeta {
         .replace(/Float/g, 'number');
     }
 
-    return { argType, returnType, customTypes };
+    return { argType, customTypes, returnType };
   }
 
   checkCustomTyp(type: string): boolean {
-    const defaultTypes = [
-      'boolean',
-      'string',
-      'date',
-      'int',
-      'number',
-      'float',
-    ];
+    const defaultTypes = ['boolean', 'string', 'date', 'int', 'number', 'float'];
     return !defaultTypes.includes(type.toLocaleLowerCase());
+  }
+
+  parseVariables(variables: Record<string, any>, fields: Record<string, any>) {
+    const result = {};
+
+    if (!variables) {
+      return result;
+    }
+
+    if (!fields) {
+      return variables;
+    }
+
+    if (typeof variables === 'object' && Object.keys(fields)?.length) {
+      for (const [key, value] of Object.entries(variables)) {
+        switch (fields[key].type) {
+          case 'String':
+            result[key] = value;
+            break;
+          case 'Number':
+            result[key] = parseFloat(value as any);
+            break;
+          case 'Float':
+            result[key] = parseFloat(value as any);
+            break;
+          case 'Int':
+            result[key] = parseInt(value as any, 10);
+            break;
+          case 'Boolean':
+            result[key] = Boolean(value);
+            break;
+          case 'Date':
+            result[key] = new Date(value as any);
+            break;
+          default:
+            result[key] = this.parseVariables(value[key], fields[key].fields);
+            break;
+        }
+      }
+    } else {
+      return variables;
+    }
+
+    return result;
   }
 
   /**
@@ -122,29 +148,23 @@ export class GraphQLMeta {
     const queryType = this.schema.getQueryType();
 
     if (logging) {
-      console.debug(
-        'GraphQLMeta::getTypes->queryTypeFields',
-        queryType.getFields(),
-      );
+      console.debug('GraphQLMeta::getTypes->queryTypeFields', queryType.getFields());
     }
 
     for (const [key, value] of Object.entries(queryType.getFields())) {
       if (key.startsWith('find')) {
         possibleTypes.push({
-          name: key.split('find').pop().slice(0, -1),
           create: false,
-          update: false,
           delete: false,
           duplicate: false,
+          name: key.split('find').pop().slice(0, -1),
+          update: false,
         });
       }
     }
 
     if (logging) {
-      console.debug(
-        'GraphQLMeta::getTypes->mutationTypeFields',
-        mutationType.getFields(),
-      );
+      console.debug('GraphQLMeta::getTypes->mutationTypeFields', mutationType.getFields());
       console.debug('GraphQLMeta::getTypes->possibleTypes', possibleTypes);
     }
 
@@ -271,10 +291,7 @@ export class GraphQLMeta {
   /**
    * Get GraphQL function
    */
-  protected getFunction(
-    name: string,
-    options: { type?: GraphQLRequestType } = {},
-  ): Record<string, any> {
+  protected getFunction(name: string, options: { type?: GraphQLRequestType } = {}): Record<string, any> {
     // Set config
     const config = {
       ...options,
@@ -285,8 +302,7 @@ export class GraphQLMeta {
 
     // If function type is set
     if (config.type) {
-      const graphQLType =
-        config.type.charAt(0).toUpperCase() + config.type.slice(1);
+      const graphQLType = config.type.charAt(0).toUpperCase() + config.type.slice(1);
       const type = this.schema.getType(graphQLType);
       if (type) {
         functions = (type as any).getFields();
@@ -314,11 +330,7 @@ export class GraphQLMeta {
    * Get (deep) type name
    */
   protected getTypeName(type: any) {
-    if (
-      type instanceof GraphQLInputObjectType ||
-      type instanceof GraphQLScalarType ||
-      type instanceof GraphQLEnumType
-    ) {
+    if (type instanceof GraphQLInputObjectType || type instanceof GraphQLScalarType || type instanceof GraphQLEnumType) {
       return type.name;
     } else if (type.type) {
       return this.getTypeName(type.type);
@@ -332,10 +344,7 @@ export class GraphQLMeta {
   /**
    * Get deep type data
    */
-  protected getDeepType(
-    type: any,
-    prepared: Record<string, any> = {},
-  ): GraphQLType {
+  protected getDeepType(type: any, prepared: Record<string, any> = {}): GraphQLType {
     // Check type
     if (!type) {
       return type;
@@ -365,8 +374,7 @@ export class GraphQLMeta {
             clone.isRequired = true;
             if (type.type.ofType instanceof GraphQLList) {
               clone.isList = true;
-              clone.isItemRequired =
-                type.type.ofType.ofType instanceof GraphQLNonNull;
+              clone.isItemRequired = type.type.ofType.ofType instanceof GraphQLNonNull;
             } else {
               clone.isList = false;
               clone.isItemRequired = false;
@@ -390,11 +398,7 @@ export class GraphQLMeta {
 
       // Set prepared cache for GraphQL types
       // (type names start with uppercase letters as opposed to property names that start with lowercase letters)
-      if (
-        type.name &&
-        type.name[0].toUpperCase() === type.name[0] &&
-        !prepared[type.name]
-      ) {
+      if (type.name && type.name[0].toUpperCase() === type.name[0] && !prepared[type.name]) {
         prepared[type.name] = graphQLType;
       }
     }
@@ -413,7 +417,6 @@ export class GraphQLMeta {
           ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
         }
       }
-
 
       Object.assign(graphQLType, ofTypeResult);
       return graphQLType;
@@ -440,8 +443,7 @@ export class GraphQLMeta {
         typeResult.isRequired = true;
         if (type.type.ofType instanceof GraphQLList) {
           typeResult.isList = true;
-          typeResult.isItemRequired =
-            type.type.ofType.ofType instanceof GraphQLNonNull;
+          typeResult.isItemRequired = type.type.ofType.ofType instanceof GraphQLNonNull;
         } else {
           typeResult.isList = false;
           typeResult.isItemRequired = false;

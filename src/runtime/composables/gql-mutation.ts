@@ -96,10 +96,16 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
       console.debug('gqlMutation::type ', type);
     }
 
+    const variables = meta.parseVariables(config.variables[key], value.fields);
+
+    if (config.log) {
+      console.debug('gqlMutation::mapped_variables ', variables);
+    }
+
     builderInput[key] = {
       list: value.isList,
       type,
-      value: config.variables[key],
+      value: variables,
     };
   }
 
