@@ -78,6 +78,12 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::argType ', argType);
   }
 
+  const variables = meta.parseVariables(config.variables, argType.fields);
+
+  if (config.log) {
+    console.debug('gqlMutation::mapped_variables ', variables);
+  }
+
   for (const [key, value] of Object.entries(argType.fields)) {
     let type: string;
 
@@ -96,16 +102,11 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
       console.debug('gqlMutation::type ', type);
     }
 
-    const variables = meta.parseVariables(config.variables[key], value.fields);
-
-    if (config.log) {
-      console.debug('gqlMutation::mapped_variables ', variables);
-    }
-
     builderInput[key] = {
       list: value.isList,
+      required: value.isList ? value.isItemRequired : value.isRequired,
       type,
-      value: variables,
+      value: variables[key],
     };
   }
 
@@ -127,5 +128,5 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { variables: config.variables }]);
+  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { variables }]);
 }

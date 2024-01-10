@@ -92,40 +92,22 @@ export class GraphQLMeta {
       for (const [key, value] of Object.entries(variables)) {
         switch (fields[key].type) {
           case 'String':
-            result[key] = {
-              type: 'String',
-              value: value,
-            };
+            result[key] = value;
             break;
           case 'Number':
-            result[key] = {
-              type: 'Number',
-              value: parseFloat(value as any),
-            };
+            result[key] = parseFloat(value as any);
             break;
           case 'Float':
-            result[key] = {
-              type: 'Float',
-              value: parseFloat(value as any),
-            };
+            result[key] = parseFloat(value as any);
             break;
           case 'Int':
-            result[key] = {
-              type: 'Int',
-              value: parseInt(value as any, 10),
-            };
+            result[key] = parseInt(value as any, 10);
             break;
           case 'Boolean':
-            result[key] = {
-              type: 'Boolean',
-              value: Boolean(value),
-            };
+            result[key] = Boolean(value);
             break;
           case 'Date':
-            result[key] = {
-              type: 'Date',
-              value: new Date(value as any),
-            };
+            result[key] = new Date(value as any);
             break;
           default:
             result[key] = this.parseVariables(value[key], fields[key].fields);
