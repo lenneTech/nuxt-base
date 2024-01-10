@@ -87,6 +87,12 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
       type = value.isRequired ? `${value.type}!` : value.type;
     }
 
+    if (config.log) {
+      console.debug('gqlMutation::key ', key);
+      console.debug('gqlMutation::value ', value);
+      console.debug('gqlMutation::type ', type);
+    }
+
     builderInput[key] = {
       list: value.isList,
       type,
