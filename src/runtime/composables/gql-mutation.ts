@@ -104,7 +104,6 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
 
     builderInput[key] = {
       list: value.isList,
-      required: value.isList ? value.isItemRequired : value.isRequired,
       type,
       value: variables[key],
     };
