@@ -48,6 +48,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   const builderInput = {};
   const metaFields = meta.getFields(method);
   const availableFields = [];
+  const variables = meta.parseVariables(config.variables, argType.fields);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -77,8 +78,6 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::variables ', config.variables);
     console.debug('gqlMutation::argType ', argType);
   }
-
-  const variables = meta.parseVariables(config.variables, argType.fields);
 
   if (config.log) {
     console.debug('gqlMutation::mapped_variables ', variables);

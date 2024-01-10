@@ -43,6 +43,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   const builderInput = {};
   const metaFields = meta.getFields(method);
   const availableFields = [];
+  const variables = meta.parseVariables(config.variables, argType.fields);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -80,7 +81,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     builderInput[key] = {
       list: value.isList,
       type,
-      value: config.variables[key],
+      value: variables[key],
     };
   }
 
@@ -116,5 +117,5 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     console.debug('gqlSubscription::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useSubscription<T>, [documentNode, config.variables ?? {}, null]);
+  return callWithNuxt(_nuxt, useSubscription<T>, [documentNode, variables ?? {}, null]);
 }

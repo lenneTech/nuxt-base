@@ -32,7 +32,7 @@ export default defineNuxtModule<ModuleOptions>({
   }),
   meta: {
     compatibility: {
-      nuxt: '3.9.0',
+      nuxt: '3.9.1',
     },
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',

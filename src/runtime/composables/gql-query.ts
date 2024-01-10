@@ -50,6 +50,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   const builderInput = {};
   const metaFields = meta.getFields(method);
   const availableFields = [];
+  const variables = meta.parseVariables(config.variables, argType.fields);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -87,7 +88,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     builderInput[key] = {
       list: value.isList,
       type,
-      value: config.variables[key],
+      value: variables[key],
     };
   }
 
@@ -112,7 +113,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   const queryConfig = {
     cache: false,
     query: documentNode,
-    variables: config.variables,
+    variables: variables,
   };
 
   return callWithNuxt(_nuxt, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [queryConfig]);
