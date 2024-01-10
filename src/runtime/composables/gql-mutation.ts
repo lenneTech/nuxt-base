@@ -88,6 +88,9 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     }
 
     if (config.log) {
+      console.debug('gqlMutation::isRequired ', value.isRequired);
+      console.debug('gqlMutation::isItemRequired ', value.isItemRequired);
+      console.debug('gqlMutation::isList ', value.isList);
       console.debug('gqlMutation::key ', key);
       console.debug('gqlMutation::value ', value);
       console.debug('gqlMutation::type ', type);
