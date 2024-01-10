@@ -110,8 +110,8 @@ export class GraphQLMeta {
             result[key] = new Date(value as any);
             break;
           default:
-            if (typeof value[key] === 'object' && Object.keys(fields[key].fields)?.length) {
-              result[key] = this.parseVariables(value[key], fields[key].fields);
+            if (typeof value === 'object' && Object.keys(fields[key].fields)?.length) {
+              result[key] = this.parseVariables(value, fields[key].fields);
             } else {
               result[key] = value;
             }
