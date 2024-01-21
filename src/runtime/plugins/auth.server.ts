@@ -5,7 +5,7 @@ import { useAuth } from '../composables/use-auth';
 import { useAuthState } from '../states/auth';
 
 export default defineNuxtPlugin({
-  enforce: 'post',
+  dependsOn: ['cookies', 'graphql'],
   name: 'auth-server',
   async setup() {
     const _nuxt = useNuxtApp();

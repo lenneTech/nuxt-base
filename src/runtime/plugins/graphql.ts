@@ -5,7 +5,6 @@ import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import { loadMeta } from '../functions/graphql-meta';
 
 export default defineNuxtPlugin({
-  enforce: 'post',
   name: 'graphql',
   async setup() {
     const nuxt = useNuxtApp();

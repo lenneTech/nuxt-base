@@ -32,7 +32,7 @@ export default defineNuxtModule<ModuleOptions>({
   }),
   meta: {
     compatibility: {
-      nuxt: '3.9.1',
+      nuxt: '3.9.3',
     },
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',
@@ -50,14 +50,14 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
-    addPlugin(resolver.resolve('runtime/plugins/0.cookies'));
-    addPlugin(resolver.resolve('runtime/plugins/1.graphql'));
+    addPlugin(resolver.resolve('runtime/plugins/cookies'));
+    addPlugin(resolver.resolve('runtime/plugins/graphql'));
 
     if (options.registerAuthPlugins) {
-      addPlugin(resolver.resolve('runtime/plugins/2.auth.server'));
+      addPlugin(resolver.resolve('runtime/plugins/auth.server'));
     }
 
-    addPlugin(resolver.resolve('runtime/plugins/3.apollo'));
+    addPlugin(resolver.resolve('runtime/plugins/apollo'));
 
     // prettier-ignore
     addTemplate({

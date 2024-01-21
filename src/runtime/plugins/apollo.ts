@@ -15,7 +15,7 @@ import { useAuthState } from '../states/auth';
  * See example: https://github.com/nuxt-modules/apollo/issues/442
  */
 export default defineNuxtPlugin({
-  enforce: 'post',
+  dependsOn: ['cookies'],
   name: 'apollo',
   async setup() {
     const links = [];
