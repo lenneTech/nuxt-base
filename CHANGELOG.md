@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/lenneTech/nuxt-base/compare/v3.2.1...v3.4.0) (2024-02-02)
+
+
+### Features
+
+* add debug log field type ([46e79f6](https://github.com/lenneTech/nuxt-base/commit/46e79f6d0f2bae2830e63b06239349e3ea5a8708))
+* add debug log field type ([c11b23c](https://github.com/lenneTech/nuxt-base/commit/c11b23c1cbdf9abc121e3e028a17cdae62f2cc0d))
+* add debug log field type ([8d37e68](https://github.com/lenneTech/nuxt-base/commit/8d37e68d1eb3846e4be74fda2d38011ff3a2caae))
+* update packages ([13e829f](https://github.com/lenneTech/nuxt-base/commit/13e829fdd1e19213adc2ea5d5918fa23649f3a5b))
+* update packages ([4ef7b5b](https://github.com/lenneTech/nuxt-base/commit/4ef7b5b8a08567b1477814f5d533f903bdf7f15d))
+* update packages ([2026b4f](https://github.com/lenneTech/nuxt-base/commit/2026b4fd411cb0a4497ca133f488ee89a5d9f94d))
+
+
+### Bug Fixes
+
+* fix parsing of variables ([386f70e](https://github.com/lenneTech/nuxt-base/commit/386f70e1cc255b387a0e5be4114fc8560fe387df))
+* fix parsing of variables ([825c140](https://github.com/lenneTech/nuxt-base/commit/825c140ef8fd9be7e160d280eb36e44f23a8fe80))
+* fix parsing of variables ([dbe0aa8](https://github.com/lenneTech/nuxt-base/commit/dbe0aa89c7357cb7f661ec63b8be41f00e1cbe07))
+* fix parsing of variables ([5abf994](https://github.com/lenneTech/nuxt-base/commit/5abf994de168b379d1fe1255a0fb92dc74bf16bd))
+* fix parsing of variables ([c6e15e6](https://github.com/lenneTech/nuxt-base/commit/c6e15e626b96e494d93fbf3e10a9fb82e0f19321))
+* fix parsing of variables ([276ce66](https://github.com/lenneTech/nuxt-base/commit/276ce66922a03e958fe5d9edaa99537a9ee27750))
+* fix query handling ([6ef67e1](https://github.com/lenneTech/nuxt-base/commit/6ef67e14f65d833502ed04e2932f7d2286c0ecc1))
+* fix refresh token handling ([a58efc2](https://github.com/lenneTech/nuxt-base/commit/a58efc2e6142d5c6451496d64587771a154e9c98))
+* fix subscription ([69dbfde](https://github.com/lenneTech/nuxt-base/commit/69dbfded249b70bbe64e70ceda94545d55ced15a))
+* fix subscription ([544ded2](https://github.com/lenneTech/nuxt-base/commit/544ded29c55f3f04fdc641d30d8ac4cd51f206f9))
+* fix subscription ([1f4e159](https://github.com/lenneTech/nuxt-base/commit/1f4e159eb8787c7f974c11252900a2985e6ec5fd))
+* fix subscription ([5f95dd4](https://github.com/lenneTech/nuxt-base/commit/5f95dd4e534557e084eaf5ebd7c8b18ff5509ae7))
+* remove unneeded logs in plugins ([fd8672f](https://github.com/lenneTech/nuxt-base/commit/fd8672f52fd634595138261be12b08ae092f20f9))
+
 ### [3.2.1](https://github.com/lenneTech/nuxt-base/compare/v3.2.0...v3.2.1) (2023-12-06)
 
 
