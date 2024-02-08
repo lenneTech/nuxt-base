@@ -34,13 +34,13 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.9.2",
+    "@apollo/client": "3.9.4",
     "@babel/core": "7.23.9",
-    "@graphql-codegen/cli": "5.0.0",
-    "@graphql-codegen/client-preset": "4.1.0",
-    "@graphql-codegen/typescript": "4.0.1",
-    "@nuxt/kit": "3.10.0",
-    "@nuxtjs/apollo": " 5.0.0-alpha.11",
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/client-preset": "4.2.2",
+    "@graphql-codegen/typescript": "4.0.4",
+    "@nuxt/kit": "3.10.1",
+    "@nuxtjs/apollo": "5.0.0-alpha.11",
     "@pinia/nuxt": "0.5.1",
     "@vue/apollo-composable": "4.0.1",
     "gql-query-builder": "3.8.0",
@@ -50,17 +50,17 @@
     "jwt-decode": "3.1.2",
     "nuxi": "3.10.0",
     "pinia": "2.1.7",
-    "vue": "3.4.15"
+    "vue": "3.4.16"
   },
   "devDependencies": {
     "@lenne.tech/eslint-config-vue": "0.0.16",
     "@nuxt/module-builder": "0.5.5",
-    "@nuxt/schema": "3.10.0",
+    "@nuxt/schema": "3.10.1",
     "@nuxt/test-utils": "3.11.0",
-    "@types/node": "20.11.15",
+    "@types/node": "20.11.16",
     "eslint": "8.56.0",
-    "nuxt": "3.10.0",
-    "prettier": "3.2.4",
+    "nuxt": "3.10.1",
+    "prettier": "3.2.5",
     "standard-version": "9.5.0",
     "typescript": "5.3.3",
     "vitest": "1.2.2"

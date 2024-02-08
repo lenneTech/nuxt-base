@@ -1,6 +1,15 @@
-import { addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, extendViteConfig, installModule, useLogger } from '@nuxt/kit';
+import {
+  addImportsDir,
+  addPlugin,
+  addTemplate,
+  createResolver,
+  defineNuxtModule,
+  extendViteConfig,
+  installModule,
+  useLogger
+} from '@nuxt/kit';
 
-import { generateFiles } from './generate';
+import {generateFiles} from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -32,7 +41,7 @@ export default defineNuxtModule<ModuleOptions>({
   }),
   meta: {
     compatibility: {
-      nuxt: '3.10.0',
+      nuxt: '3.10.1',
     },
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',
