@@ -43,7 +43,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   const builderInput = {};
   const metaFields = meta.getFields(method);
   const availableFields = [];
-  const variables = meta.parseVariables(config.variables, argType.fields);
+  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {

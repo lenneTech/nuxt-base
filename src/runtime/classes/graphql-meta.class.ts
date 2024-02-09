@@ -77,7 +77,7 @@ export class GraphQLMeta {
     return !defaultTypes.includes(type.toLocaleLowerCase());
   }
 
-  parseVariables(variables: Record<string, any>, fields: Record<string, any>) {
+  parseVariables(variables: Record<string, any>, fields: Record<string, any>, log = false) {
     const result = {};
 
     if (!variables) {
@@ -112,7 +112,7 @@ export class GraphQLMeta {
             break;
           default:
             if (typeof value === 'object' && Object.keys(fields[key].fields)?.length) {
-              result[key] = this.parseVariables(value, fields[key].fields);
+              result[key] = this.parseVariables(value, fields[key].fields, log);
             } else {
               result[key] = value;
             }
