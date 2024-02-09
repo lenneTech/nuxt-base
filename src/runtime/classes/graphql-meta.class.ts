@@ -90,7 +90,15 @@ export class GraphQLMeta {
 
     if (typeof variables === 'object' && Object.keys(fields)?.length) {
       for (const [key, value] of Object.entries(variables)) {
-        console.log('key', key, 'value', value, 'fields', fields[key]);
+        if (log) {
+          console.debug('key', key, 'value', value, 'fields', fields[key]);
+        }
+
+        if (Array.isArray(value)) {
+          result[key] = value.map((item) => this.parseVariables(item, fields[key].fields, log));
+          continue;
+        }
+
         switch (fields[key].type) {
           case 'String':
             result[key] = value;
