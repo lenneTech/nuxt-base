@@ -99,6 +99,11 @@ export class GraphQLMeta {
           continue;
         }
 
+        if (!fields[key]?.type) {
+          console.error('GraphQLMeta::parseVariables->fields-> ', key, ' is missing type in fields. Please check the schema or input');
+          continue;
+        }
+
         switch (fields[key].type) {
           case 'String':
             result[key] = value;
