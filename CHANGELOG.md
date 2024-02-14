@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.6.1](https://github.com/lenneTech/nuxt-base/compare/v3.6.0...v3.6.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* fix undefined fields of key in parseVariables ([d711d67](https://github.com/lenneTech/nuxt-base/commit/d711d67ab3d7f06100ebe5af4b9e3edcc5f882a3))
+
 ## [3.6.0](https://github.com/lenneTech/nuxt-base/compare/v3.2.1...v3.6.0) (2024-02-09)
 
 
