@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.7.0](https://github.com/lenneTech/nuxt-base/compare/v3.6.1...v3.7.0) (2024-02-16)
+
+
+### Features
+
+* Update packages ([3811170](https://github.com/lenneTech/nuxt-base/commit/3811170386a26552608dc7ab6e404c23f7dddc73))
+* Update packages ([7e26ef3](https://github.com/lenneTech/nuxt-base/commit/7e26ef370ca186882222822a1acb710316db9396))
+
+
+### Bug Fixes
+
+* add defaults for host and wsurl ([d4a13be](https://github.com/lenneTech/nuxt-base/commit/d4a13be393051ec95df5d95755159e65705c79a2))
+
 ### [3.6.1](https://github.com/lenneTech/nuxt-base/compare/v3.6.0...v3.6.1) (2024-02-14)
 
 
