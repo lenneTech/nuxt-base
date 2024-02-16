@@ -45,8 +45,8 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.build.transpile.push(resolver.resolve('runtime'));
 
     const wsUrl = options.host?.replace('https://', 'wss://').replace('http://', 'ws://');
-    nuxt.options.runtimeConfig.public['host'] = options.host;
-    nuxt.options.runtimeConfig.public['wsUrl'] = wsUrl;
+    nuxt.options.runtimeConfig.public['host'] = options.host ?? 'http://localhost:3000';
+    nuxt.options.runtimeConfig.public['wsUrl'] = wsUrl ?? 'ws://localhost:3000';
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
