@@ -91,7 +91,7 @@ export class GraphQLMeta {
     if (typeof variables === 'object' && Object.keys(fields)?.length) {
       for (const [key, value] of Object.entries(variables)) {
         if (log) {
-          console.debug('key', key, 'value', value, 'fields', fields[key]);
+          console.debug('key', key, 'value', value, 'fields');
         }
 
         if (Array.isArray(value)) {
@@ -99,12 +99,16 @@ export class GraphQLMeta {
           continue;
         }
 
-        if (!fields[key]?.type) {
+        if (!fields[key] || !fields[key]?.type) {
           console.error('GraphQLMeta::parseVariables->fields-> ', key, ' is missing type in fields. Please check the schema or input');
           continue;
         }
 
-        switch (fields[key].type) {
+        if (log) {
+          console.debug('type', fields[key]?.type);
+        }
+
+        switch (fields[key]?.type) {
           case 'String':
             result[key] = value;
             break;
