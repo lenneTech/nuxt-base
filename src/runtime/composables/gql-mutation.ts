@@ -126,5 +126,5 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { variables }]);
+  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { fetchPolicy: 'no-cache', variables }]);
 }

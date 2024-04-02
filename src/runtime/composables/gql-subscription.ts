@@ -117,5 +117,5 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     console.debug('gqlSubscription::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useSubscription<T>, [documentNode, variables ?? {}, null]);
+  return callWithNuxt(_nuxt, useSubscription<T>, [documentNode, variables ?? {}, { fetchPolicy: 'no-cache' }]);
 }
