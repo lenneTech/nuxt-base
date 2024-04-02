@@ -131,6 +131,11 @@ export default defineNuxtModule<ModuleOptions>({
         default: {
           authHeader: 'Authorization',
           authType: 'Bearer',
+          defaultOptions: {
+            watchQuery: {
+              fetchPolicy: 'no-cache',
+            },
+          },
           httpEndpoint: options.host || null,
           proxyCookies: true,
           tokenName: `apollo:${options.storagePrefix}.token`,
