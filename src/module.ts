@@ -132,6 +132,12 @@ export default defineNuxtModule<ModuleOptions>({
           authHeader: 'Authorization',
           authType: 'Bearer',
           defaultOptions: {
+            mutate: {
+              fetchPolicy: 'no-cache',
+            },
+            query: {
+              fetchPolicy: 'no-cache',
+            },
             watchQuery: {
               fetchPolicy: 'no-cache',
             },
