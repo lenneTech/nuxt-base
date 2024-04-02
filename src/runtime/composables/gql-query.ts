@@ -111,6 +111,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   }
 
   const queryConfig = {
+    cache: false,
     fetchPolicy: 'no-cache',
     query: documentNode,
     variables: variables,
