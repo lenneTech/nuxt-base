@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.8.0](https://github.com/lenneTech/nuxt-base/compare/v3.7.0...v3.8.0) (2024-04-11)
+
+
+### Features
+
+* update packages ([58af72d](https://github.com/lenneTech/nuxt-base/commit/58af72d8260608cbb269a30c9b9c61ebb7434e56))
+* updates packages ([8e43578](https://github.com/lenneTech/nuxt-base/commit/8e43578eff3f651ae85b6540db0a4d029ff6819e))
+
+
+### Bug Fixes
+
+* disable caching ([dbe71ae](https://github.com/lenneTech/nuxt-base/commit/dbe71ae8d05e149991aded091cf726375caea055))
+* disable caching ([0ee3a7c](https://github.com/lenneTech/nuxt-base/commit/0ee3a7cd4f5253234974ddf4bf9693981be54fd4))
+* disable caching ([5cca41c](https://github.com/lenneTech/nuxt-base/commit/5cca41c4d02b59b61b7b20143fb6b7040581d543))
+* disable caching ([2af3795](https://github.com/lenneTech/nuxt-base/commit/2af3795d0fe001d6bd4de86793809c4ef313da83))
+
 ## [3.7.0](https://github.com/lenneTech/nuxt-base/compare/v3.6.1...v3.7.0) (2024-02-16)
 
 
