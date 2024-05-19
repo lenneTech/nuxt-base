@@ -33,7 +33,7 @@ export default defineNuxtPlugin({
 
       if (err.graphQLErrors) {
         for (const error of err.graphQLErrors) {
-          switch (error.extensions.code) {
+          switch (error.extensions?.code) {
             case 'UNAUTHENTICATED': {
               if (error.message !== 'Expired refresh token' && error.message !== 'Expired token' && error.message !== 'Invalid token') {
                 return;
@@ -103,29 +103,29 @@ export default defineNuxtPlugin({
     const wsLink =
       typeof window !== 'undefined'
         ? new GraphQLWsLink(
-            createClient({
-              connectionParams: () => {
-              const { accessTokenState } = useAuthState();
+          createClient({
+            connectionParams: () => {
+              const {accessTokenState} = useAuthState();
               return {
                 Authorization: accessTokenState.value ? 'Bearer ' + accessTokenState.value : undefined,
               };
             },
             lazy: true,
             url: (wsUrl as string) || '',
-            }),
-          )
+          }),
+        )
         : null;
 
     const splitLink =
       typeof window !== 'undefined' && wsLink != null
         ? split(
-            ({ query }) => {
-              const def = getMainDefinition(query);
-              return def.kind === 'OperationDefinition' && def.operation === 'subscription';
-            },
-            wsLink,
-            httpLink,
-          )
+          ({query}) => {
+            const def = getMainDefinition(query);
+            return def.kind === 'OperationDefinition' && def.operation === 'subscription';
+          },
+          wsLink,
+          httpLink,
+        )
         : httpLink;
     /* eslint-enable */
 
