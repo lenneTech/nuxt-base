@@ -64,8 +64,8 @@ importers:
         specifier: 0.0.16
         version: 0.0.16(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.5)(vitest@1.6.0)
       '@nuxt/module-builder':
-        specifier: 0.6.0
-        version: 0.6.0(@nuxt/kit@3.11.2)(nuxi@3.11.1)(typescript@5.4.5)
+        specifier: 0.5.5
+        version: 0.5.5(@nuxt/kit@3.11.2)(nuxi@3.11.1)(typescript@5.4.5)
       '@nuxt/schema':
         specifier: 3.11.2
         version: 3.11.2(rollup@3.29.0)
@@ -2696,21 +2696,19 @@ packages:
       - rollup
       - supports-color
 
-  /@nuxt/module-builder@0.6.0(@nuxt/kit@3.11.2)(nuxi@3.11.1)(typescript@5.4.5):
-    resolution: {integrity: sha512-d/sn+6n23qB+yGuItNvGnNlPpDzwcsW6riyISdo4H2MO/3TWFsIzB5+JZK104t0G6ftxB71xWHmBBYEdkXOhVw==}
+  /@nuxt/module-builder@0.5.5(@nuxt/kit@3.11.2)(nuxi@3.11.1)(typescript@5.4.5):
+    resolution: {integrity: sha512-ifFfwA1rbSXSae25RmqA2kAbV3xoShZNrq1yK8VXB/EnIcDn4WiaYR1PytaSxIt5zsvWPn92BJXiIUBiMQZ0hw==}
     hasBin: true
     peerDependencies:
-      '@nuxt/kit': ^3.11.2
-      nuxi: ^3.11.1
+      '@nuxt/kit': ^3.8.2
+      nuxi: ^3.10.0
     dependencies:
       '@nuxt/kit': 3.11.2(rollup@3.29.0)
       citty: 0.1.6
       consola: 3.2.3
-      defu: 6.1.4
-      mlly: 1.6.1
+      mlly: 1.7.0
       nuxi: 3.11.1
       pathe: 1.1.2
-      pkg-types: 1.1.1
       unbuild: 2.0.0(typescript@5.4.5)
     transitivePeerDependencies:
       - sass
