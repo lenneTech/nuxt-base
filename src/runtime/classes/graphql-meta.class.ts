@@ -299,7 +299,9 @@ export class GraphQLMeta {
       }
     }
 
+    console.debug('GraphQLMeta::getFields->functionName', functionName);
     const func = this.getFunction(functionName, options);
+    console.debug('GraphQLMeta::getFields->func', func);
     const result = this.getDeepType(func.type);
 
     // Set cache
