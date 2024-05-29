@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.9.0](https://github.com/lenneTech/nuxt-base/compare/v3.8.0...v3.9.0) (2024-05-29)
+
+
+### Features
+
+* update packages ([19e82b6](https://github.com/lenneTech/nuxt-base/commit/19e82b6c744356244c697383362d7a666431884d))
+* update packages ([0de5029](https://github.com/lenneTech/nuxt-base/commit/0de5029b15966abc1f4b45b2d40fc31ba7f63dd4))
+* update packages ([82299c2](https://github.com/lenneTech/nuxt-base/commit/82299c22386ee79379aa3e3c820617d1aa67c5bc))
+
+
+### Bug Fixes
+
+* fix error in apollo plugin with wss communication ([40c68e3](https://github.com/lenneTech/nuxt-base/commit/40c68e316b25f99c86a16ef24ff2f4e09dbe7b6f))
+
 ## [3.8.0](https://github.com/lenneTech/nuxt-base/compare/v3.7.0...v3.8.0) (2024-04-11)
 
 
