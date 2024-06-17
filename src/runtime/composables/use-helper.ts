@@ -85,5 +85,30 @@ export function useHelper() {
     return Object.keys(diff).length ? diff : undefined;
   }
 
-  return { getDifferences, groupBy, isValidMongoID, removeFields, removeNullOrUndefined };
+  function slugifyDomain(input: string) {
+    const specialChars = {
+      ß: 'ss',
+      ä: 'ae',
+      ö: 'oe',
+      ü: 'ue',
+    };
+    const a = 'àáâæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôòóœøōõőṕŕřśšşșťțûùúūǘůűųẃẍÿýžźż·/_,:;';
+    const b = 'aaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnooooooooprrssssttuuuuuuuuwxyyzzz------';
+    const p = new RegExp(a.split('').join('|'), 'g');
+    return input
+      .toString()
+      .toLowerCase()
+      .replace(/[äöüß]/gi, (matched) => {
+        return specialChars[matched.toLowerCase()];
+      }) // Replace german special characters
+      .replace(/\s+/g, '-') // Replace spaces with -
+      .replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
+      .replace(/&/g, '-') // Replace & with '-'
+      .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+      .replace(/\-\-+/g, '-') // Replace multiple - with single -
+      .replace(/^-+/, '') // Trim - from start of text
+      .replace(/-+$/, ''); // Trim - from end of text
+  }
+
+  return { getDifferences, groupBy, isValidMongoID, removeFields, removeNullOrUndefined, slugifyDomain };
 }

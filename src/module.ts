@@ -11,9 +11,11 @@ export interface ModuleOptions {
     wsLinkOptions?: any;
   };
   autoImport?: boolean;
+  disableGraphql?: boolean;
   generateTypes?: boolean;
   host: string;
   registerAuthPlugins?: boolean;
+  registerPlugins?: boolean;
   schema?: string;
   storagePrefix?: string;
 }
@@ -24,15 +26,17 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: (_nuxt) => ({
     autoImport: false,
+    disableGraphql: false,
     generateTypes: true,
     host: '',
     registerAuthPlugins: false,
+    registerPlugins: true,
     schema: null,
     storagePrefix: 'base',
   }),
   meta: {
     compatibility: {
-      nuxt: '3.11.2',
+      nuxt: '3.*.*',
     },
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',
@@ -50,14 +54,21 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
-    addPlugin(resolver.resolve('runtime/plugins/cookies'));
-    addPlugin(resolver.resolve('runtime/plugins/graphql'));
+    if (options.registerPlugins) {
+      addPlugin(resolver.resolve('runtime/plugins/cookies'));
 
-    if (options.registerAuthPlugins) {
+      if (!options.disableGraphql) {
+        addPlugin(resolver.resolve('runtime/plugins/graphql'));
+      }
+    }
+
+    if (options.registerAuthPlugins && options.registerPlugins) {
       addPlugin(resolver.resolve('runtime/plugins/auth.server'));
     }
 
-    addPlugin(resolver.resolve('runtime/plugins/apollo'));
+    if (options.registerPlugins && !options.disableGraphql) {
+      addPlugin(resolver.resolve('runtime/plugins/apollo'));
+    }
 
     // prettier-ignore
     addTemplate({
@@ -83,7 +94,6 @@ export default defineNuxtModule<ModuleOptions>({
       ].join('\n'),
     });
     nuxt.options.alias['#base-types'] = resolver.resolve(nuxt.options.buildDir, 'base-types');
-
     nuxt.options.alias['#base-types/*'] = resolver.resolve(nuxt.options.buildDir, 'base-types', '*');
 
     addImportsDir(resolver.resolve('runtime/composables'));
@@ -103,9 +113,10 @@ export default defineNuxtModule<ModuleOptions>({
       }, 5000);
     }
 
-    // TODO: Remove when package fixed with valid ESM exports
-    nuxt.options.build.transpile.push(({ isServer }) => !isServer && 'gql-query-builder');
-
+    if (!options.disableGraphql) {
+      // TODO: Remove when package fixed with valid ESM exports
+      nuxt.options.build.transpile.push(({ isServer }) => !isServer && 'gql-query-builder');
+    }
     // TODO: Remove when package fixed with valid ESM exports
     extendViteConfig((config) => {
       config.optimizeDeps = config.optimizeDeps || {};
@@ -125,37 +136,44 @@ export default defineNuxtModule<ModuleOptions>({
     });
 
     logger.success('[@lenne.tech/nuxt-base] Set WebSocket url:', wsUrl);
-    await installModule(await resolver.resolvePath('@nuxtjs/apollo'), {
-      autoImports: true,
-      clients: {
-        default: {
-          authHeader: 'Authorization',
-          authType: 'Bearer',
-          defaultOptions: {
-            mutate: {
-              fetchPolicy: 'no-cache',
+    if (!options.disableGraphql) {
+      await installModule(await resolver.resolvePath('@nuxtjs/apollo'), {
+        autoImports: true,
+        clients: {
+          default: {
+            authHeader: 'Authorization',
+            authType: 'Bearer',
+            defaultOptions: {
+              mutate: {
+                fetchPolicy: 'no-cache',
+              },
+              query: {
+                fetchPolicy: 'no-cache',
+              },
+              watchQuery: {
+                fetchPolicy: 'no-cache',
+              },
             },
-            query: {
-              fetchPolicy: 'no-cache',
+            httpEndpoint: options.host || null,
+            httpLinkOptions: {
+              credentials: 'include',
+              fetchOptions: {
+                credentials: 'include',
+              },
             },
-            watchQuery: {
-              fetchPolicy: 'no-cache',
-            },
+            tokenName: `apollo:${options.storagePrefix}.token`,
+            tokenStorage: 'cookie',
+            wsEndpoint: wsUrl || null,
+            ...options.apollo,
           },
-          httpEndpoint: options.host || null,
-          proxyCookies: true,
-          tokenName: `apollo:${options.storagePrefix}.token`,
-          tokenStorage: 'cookie',
-          wsEndpoint: wsUrl || null,
-          ...options.apollo,
         },
-      },
-    });
+      });
+    }
 
     logger.success('[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo');
 
     await installModule(await resolver.resolvePath('@pinia/nuxt'), {
-      autoImports: ['defineStore'],
+      autoImports: true,
     });
 
     logger.success('[@lenne.tech/nuxt-base] Installed @pinia/nuxt');
