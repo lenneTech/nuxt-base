@@ -1,6 +1,15 @@
-import { addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, extendViteConfig, installModule, useLogger } from '@nuxt/kit';
+import {
+  addImportsDir,
+  addPlugin,
+  addTemplate,
+  createResolver,
+  defineNuxtModule,
+  extendViteConfig,
+  installModule,
+  useLogger
+} from '@nuxt/kit';
 
-import { generateFiles } from './generate';
+import {generateFiles} from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
