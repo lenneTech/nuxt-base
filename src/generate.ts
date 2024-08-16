@@ -13,9 +13,17 @@ const { loadSchema } = require('@graphql-tools/load');
 const { GraphQLFileLoader } = require('@graphql-tools/graphql-file-loader');
 
 export async function loadMetaServer(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {
+  if (!config || !config.public) {
+    throw new Error('Invalid configuration object');
+  }
+
   let schema;
 
   if (!config.public.schema) {
+    if (!config.public.host) {
+      throw new Error('Host is not defined in the configuration');
+    }
+
     const { data: result } = await ofetch(config.public.host, {
       body: JSON.stringify({
         query: getIntrospectionQuery({ descriptions: false }),
@@ -81,9 +89,12 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
 
   if (methods?.query) {
     for (const query of methods.query) {
+      console.log('query', query);
       const types = meta.getTypesForMethod(query, 'Query');
       customTypes.push(types.customTypes);
       const inputFieldsType = types.returnType.replace('[]', '');
+
+      console.log('inputFieldsType', inputFieldsType);
 
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
@@ -94,11 +105,13 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       );
     }
   }
-
+  console.log('mutation');
   if (methods?.mutation) {
     for (const mutation of methods.mutation) {
       const types = meta.getTypesForMethod(mutation, 'Mutation');
-      customTypes.push(types.customTypes);
+      if (types.customTypes) {
+        customTypes.push(types.customTypes);
+      }
       const inputFieldsType = types.returnType.replace('[]', '');
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
@@ -113,7 +126,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   if (methods?.subscription) {
     for (const subscription of methods.subscription) {
       const types = meta.getTypesForMethod(subscription, 'Subscription');
-      customTypes.push(types.customTypes);
+      if (types.customTypes) {
+        customTypes.push(types.customTypes);
+      }
       const inputFieldsType = types.returnType.replace('[]', '');
 
       template.push(
@@ -126,9 +141,10 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
     }
   }
 
+  console.log('customTypes', customTypes);
+
   customTypes = [...new Set([].concat(...customTypes))];
 
-  console.log('customTypes', customTypes);
 
   // Remove type upload
   customTypes = customTypes.filter((e) => e !== 'Upload');
