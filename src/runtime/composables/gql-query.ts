@@ -1,4 +1,4 @@
-import type { AsyncData, NuxtApp } from 'nuxt/app';
+import {type AsyncData, callWithNuxt, type NuxtApp} from 'nuxt/app';
 
 import { useAsyncQuery, useLazyAsyncQuery, useNuxtApp } from '#imports';
 import { query } from 'gql-query-builder';
@@ -114,5 +114,5 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     variables: variables,
   };
 
-  return nuxtApp.runWithContext(() => (config.lazy ? useLazyAsyncQuery<T>(queryConfig) : useAsyncQuery<T>(queryConfig)));
+  return callWithNuxt(nuxtApp, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [queryConfig]);
 }
