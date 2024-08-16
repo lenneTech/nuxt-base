@@ -500,6 +500,7 @@ export class GraphQLMeta {
       // Set enum values
       if (type._values) {
         console.log('getDeepType::_values', type);
+        console.log('getDeepType::_values', typeName);
         graphQLType.isEnum = true;
         console.log('getDeepType::type._values', type._values);
         console.log('getDeepType::type._nameLookup', type._nameLookup);
