@@ -72,9 +72,6 @@ export default async function generateGraphQLTypes(schema: string) {
 
 export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const methods = meta.getMethodNames();
-
-  console.log('methods', methods);
-
   const template = [];
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';\n');
@@ -130,6 +127,8 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   }
 
   customTypes = [...new Set([].concat(...customTypes))];
+
+  console.log('customTypes', customTypes);
 
   // Remove type upload
   customTypes = customTypes.filter((e) => e !== 'Upload');

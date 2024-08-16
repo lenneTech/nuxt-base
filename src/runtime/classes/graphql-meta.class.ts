@@ -42,6 +42,9 @@ export class GraphQLMeta {
     const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method], {});
     const argsDeepType = this.getArgs(method);
 
+    console.log('returnDeepType', returnDeepType);
+    console.log('argsDeepType', argsDeepType);
+
     if (returnDeepType) {
       returnType = returnDeepType.type + (returnDeepType.isList ? '[]' : '');
       returnType = returnType.replace(/Boolean/g, 'boolean');
