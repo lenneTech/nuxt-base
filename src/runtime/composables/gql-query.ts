@@ -10,8 +10,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, any>> {
-  const _nuxt = useNuxtApp() as NuxtApp;
-  const { $graphQl } = _nuxt;
+  const nuxtApp = useNuxtApp() as NuxtApp;
 
   // Check parameters
   if (!method) {
@@ -35,7 +34,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = $graphQl() as unknown as GraphQLMeta;
+  const meta = nuxtApp.graphQl as unknown as GraphQLMeta;
   if (!meta) {
     return;
   }
@@ -115,5 +114,5 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     variables: variables,
   };
 
-  return config.lazy ? useLazyAsyncQuery<T>(queryConfig) : useAsyncQuery<T>(queryConfig);
+  return nuxtApp.runWithContext(() => (config.lazy ? useLazyAsyncQuery<T>(queryConfig) : useAsyncQuery<T>(queryConfig)));
 }

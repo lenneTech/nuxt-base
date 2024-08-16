@@ -3,7 +3,7 @@ import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useNuxtApp } from 'nuxt/app';
 
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
@@ -11,8 +11,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseSubscriptionReturn<T, any>> {
-  const _nuxt = useNuxtApp();
-  const { $graphQl } = _nuxt;
+  const nuxtApp = useNuxtApp();
 
   // Check parameters
   if (!method) {
@@ -29,8 +28,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const fields = config.fields as unknown as string[];
-  const meta = $graphQl() as GraphQLMeta;
-
+  const meta = nuxtApp.graphQl as unknown as GraphQLMeta;
   if (!meta) {
     return;
   }
@@ -117,5 +115,5 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     console.debug('gqlSubscription::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useSubscription<T>, [documentNode, variables ?? {}, { fetchPolicy: 'no-cache' }]);
+  return nuxtApp.runWithContext(() => useSubscription<T>(documentNode, variables ?? {}, { fetchPolicy: 'no-cache' }));
 }

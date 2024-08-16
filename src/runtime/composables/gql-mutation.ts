@@ -12,9 +12,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
-  const _nuxt = useNuxtApp() as NuxtApp;
-  console.log('gqlMutation::_nuxt', _nuxt);
-  const { $graphQl } = _nuxt;
+  const nuxtApp = useNuxtApp() as NuxtApp;
 
   // Check parameters
   if (!method) {
@@ -36,8 +34,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::fields ', fields);
   }
 
-  const meta = $graphQl() as GraphQLMeta;
-
+  const meta = nuxtApp.graphQl as unknown as GraphQLMeta;
   if (!meta) {
     return;
   }
@@ -128,5 +125,5 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return useMutation<T>(documentNode, { fetchPolicy: 'no-cache', variables });
+  return nuxtApp.runWithContext(() => useMutation<T>(documentNode, { fetchPolicy: 'no-cache', variables }));
 }
