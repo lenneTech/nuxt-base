@@ -1,15 +1,6 @@
-import {
-  addImportsDir,
-  addPlugin,
-  addTemplate,
-  createResolver,
-  defineNuxtModule,
-  extendViteConfig,
-  installModule,
-  useLogger
-} from '@nuxt/kit';
+import { addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, extendViteConfig, installModule, useLogger } from '@nuxt/kit';
 
-import {generateFiles} from './generate';
+import { generateFiles } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -55,7 +46,9 @@ export default defineNuxtModule<ModuleOptions>({
 
     logger.info('[@lenne.tech/nuxt-base] Init @lenne.tech/nuxt-base');
 
-    nuxt.options.build.transpile.push(resolver.resolve('runtime'));
+    // Transpile runtime
+    const runtimeDir = resolver.resolve('runtime');
+    nuxt.options.build.transpile.push(runtimeDir);
 
     const wsUrl = options.host?.replace('https://', 'wss://').replace('http://', 'ws://');
     nuxt.options.runtimeConfig.public['host'] = options.host ?? 'http://localhost:3000';
@@ -65,6 +58,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     if (options.registerPlugins) {
       addPlugin(resolver.resolve('runtime/plugins/cookies'));
+      addPlugin(resolver.resolve('runtime/plugins/apollo-error'));
 
       if (!options.disableGraphql) {
         addPlugin(resolver.resolve('runtime/plugins/graphql'));

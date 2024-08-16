@@ -85,7 +85,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';\n');
   template.push('import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n');
-  template.push('import { UseMutationReturn, UseSubscriptionReturn } from \'@vue/apollo-composable\';\n');
+  template.push('import type { UseMutationReturn, UseSubscriptionReturn } from \'@vue/apollo-composable\';\n');
   template.push('import type { AsyncData } from \'nuxt/app\';');
 
   if (methods?.query) {
@@ -145,7 +145,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   customTypes = customTypes.filter((e) => e !== 'Upload');
 
   if (customTypes.length) {
-    template.unshift(`import {${customTypes.join(', ')}} from "./default"`);
+    template.unshift(`import type {${customTypes.join(', ')}} from "./default"`);
   }
 
   return template.join('\n');

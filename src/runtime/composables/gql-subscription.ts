@@ -1,16 +1,26 @@
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 
-import { useGraphqlMeta } from '#imports';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
+import { useNuxtApp } from 'nuxt/app';
 
+import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseSubscriptionReturn<T, any>> {
+  const useGqlMeta = (): GraphQLMeta => {
+    const nuxtApp = useNuxtApp();
+
+    if (!nuxtApp._meta) {
+      throw new Error('GraphQLMeta is not available.');
+    }
+
+    return nuxtApp?._meta as GraphQLMeta;
+  };
+
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
@@ -26,7 +36,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const fields = config.fields as unknown as string[];
-  const meta = useGraphqlMeta() as GraphQLMeta;
+  const meta = useGqlMeta();
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);

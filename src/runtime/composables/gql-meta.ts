@@ -6,7 +6,7 @@ export function useGraphqlMeta(): GraphQLMeta {
   const nuxtApp = useNuxtApp() as { _meta: GraphQLMeta } & GraphQLMeta;
 
   if (!nuxtApp._meta) {
-    throw new Error('GQL Meta is not available.');
+    throw new Error('GraphQLMeta is not available.');
   }
 
   return nuxtApp?._meta;
