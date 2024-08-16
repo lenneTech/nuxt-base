@@ -8,9 +8,7 @@ import { tryUseNuxtApp, useNuxtApp } from 'nuxt/app';
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
-import { hashPasswords } from '../functions/graphql-meta';
-
-export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
+export function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): UseMutationReturn<T, any> {
   const useGqlMeta = () => {
     console.log('nuxtApp', tryUseNuxtApp());
     const nuxtApp = useNuxtApp();
@@ -44,9 +42,9 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
 
   const meta = useGqlMeta();
 
-  if (config.hashPasswords) {
-    config.variables = await hashPasswords(config.variables);
-  }
+  // if (config.hashPasswords) {
+  //   config.variables = await hashPasswords(config.variables);
+  // }
 
   const argType = meta.getArgs(method);
   const builderInput = {};
