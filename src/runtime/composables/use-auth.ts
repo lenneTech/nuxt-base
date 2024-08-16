@@ -1,4 +1,6 @@
-import jwt_decode from 'jwt-decode';
+import type { JwtPayload } from 'jwt-decode';
+
+import { jwtDecode } from 'jwt-decode';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
 import { useAuthState } from '../states/auth';
@@ -79,9 +81,13 @@ export function useAuth() {
     $setAuthCookies(null, null);
   }
 
-  function getDecodedAccessToken(token: string): any {
+  function getDecodedAccessToken(token: string): JwtPayload | null {
+    if (!token) {
+      return null;
+    }
+
     try {
-      return jwt_decode(token);
+      return jwtDecode(token);
     } catch (err) {
       return null;
     }
@@ -89,8 +95,8 @@ export function useAuth() {
 
   function isTokenExpired(token?: string): boolean {
     if (token) {
-      const decoded: { exp: number } = getDecodedAccessToken(token);
-      return decoded.exp < Date.now() / 1000;
+      const decoded = getDecodedAccessToken(token);
+      return decoded?.exp < Date.now() / 1000;
     }
     return false;
   }
