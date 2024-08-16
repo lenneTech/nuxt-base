@@ -108,16 +108,16 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   if (methods?.mutation) {
     for (const mutation of methods.mutation) {
       const types = meta.getTypesForMethod(mutation, 'Mutation');
-      if (types.customTypes) {
-        customTypes.push(types.customTypes);
-      }
+      customTypes.push(types.customTypes);
       const inputFieldsType = types.returnType.replace('[]', '');
+      const returnTypeIsDefaultType = defaultTypes.includes(types.returnType.toLowerCase());
+
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<UseMutationReturn<{${mutation}: ${types.returnType}}, any>> => gqlMutation<{${mutation}: ${
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<UseMutationReturn<{${mutation}: ${types.returnType}}, any>> => gqlMutation<{${mutation}: ${
           types.returnType
-        }}>('${mutation}', {${types.argType ? 'variables,' : ''} fields, log})`,
+        }}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
       );
     }
   }
@@ -125,17 +125,16 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   if (methods?.subscription) {
     for (const subscription of methods.subscription) {
       const types = meta.getTypesForMethod(subscription, 'Subscription');
-      if (types.customTypes) {
-        customTypes.push(types.customTypes);
-      }
+      customTypes.push(types.customTypes);
       const inputFieldsType = types.returnType.replace('[]', '');
+      const returnTypeIsDefaultType = defaultTypes.includes(types.returnType.toLowerCase());
 
       template.push(
         `export const use${capitalizeFirstLetter(subscription)}Subscription = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${inputFieldsType}>[] | null, log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
           types.returnType
-        }}, any>> => gqlSubscription<{${subscription}: ${types.returnType}}>('${subscription}', {${types.argType ? 'variables,' : ''} fields, log})`,
+        }}, any>> => gqlSubscription<{${subscription}: ${types.returnType}}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
       );
     }
   }

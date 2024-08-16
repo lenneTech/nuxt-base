@@ -3,7 +3,7 @@ import type { AsyncData } from 'nuxt/app';
 import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useNuxtApp } from 'nuxt/app';
 
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
@@ -37,7 +37,6 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   }
 
   const meta = $graphQl() as unknown as GraphQLMeta;
-
   if (!meta) {
     return;
   }
@@ -117,5 +116,5 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     variables: variables,
   };
 
-  return callWithNuxt(_nuxt, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [queryConfig]);
+  return config.lazy ? useLazyAsyncQuery<T>(queryConfig) : useAsyncQuery<T>(queryConfig);
 }
