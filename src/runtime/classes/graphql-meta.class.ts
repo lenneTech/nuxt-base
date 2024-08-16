@@ -1,12 +1,11 @@
-import type { GraphQLSchema } from 'graphql';
+import type {GraphQLSchema} from 'graphql';
+import {GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType} from 'graphql';
 
-import { GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType } from 'graphql';
+import type {GraphQLRequestType} from '../enums/graphql-request-type.enum';
+import type {GraphqlCrudType} from '../interfaces/graphql-crud-type.interface';
 
-import type { GraphQLRequestType } from '../enums/graphql-request-type.enum';
-import type { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
-
-import { GraphQLType } from './graphql-type.class';
-import { Helper } from './helper.class';
+import {GraphQLType} from './graphql-type.class';
+import {Helper} from './helper.class';
 
 /**
  * GraphQL meta
@@ -60,6 +59,7 @@ export class GraphQLMeta {
         }
       }
 
+      console.log('argType', argType);
       argType = result.join(', ');
       argType = argType
         .replace(/String/g, 'string')
