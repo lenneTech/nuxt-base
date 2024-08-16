@@ -95,6 +95,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       const inputFieldsType = types.returnType.replace('[]', '');
       const returnTypeIsDefaultType = defaultTypes.includes(types.returnType.toLowerCase());
 
+      console.log('inputFieldsType', inputFieldsType);
+      console.log('returnTypeIsDefaultType', returnTypeIsDefaultType);
+
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
