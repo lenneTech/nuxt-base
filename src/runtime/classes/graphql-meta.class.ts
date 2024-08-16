@@ -376,7 +376,7 @@ export class GraphQLMeta {
    * Get deep type data
    */
   protected getDeepType(type: any, prepared: Record<string, any> = {}): GraphQLType {
-    console.log('getDeepType::type', type);
+    console.log('getDeepType::type');
     try {
       // Check if type is undefined or null
       if (!type) {
@@ -388,12 +388,12 @@ export class GraphQLMeta {
       const graphQLType = GraphQLType.map({
         type: this.getTypeName(type),
       });
-      console.log('getDeepType::typeName', typeName);
-      console.log('getDeepType::graphQLType', graphQLType);
+      console.log('getDeepType::typeName');
+      console.log('getDeepType::graphQLType');
       // Check prepared
       if (typeof type === 'object') {
         const preparedType = prepared[typeName];
-        console.log('getDeepType::preparedType', preparedType);
+        console.log('getDeepType::preparedType');
         // Work with cached type
         if (preparedType) {
           // Create a new object to protect own isXXX information
@@ -402,8 +402,8 @@ export class GraphQLMeta {
           // But use fields as reference to get future changes via prepared caching
           clone.fields = preparedType.fields;
 
-          console.log('getDeepType::clone.fields', clone.fields);
-          console.log('getDeepType::type.type', type.type);
+          console.log('getDeepType::clone.fields');
+          console.log('getDeepType::type.type');
           // Check for meta flags
           if (type.type) {
             if (type.type instanceof GraphQLNonNull) {
@@ -438,7 +438,7 @@ export class GraphQLMeta {
           prepared[type.name] = graphQLType;
         }
       }
-      console.log('getDeepType::type.ofType', type.ofType);
+      console.log('getDeepType::type.ofType');
       // Search deeper
       if (type.ofType) {
         const ofTypeResult = this.getDeepType(type.ofType, prepared);
@@ -453,13 +453,14 @@ export class GraphQLMeta {
             ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
           }
         }
-        console.log('getDeepType::assign', graphQLType, ofTypeResult);
+        console.log('getDeepType::assign');
         Object.assign(graphQLType, ofTypeResult);
         return graphQLType;
       }
 
       // Process fields
       if (type._fields) {
+        console.log('getDeepType::_fields');
         const fields = {};
         for (const [key, value] of Object.entries(type._fields)) {
           fields[key] = this.getDeepType(value, prepared);
@@ -472,6 +473,7 @@ export class GraphQLMeta {
 
       // Process type
       if (type.type) {
+        console.log('getDeepType::type');
         const typeResult = this.getDeepType(type.type, prepared);
 
         // Check for meta flags
@@ -503,6 +505,7 @@ export class GraphQLMeta {
 
       // Set enum values
       if (type._values) {
+        console.log('getDeepType::_values');
         graphQLType.isEnum = true;
         for (const [key, value] of Object.entries(type._nameLookup)) {
           if (!(value as any).isDeprecated) {

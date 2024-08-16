@@ -100,7 +100,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
         } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} lazy?: boolean, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
-        }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'null' : 'fields'}, lazy, log})`,
+        }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, lazy, log})`,
       );
     }
   }
