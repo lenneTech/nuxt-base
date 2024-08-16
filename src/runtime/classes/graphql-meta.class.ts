@@ -59,8 +59,8 @@ export class GraphQLMeta {
         }
       }
 
-      console.log('argType', argType);
       argType = result.join(', ');
+      console.log('argType', argType);
       argType = argType
         .replace(/String/g, 'string')
         .replace(/Boolean/g, 'string')
