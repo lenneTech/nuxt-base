@@ -95,9 +95,6 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       const inputFieldsType = types.returnType.replace('[]', '');
       const returnTypeIsDefaultType = defaultTypes.includes(types.returnType.toLowerCase());
 
-      console.log('inputFieldsType', inputFieldsType);
-      console.log('returnTypeIsDefaultType', returnTypeIsDefaultType);
-
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
@@ -142,8 +139,6 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       );
     }
   }
-
-  console.log('customTypes', customTypes);
 
   customTypes = [...new Set([].concat(...customTypes))];
 
@@ -214,8 +209,6 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
 
     // Generate composable types
     const composables = await generateComposables(meta);
-
-    console.log('composables', composables);
 
     addTemplate({
       filename: nuxt.options.rootDir + '/src/base/index.ts',

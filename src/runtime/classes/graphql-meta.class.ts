@@ -376,7 +376,6 @@ export class GraphQLMeta {
    * Get deep type data
    */
   protected getDeepType(type: any, prepared: Record<string, any> = {}): GraphQLType {
-    console.log('getDeepType::type');
     try {
       // Check if type is undefined or null
       if (!type) {
@@ -499,16 +498,7 @@ export class GraphQLMeta {
 
       // Set enum values
       if (type._values) {
-        console.log('getDeepType::_values', type);
-        console.log('getDeepType::_values', typeName);
         graphQLType.isEnum = true;
-        console.log('getDeepType::type._values', type._values);
-        console.log('getDeepType::type._nameLookup', type._nameLookup);
-        for (const [key, value] of Object.entries(type._nameLookup)) {
-          if (!(value as any).isDeprecated) {
-            graphQLType.validEnums.push(key);
-          }
-        }
       }
 
       // Finish

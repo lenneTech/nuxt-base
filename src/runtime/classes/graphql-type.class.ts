@@ -10,5 +10,4 @@ export class GraphQLType extends Standard {
   isItemRequired = false;
   isList = false;
   isEnum = false;
-  validEnums: string[] = [];
 }
