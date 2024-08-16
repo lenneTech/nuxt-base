@@ -29,7 +29,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const fields = config.fields as unknown as string[];
-  const meta = nuxtApp.graphQl as unknown as GraphQLMeta;
+  const meta = nuxtApp._graphQl as unknown as GraphQLMeta;
   if (!meta) {
     return;
   }

@@ -34,7 +34,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = nuxtApp.graphQl as unknown as GraphQLMeta;
+  const meta = nuxtApp._graphQl as unknown as GraphQLMeta;
   if (!meta) {
     return;
   }
