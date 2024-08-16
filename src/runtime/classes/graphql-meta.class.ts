@@ -388,11 +388,12 @@ export class GraphQLMeta {
       const graphQLType = GraphQLType.map({
         type: this.getTypeName(type),
       });
-
+      console.log('getDeepType::typeName', typeName);
+      console.log('getDeepType::graphQLType', graphQLType);
       // Check prepared
       if (typeof type === 'object') {
         const preparedType = prepared[typeName];
-
+        console.log('getDeepType::preparedType', preparedType);
         // Work with cached type
         if (preparedType) {
           // Create a new object to protect own isXXX information
@@ -401,6 +402,8 @@ export class GraphQLMeta {
           // But use fields as reference to get future changes via prepared caching
           clone.fields = preparedType.fields;
 
+          console.log('getDeepType::clone.fields', clone.fields);
+          console.log('getDeepType::type.type', type.type);
           // Check for meta flags
           if (type.type) {
             if (type.type instanceof GraphQLNonNull) {
@@ -435,7 +438,7 @@ export class GraphQLMeta {
           prepared[type.name] = graphQLType;
         }
       }
-
+      console.log('getDeepType::type.ofType', type.ofType);
       // Search deeper
       if (type.ofType) {
         const ofTypeResult = this.getDeepType(type.ofType, prepared);
@@ -450,7 +453,7 @@ export class GraphQLMeta {
             ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
           }
         }
-
+        console.log('getDeepType::assign', graphQLType, ofTypeResult);
         Object.assign(graphQLType, ofTypeResult);
         return graphQLType;
       }
