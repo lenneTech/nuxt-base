@@ -81,6 +81,7 @@ export default async function generateGraphQLTypes(schema: string) {
 export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const methods = meta.getMethodNames();
   const template = [];
+  const defaultTypes = ['boolean', 'string', 'date', 'int', 'number', 'float'];
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';\n');
   template.push('import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n');
@@ -92,13 +93,14 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       const types = meta.getTypesForMethod(query, 'Query');
       customTypes.push(types.customTypes);
       const inputFieldsType = types.returnType.replace('[]', '');
+      const returnTypeIsDefaultType = defaultTypes.includes(types.returnType.toLowerCase());
 
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } fields?: InputFields<${inputFieldsType}>[] | null, lazy?: boolean, log?: boolean): Promise<AsyncData<{${query}: ${
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} lazy?: boolean, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
-        }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${types.argType ? 'variables,' : ''} fields, lazy, log})`,
+        }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'null' : 'fields'}, lazy, log})`,
       );
     }
   }

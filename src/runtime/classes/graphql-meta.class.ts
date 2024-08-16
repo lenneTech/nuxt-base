@@ -65,9 +65,17 @@ export class GraphQLMeta {
         .replace(/String/g, 'string')
         .replace(/Upload/g, 'any')
         .replace(/Boolean/g, 'boolean')
-        .toString()
         .replace(/Int/g, 'number')
         .replace(/Float/g, 'number');
+    }
+
+    if (returnType) {
+      returnType = returnType
+        .replace(/Int/g, 'number')
+        .replace(/Float/g, 'number')
+        .replace(/Boolean/g, 'boolean')
+        .replace(/String/g, 'string')
+        .replace(/Upload/g, 'any');
     }
 
     return { argType, customTypes, returnType };
