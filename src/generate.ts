@@ -1,12 +1,12 @@
-import type { Types } from '@graphql-codegen/plugin-helpers';
-import type { Import } from 'unimport';
+import type {Types} from '@graphql-codegen/plugin-helpers';
+import type {Import} from 'unimport';
 
-import { generate } from '@graphql-codegen/cli';
-import { addTemplate } from '@nuxt/kit';
-import { buildClientSchema, getIntrospectionQuery } from 'graphql';
-import { ofetch } from 'ofetch';
+import {generate} from '@graphql-codegen/cli';
+import {addTemplate} from '@nuxt/kit';
+import {buildClientSchema, getIntrospectionQuery} from 'graphql';
+import {ofetch} from 'ofetch';
 
-import { GraphQLMeta } from './runtime/classes/graphql-meta.class';
+import {GraphQLMeta} from './runtime/classes/graphql-meta.class';
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const { loadSchema } = require('@graphql-tools/load');
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
@@ -72,6 +72,9 @@ export default async function generateGraphQLTypes(schema: string) {
 
 export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const methods = meta.getMethodNames();
+
+  console.log('methods', methods);
+
   const template = [];
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';\n');
@@ -195,6 +198,9 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
 
     // Generate composable types
     const composables = await generateComposables(meta);
+
+    console.log('composables', composables);
+
     addTemplate({
       filename: nuxt.options.rootDir + '/src/base/index.ts',
       getContents: () => composables || '',
