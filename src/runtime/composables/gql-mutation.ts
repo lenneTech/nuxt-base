@@ -1,20 +1,15 @@
 import type { UseMutationReturn } from '@vue/apollo-composable';
 
-import { useNuxtApp } from '#imports';
+import { useGraphqlMeta } from '#build/src/runtime/composables/gql-meta';
 import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { type NuxtApp, callWithNuxt, tryUseNuxtApp } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
-  console.log('tryUseNuxtApp', tryUseNuxtApp());
-  const nuxtApp = useNuxtApp() as NuxtApp;
-
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
@@ -35,10 +30,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::fields ', fields);
   }
 
-  const meta = nuxtApp._graphQl as unknown as GraphQLMeta;
-  if (!meta) {
-    return;
-  }
+  const meta = useGraphqlMeta();
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);
@@ -126,5 +118,5 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return callWithNuxt(nuxtApp, useMutation<T>, [documentNode, { fetchPolicy: 'no-cache', variables }]);
+  return useMutation<T>(documentNode, { fetchPolicy: 'no-cache', variables });
 }

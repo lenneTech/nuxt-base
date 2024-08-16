@@ -18,7 +18,7 @@ export default defineNuxtPlugin({
       meta = null;
     }
 
-    nuxtApp._graphQl = meta;
+    nuxtApp._meta = meta;
 
     return {
       provide: {

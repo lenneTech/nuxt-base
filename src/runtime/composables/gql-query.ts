@@ -1,17 +1,14 @@
-import {type AsyncData, callWithNuxt, type NuxtApp} from 'nuxt/app';
-
-import { useAsyncQuery, useLazyAsyncQuery, useNuxtApp } from '#imports';
+import { useGraphqlMeta } from '#build/src/runtime/composables/gql-meta';
+import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
+import { type AsyncData } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, any>> {
-  const nuxtApp = useNuxtApp() as NuxtApp;
-
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
@@ -34,10 +31,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = nuxtApp._graphQl as unknown as GraphQLMeta;
-  if (!meta) {
-    return;
-  }
+  const meta = useGraphqlMeta();
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);
@@ -114,5 +108,5 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     variables: variables,
   };
 
-  return callWithNuxt(nuxtApp, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [queryConfig]);
+  return config.lazy ? useLazyAsyncQuery<T>(queryConfig) : useAsyncQuery<T>(queryConfig);
 }
