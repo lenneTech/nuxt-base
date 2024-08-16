@@ -63,14 +63,19 @@ export class GraphQLMeta {
       }
 
       argType = result.join(', ');
+      console.log('result', result);
       console.log('argType', argType);
       argType = argType
         .replace(/String/g, 'string')
-        .replace(/Boolean/g, 'string')
+        .replace(/Boolean/g, 'boolean')
         .toString()
         .replace(/Int/g, 'number')
         .replace(/Float/g, 'number');
     }
+
+    console.log('argType', argType);
+    console.log('customTypes', customTypes);
+    console.log('returnType', returnType);
 
     return { argType, customTypes, returnType };
   }
