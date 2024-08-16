@@ -180,12 +180,6 @@ export default defineNuxtModule<ModuleOptions>({
     }
 
     logger.success('[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo');
-
-    await installModule(await resolver.resolvePath('@pinia/nuxt'), {
-      autoImports: true,
-    });
-
-    logger.success('[@lenne.tech/nuxt-base] Installed @pinia/nuxt');
     logger.success('[@lenne.tech/nuxt-base] Initialize done!');
   },
 });

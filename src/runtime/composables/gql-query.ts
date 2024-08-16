@@ -1,9 +1,8 @@
-import type { AsyncData } from 'nuxt/app';
+import type { AsyncData, NuxtApp } from 'nuxt/app';
 
-import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
+import { useAsyncQuery, useLazyAsyncQuery, useNuxtApp } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useNuxtApp } from 'nuxt/app';
 
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
@@ -11,7 +10,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, any>> {
-  const _nuxt = useNuxtApp();
+  const _nuxt = useNuxtApp() as NuxtApp;
   const { $graphQl } = _nuxt;
 
   // Check parameters
