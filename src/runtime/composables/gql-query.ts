@@ -10,7 +10,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 
-export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): AsyncData<T, any> {
+export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, any>> {
   const _nuxt = useNuxtApp();
   const { $graphQl } = _nuxt;
 
@@ -36,7 +36,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = $graphQl() as GraphQLMeta;
+  const meta = $graphQl() as unknown as GraphQLMeta;
 
   if (!meta) {
     return;

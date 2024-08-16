@@ -1,12 +1,12 @@
-import type {Types} from '@graphql-codegen/plugin-helpers';
-import type {Import} from 'unimport';
+import type { Types } from '@graphql-codegen/plugin-helpers';
+import type { Import } from 'unimport';
 
-import {generate} from '@graphql-codegen/cli';
-import {addTemplate} from '@nuxt/kit';
-import {buildClientSchema, getIntrospectionQuery} from 'graphql';
-import {ofetch} from 'ofetch';
+import { generate } from '@graphql-codegen/cli';
+import { addTemplate } from '@nuxt/kit';
+import { buildClientSchema, getIntrospectionQuery } from 'graphql';
+import { ofetch } from 'ofetch';
 
-import {GraphQLMeta} from './runtime/classes/graphql-meta.class';
+import { GraphQLMeta } from './runtime/classes/graphql-meta.class';
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const { loadSchema } = require('@graphql-tools/load');
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
@@ -89,12 +89,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
 
   if (methods?.query) {
     for (const query of methods.query) {
-      console.log('query', query);
       const types = meta.getTypesForMethod(query, 'Query');
       customTypes.push(types.customTypes);
       const inputFieldsType = types.returnType.replace('[]', '');
-
-      console.log('inputFieldsType', inputFieldsType);
 
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
@@ -105,7 +102,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       );
     }
   }
-  console.log('mutation');
+
   if (methods?.mutation) {
     for (const mutation of methods.mutation) {
       const types = meta.getTypesForMethod(mutation, 'Mutation');
@@ -144,7 +141,6 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   console.log('customTypes', customTypes);
 
   customTypes = [...new Set([].concat(...customTypes))];
-
 
   // Remove type upload
   customTypes = customTypes.filter((e) => e !== 'Upload');

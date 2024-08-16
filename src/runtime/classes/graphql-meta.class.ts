@@ -1,11 +1,12 @@
-import type {GraphQLSchema} from 'graphql';
-import {GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType} from 'graphql';
+import type { GraphQLSchema } from 'graphql';
 
-import type {GraphQLRequestType} from '../enums/graphql-request-type.enum';
-import type {GraphqlCrudType} from '../interfaces/graphql-crud-type.interface';
+import { GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType } from 'graphql';
 
-import {GraphQLType} from './graphql-type.class';
-import {Helper} from './helper.class';
+import type { GraphQLRequestType } from '../enums/graphql-request-type.enum';
+import type { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
+
+import { GraphQLType } from './graphql-type.class';
+import { Helper } from './helper.class';
 
 /**
  * GraphQL meta
@@ -39,9 +40,6 @@ export class GraphQLMeta {
     let returnType: string = null;
     let argType: string = null;
     const customTypes: string[] = [];
-    console.log('schema 1', this.schema['get' + type + 'Type']());
-    console.log('schema 2', this.schema['get' + type + 'Type']()['_fields']);
-    console.log('schema 3', this.schema['get' + type + 'Type']()['_fields'][method]);
     const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method], {});
     const argsDeepType = this.getArgs(method);
 
@@ -65,6 +63,7 @@ export class GraphQLMeta {
       argType = result.join(', ');
       argType = argType
         .replace(/String/g, 'string')
+        .replace(/Upload/g, 'any')
         .replace(/Boolean/g, 'boolean')
         .toString()
         .replace(/Int/g, 'number')
@@ -369,137 +368,143 @@ export class GraphQLMeta {
    * Get deep type data
    */
   protected getDeepType(type: any, prepared: Record<string, any> = {}): GraphQLType {
-    // Check if type is undefined or null
-    if (!type) {
-      return new GraphQLType();
-    }
+    console.log('getDeepType::type', type);
+    try {
+      // Check if type is undefined or null
+      if (!type) {
+        return new GraphQLType();
+      }
 
-    // Infinite regress protection
-    const typeName = this.getTypeName(type);
-    const graphQLType = GraphQLType.map({
-      type: this.getTypeName(type),
-    });
+      // Infinite regress protection
+      const typeName = this.getTypeName(type);
+      const graphQLType = GraphQLType.map({
+        type: this.getTypeName(type),
+      });
 
-    // Check prepared
-    if (typeof type === 'object') {
-      const preparedType = prepared[typeName];
+      // Check prepared
+      if (typeof type === 'object') {
+        const preparedType = prepared[typeName];
 
-      // Work with cached type
-      if (preparedType) {
-        // Create a new object to protect own isXXX information
-        const clone = Object.assign({}, preparedType);
+        // Work with cached type
+        if (preparedType) {
+          // Create a new object to protect own isXXX information
+          const clone = Object.assign({}, preparedType);
 
-        // But use fields as reference to get future changes via prepared caching
-        clone.fields = preparedType.fields;
+          // But use fields as reference to get future changes via prepared caching
+          clone.fields = preparedType.fields;
 
-        // Check for meta flags
-        if (type.type) {
-          if (type.type instanceof GraphQLNonNull) {
-            clone.isRequired = true;
-            if (type.type.ofType instanceof GraphQLList) {
-              clone.isList = true;
-              clone.isItemRequired = type.type.ofType.ofType instanceof GraphQLNonNull;
+          // Check for meta flags
+          if (type.type) {
+            if (type.type instanceof GraphQLNonNull) {
+              clone.isRequired = true;
+              if (type.type.ofType instanceof GraphQLList) {
+                clone.isList = true;
+                clone.isItemRequired = type.type.ofType.ofType instanceof GraphQLNonNull;
+              } else {
+                clone.isList = false;
+                clone.isItemRequired = false;
+              }
             } else {
-              clone.isList = false;
-              clone.isItemRequired = false;
-            }
-          } else {
-            clone.isRequired = false;
+              clone.isRequired = false;
 
-            // List first
-            if (type.type instanceof GraphQLList) {
-              clone.isList = true;
-              clone.isItemRequired = type.ofType instanceof GraphQLNonNull;
-            } else {
-              clone.isList = false;
-              clone.isItemRequired = false;
+              // List first
+              if (type.type instanceof GraphQLList) {
+                clone.isList = true;
+                clone.isItemRequired = type.ofType instanceof GraphQLNonNull;
+              } else {
+                clone.isList = false;
+                clone.isItemRequired = false;
+              }
             }
+          }
+
+          return clone;
+        }
+
+        // Set prepared cache for GraphQL types
+        // (type names start with uppercase letters as opposed to property names that start with lowercase letters)
+        if (type.name && type.name[0].toUpperCase() === type.name[0] && !prepared[type.name]) {
+          prepared[type.name] = graphQLType;
+        }
+      }
+
+      // Search deeper
+      if (type.ofType) {
+        const ofTypeResult = this.getDeepType(type.ofType, prepared);
+
+        if (type instanceof GraphQLNonNull) {
+          ofTypeResult.isRequired = true;
+        } else {
+          ofTypeResult.isRequired = false;
+
+          if (type instanceof GraphQLList) {
+            ofTypeResult.isList = true;
+            ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
           }
         }
 
-        return clone;
+        Object.assign(graphQLType, ofTypeResult);
+        return graphQLType;
       }
 
-      // Set prepared cache for GraphQL types
-      // (type names start with uppercase letters as opposed to property names that start with lowercase letters)
-      if (type.name && type.name[0].toUpperCase() === type.name[0] && !prepared[type.name]) {
-        prepared[type.name] = graphQLType;
-      }
-    }
-
-    // Search deeper
-    if (type.ofType) {
-      const ofTypeResult = this.getDeepType(type.ofType, prepared);
-
-      if (type instanceof GraphQLNonNull) {
-        ofTypeResult.isRequired = true;
-      } else {
-        ofTypeResult.isRequired = false;
-
-        if (type instanceof GraphQLList) {
-          ofTypeResult.isList = true;
-          ofTypeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
+      // Process fields
+      if (type._fields) {
+        const fields = {};
+        for (const [key, value] of Object.entries(type._fields)) {
+          fields[key] = this.getDeepType(value, prepared);
         }
+
+        // Assign and not replace to preserve updates in the cache
+        Object.assign(graphQLType.fields, fields);
+        return graphQLType;
       }
 
-      Object.assign(graphQLType, ofTypeResult);
-      return graphQLType;
-    }
+      // Process type
+      if (type.type) {
+        const typeResult = this.getDeepType(type.type, prepared);
 
-    // Process fields
-    if (type._fields) {
-      const fields = {};
-      for (const [key, value] of Object.entries(type._fields)) {
-        fields[key] = this.getDeepType(value, prepared);
-      }
-
-      // Assign and not replace to preserve updates in the cache
-      Object.assign(graphQLType.fields, fields);
-      return graphQLType;
-    }
-
-    // Process type
-    if (type.type) {
-      const typeResult = this.getDeepType(type.type, prepared);
-
-      // Check for meta flags
-      if (type.type instanceof GraphQLNonNull) {
-        typeResult.isRequired = true;
-        if (type.type.ofType instanceof GraphQLList) {
-          typeResult.isList = true;
-          typeResult.isItemRequired = type.type.ofType.ofType instanceof GraphQLNonNull;
+        // Check for meta flags
+        if (type.type instanceof GraphQLNonNull) {
+          typeResult.isRequired = true;
+          if (type.type.ofType instanceof GraphQLList) {
+            typeResult.isList = true;
+            typeResult.isItemRequired = type.type.ofType.ofType instanceof GraphQLNonNull;
+          } else {
+            typeResult.isList = false;
+            typeResult.isItemRequired = false;
+          }
         } else {
-          typeResult.isList = false;
-          typeResult.isItemRequired = false;
-        }
-      } else {
-        typeResult.isRequired = false;
+          typeResult.isRequired = false;
 
-        // List first
-        if (type.type instanceof GraphQLList) {
-          typeResult.isList = true;
-          typeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
-        } else {
-          typeResult.isList = false;
-          typeResult.isItemRequired = false;
+          // List first
+          if (type.type instanceof GraphQLList) {
+            typeResult.isList = true;
+            typeResult.isItemRequired = type.ofType instanceof GraphQLNonNull;
+          } else {
+            typeResult.isList = false;
+            typeResult.isItemRequired = false;
+          }
+        }
+
+        Object.assign(graphQLType, typeResult);
+        return graphQLType;
+      }
+
+      // Set enum values
+      if (type._values) {
+        graphQLType.isEnum = true;
+        for (const [key, value] of Object.entries(type._nameLookup)) {
+          if (!(value as any).isDeprecated) {
+            graphQLType.validEnums.push(key);
+          }
         }
       }
 
-      Object.assign(graphQLType, typeResult);
+      // Finish
       return graphQLType;
+    } catch (e) {
+      console.error('GraphQLMeta::getDeepType->error', e);
+      return new GraphQLType();
     }
-
-    // Set enum values
-    if (type._values) {
-      graphQLType.isEnum = true;
-      for (const [key, value] of Object.entries(type._nameLookup)) {
-        if (!(value as any).isDeprecated) {
-          graphQLType.validEnums.push(key);
-        }
-      }
-    }
-
-    // Finish
-    return graphQLType;
   }
 }
