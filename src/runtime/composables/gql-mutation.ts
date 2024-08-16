@@ -1,10 +1,11 @@
 import type { UseMutationReturn } from '@vue/apollo-composable';
 
-import { useGraphqlMeta } from '#build/src/runtime/composables/gql-meta';
+import { useGraphqlMeta } from '#imports';
 import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
 
+import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
@@ -30,7 +31,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::fields ', fields);
   }
 
-  const meta = useGraphqlMeta();
+  const meta = useGraphqlMeta() as GraphQLMeta;
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);

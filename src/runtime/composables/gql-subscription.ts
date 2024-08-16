@@ -1,6 +1,7 @@
+import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 
-import { useGraphqlMeta } from '#build/src/runtime/composables/gql-meta';
+import { useGraphqlMeta } from '#imports';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
@@ -25,7 +26,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const fields = config.fields as unknown as string[];
-  const meta = useGraphqlMeta();
+  const meta = useGraphqlMeta() as GraphQLMeta;
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);

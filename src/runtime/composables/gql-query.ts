@@ -1,5 +1,6 @@
-import { useGraphqlMeta } from '#build/src/runtime/composables/gql-meta';
-import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
+import type { GraphQLMeta } from '../classes/graphql-meta.class';
+
+import { useAsyncQuery, useGraphqlMeta, useLazyAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { type AsyncData } from 'nuxt/app';
@@ -31,7 +32,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = useGraphqlMeta();
+  const meta = useGraphqlMeta() as GraphQLMeta;
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);
