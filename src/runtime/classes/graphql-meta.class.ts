@@ -39,11 +39,11 @@ export class GraphQLMeta {
     let returnType: string = null;
     let argType: string = null;
     const customTypes: string[] = [];
+    console.log('schema 1', this.schema['get' + type + 'Type']());
+    console.log('schema 2', this.schema['get' + type + 'Type']()['_fields']);
+    console.log('schema 3', this.schema['get' + type + 'Type']()['_fields'][method]);
     const returnDeepType = this.getDeepType(this.schema['get' + type + 'Type']()['_fields'][method], {});
     const argsDeepType = this.getArgs(method);
-
-    console.log('returnDeepType', returnDeepType);
-    console.log('argsDeepType', argsDeepType);
 
     if (returnDeepType) {
       returnType = returnDeepType.type + (returnDeepType.isList ? '[]' : '');
@@ -63,8 +63,6 @@ export class GraphQLMeta {
       }
 
       argType = result.join(', ');
-      console.log('result', result);
-      console.log('argType', argType);
       argType = argType
         .replace(/String/g, 'string')
         .replace(/Boolean/g, 'boolean')
@@ -72,10 +70,6 @@ export class GraphQLMeta {
         .replace(/Int/g, 'number')
         .replace(/Float/g, 'number');
     }
-
-    console.log('argType', argType);
-    console.log('customTypes', customTypes);
-    console.log('returnType', returnType);
 
     return { argType, customTypes, returnType };
   }
@@ -375,9 +369,9 @@ export class GraphQLMeta {
    * Get deep type data
    */
   protected getDeepType(type: any, prepared: Record<string, any> = {}): GraphQLType {
-    // Check type
+    // Check if type is undefined or null
     if (!type) {
-      return type;
+      return new GraphQLType();
     }
 
     // Infinite regress protection
