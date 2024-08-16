@@ -3,7 +3,7 @@ import type { UseMutationReturn } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useNuxtApp } from 'nuxt/app';
+import { tryUseNuxtApp, useNuxtApp } from 'nuxt/app';
 
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
@@ -11,7 +11,8 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
-  const useGqlMeta = (): GraphQLMeta => {
+  const useGqlMeta = () => {
+    console.log('nuxtApp', tryUseNuxtApp());
     const nuxtApp = useNuxtApp();
 
     if (!nuxtApp._meta) {

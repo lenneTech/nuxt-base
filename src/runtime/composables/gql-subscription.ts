@@ -11,7 +11,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseSubscriptionReturn<T, any>> {
-  const useGqlMeta = (): GraphQLMeta => {
+  const useGqlMeta = () => {
     const nuxtApp = useNuxtApp();
 
     if (!nuxtApp._meta) {
