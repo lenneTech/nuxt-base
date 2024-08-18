@@ -3,24 +3,13 @@ import type { UseSubscriptionReturn } from '@vue/apollo-composable';
 import { useSubscription } from '@vue/apollo-composable';
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useNuxtApp } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
+import { useGqlMetaState } from '../states/gql-meta';
 
 export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseSubscriptionReturn<T, any>> {
-  const useGqlMeta = () => {
-    const nuxtApp = useNuxtApp();
-
-    if (!nuxtApp._meta) {
-      throw new Error('GraphQLMeta is not available.');
-    }
-
-    return nuxtApp?._meta as GraphQLMeta;
-  };
-
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
@@ -36,17 +25,20 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const fields = config.fields as unknown as string[];
-  const meta = useGqlMeta();
+  const { meta } = useGqlMetaState();
+  if (!meta.value) {
+    throw new Error('GraphQLMeta is not available.');
+  }
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);
   }
 
-  const argType = meta.getArgs(method);
+  const argType = meta.value.getArgs(method);
   const builderInput = {};
-  const metaFields = meta.getFields(method);
+  const metaFields = meta.value.getFields(method);
   const availableFields = [];
-  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
+  const variables = meta.value.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {

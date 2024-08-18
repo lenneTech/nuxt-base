@@ -1,24 +1,14 @@
 import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { type AsyncData, useNuxtApp } from 'nuxt/app';
+import { type AsyncData } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
+import { useGqlMetaState } from '../states/gql-meta';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, any>> {
-  const useGqlMeta = () => {
-    const nuxtApp = useNuxtApp();
-
-    if (!nuxtApp._meta) {
-      throw new Error('GraphQLMeta is not available.');
-    }
-
-    return nuxtApp?._meta as GraphQLMeta;
-  };
-
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
@@ -41,17 +31,20 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = useGqlMeta();
+  const { meta } = useGqlMetaState();
+  if (!meta.value) {
+    throw new Error('GraphQLMeta is not available.');
+  }
 
   if (config.hashPasswords) {
     config.variables = await hashPasswords(config.variables);
   }
 
-  const argType = meta.getArgs(method);
+  const argType = meta.value.getArgs(method);
   const builderInput = {};
-  const metaFields = meta.getFields(method);
+  const metaFields = meta.value.getFields(method);
   const availableFields = [];
-  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
+  const variables = meta.value.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
