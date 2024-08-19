@@ -40,7 +40,7 @@
     "@graphql-codegen/client-preset": "4.3.3",
     "@graphql-codegen/typescript": "4.0.9",
     "@nuxt/kit": "3.11.2",
-    "@nuxtjs/apollo": "5.0.0-alpha.14",
+    "@nuxtjs/apollo": "5.0.0-alpha.13",
     "@vue/apollo-composable": "4.1.0",
     "gql-query-builder": "3.8.0",
     "graphql": "16.9.0",
