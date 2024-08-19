@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { useSignInMutation } from '../base';
 import { navigateTo } from '#app';
 import { useAuth } from '#imports';
 
+import { useSignInMutation } from '../base';
+
 const login = async () => {
-  const { setTokens, setCurrentUser } = useAuth();
+  const { setCurrentUser, setTokens } = useAuth();
   const { mutate } = await useSignInMutation({ input: { email: 'tamino_filsinger@hotmail.com', password: 'asdasd' } }, ['token', 'refreshToken', { user: ['id'] }]);
   const data = await mutate();
   setTokens(data.data.signIn.token, data.data.signIn.refreshToken);
@@ -15,8 +16,6 @@ const login = async () => {
 
 <template>
   <div>
-    <button @click="login()">
-      Login
-    </button>
+    <button @click="login()">Login</button>
   </div>
 </template>

@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { $fetch, setup } from '@nuxt/test-utils';
 import { fileURLToPath } from 'node:url';
-import { setup, $fetch } from '@nuxt/test-utils';
+import { describe, expect, it } from 'vitest';
 
 describe('ssr', async () => {
   await setup({

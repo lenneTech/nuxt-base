@@ -2,7 +2,7 @@
  * GraphQL request type enum
  */
 export enum GraphQLRequestType {
-  QUERY = 'query',
   MUTATION = 'mutation',
+  QUERY = 'query',
   SUBSCRIPTION = 'subscription',
 }

@@ -9,25 +9,21 @@ export class Standard {
   /**
    * Static map method
    */
-  public static map<T extends Standard>(
-    this: new (...args: any[]) => T,
-    data: Partial<T> | { [key: string]: any },
-    item: T = new this(),
-  ): T {
+  public static map<T extends Standard>(this: new (...args: any[]) => T, data: { [key: string]: any } | Partial<T>, item: T = new this()): T {
     return (item as any).map(data);
   }
 
   /**
    * Map data into an object
    */
-  public map(data: Partial<this> | { [key: string]: any }): this {
+  public map(data: { [key: string]: any } | Partial<this>): this {
     return Helper.map(data, this);
   }
 
   /**
    * Clone object (and map additional data)
    */
-  public clone(mapData?: Partial<this> | { [key: string]: any }): this {
+  public clone(mapData?: { [key: string]: any } | Partial<this>): this {
     const current = JSON.parse(JSON.stringify(this));
     if (mapData) {
       Object.assign(current, mapData);

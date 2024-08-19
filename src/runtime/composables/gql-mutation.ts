@@ -3,13 +3,17 @@ import type { UseMutationReturn } from '@vue/apollo-composable';
 import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
+import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
-import { useGqlMetaState } from '../states/gql-meta';
 
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
+  const _nuxt = useNuxtApp();
+  const { $graphQl } = _nuxt;
+
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
@@ -30,8 +34,8 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::fields ', fields);
   }
 
-  const { meta } = useGqlMetaState();
-  if (!meta.value) {
+  const meta = $graphQl() as GraphQLMeta;
+  if (!meta) {
     throw new Error('GraphQLMeta is not available.');
   }
 
@@ -39,11 +43,11 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     config.variables = await hashPasswords(config.variables);
   }
 
-  const argType = meta.value.getArgs(method);
+  const argType = meta.getArgs(method);
   const builderInput = {};
-  const metaFields = meta.value.getFields(method);
+  const metaFields = meta.getFields(method);
   const availableFields = [];
-  const variables = meta.value.parseVariables(config.variables, argType.fields, config.log);
+  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -121,5 +125,5 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return useMutation<T>(documentNode, { fetchPolicy: 'no-cache', variables });
+  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { fetchPolicy: 'no-cache', variables }]);
 }
