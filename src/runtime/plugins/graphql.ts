@@ -3,7 +3,6 @@ import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nu
 import type { GraphQLMeta } from '../classes/graphql-meta.class';
 
 import { loadMeta } from '../functions/graphql-meta';
-import { useGqlMetaState } from '../states/gql-meta';
 
 export default defineNuxtPlugin({
   name: 'graphql',
@@ -20,7 +19,6 @@ export default defineNuxtPlugin({
     }
 
     nuxtApp._meta = meta;
-    useGqlMetaState().meta.value = meta;
 
     return {
       provide: {
