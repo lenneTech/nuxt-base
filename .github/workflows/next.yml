@@ -35,7 +35,12 @@ jobs:
           fetch-depth: 3
       - name: Install dependencies
         run: pnpm install
+
+      - name: Install dependencies
+        run: cd playground/nuxt-app && npm install
+
       - run: pnpm build
+
       - name: Set git identity
         run: |
           git config user.name 'github-actions[bot]'

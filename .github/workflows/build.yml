@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Install dependencies
+        run: cd playground/nuxt-app && npm install
+
       - name: Build
         run: pnpm build
