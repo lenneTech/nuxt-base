@@ -8,36 +8,24 @@ import { TodoInput } from './todo.input';
 /**
  * Todo create input
  */
-@Restricted(RoleEnum.S_EVERYONE)
+@Restricted(RoleEnum.ADMIN)
 @InputType({ description: 'Input data to create a new Todo' })
 export class TodoCreateInput extends TodoInput {
 
   // ===================================================================================================================
   // Properties
   // ===================================================================================================================
-
+      
   /**
    * Name of Todo
    */
   @Restricted(RoleEnum.S_EVERYONE)
   @Field(() => String, {
     description: 'Name of Todo',
-    nullable: true,
+    nullable: false,
   })
-  @IsOptional()
-  override name?: string = undefined;
-
-  /**
-   * AssigneesId of Todo
-   */
-  @Restricted(RoleEnum.S_EVERYONE)
-  @Field(() => [String], {
-    description: 'AssigneesId of Todo',
-    nullable: true,
-  })
-  @IsOptional()
-  override assignees?: string[] = undefined;
-
+  override name: string = undefined;
+      
   /**
    * Description of Todo
    */
@@ -48,16 +36,27 @@ export class TodoCreateInput extends TodoInput {
   })
   @IsOptional()
   override description?: string = undefined;
-
+      
   /**
-   * Status of Todo
+   * AssigneId of Todo
    */
   @Restricted(RoleEnum.S_EVERYONE)
   @Field(() => String, {
-    description: 'Status of Todo',
+    description: 'AssigneId of Todo',
     nullable: true,
   })
   @IsOptional()
-  override status?: string = undefined;
-
+  override assigne?: string = undefined;
+      
+  /**
+   * Deadline of Todo
+   */
+  @Restricted(RoleEnum.S_EVERYONE)
+  @Field(() => Number, {
+    description: 'Deadline of Todo',
+    nullable: true,
+  })
+  @IsOptional()
+  override deadline?: Date = undefined;
+  
 }

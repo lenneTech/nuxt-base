@@ -26,21 +26,10 @@ export class Todo extends PersistenceModel {
   @Restricted(RoleEnum.S_EVERYONE)
   @Field(() => String, {
     description: 'Name of Todo',
-    nullable: true,
+    nullable: false,
   })
   @Prop()
   name: string = undefined;
-    
-  /**
-   * Assignees of Todo
-   */
-  @Restricted(RoleEnum.S_EVERYONE)
-  @Field(() => [User], {
-    description: 'Assignees of Todo',
-    nullable: true,
-  })
-  @Prop([{ ref: 'User', type: Schema.Types.ObjectId }])
-  assignees: User[] = undefined;
     
   /**
    * Description of Todo
@@ -54,15 +43,26 @@ export class Todo extends PersistenceModel {
   description: string = undefined;
     
   /**
-   * Status of Todo
+   * Assigne of Todo
    */
   @Restricted(RoleEnum.S_EVERYONE)
-  @Field(() => String, {
-    description: 'Status of Todo',
+  @Field(() => User, {
+    description: 'Assigne of Todo',
+    nullable: true,
+  })
+  @Prop({ ref: 'User', type: Schema.Types.ObjectId })
+  assigne: User = undefined;
+    
+  /**
+   * Deadline of Todo
+   */
+  @Restricted(RoleEnum.S_EVERYONE)
+  @Field(() => Number, {
+    description: 'Deadline of Todo',
     nullable: true,
   })
   @Prop()
-  status: string = undefined;
+  deadline: Date = undefined;
   
 
   // ===================================================================================================================
@@ -86,7 +86,7 @@ export class Todo extends PersistenceModel {
   override map(input) {
     super.map(input);
     // return mapClasses(input, { propertyName: PropertyModel }, this);
-    return mapClasses(input, { assignees: User }, this);
+    return mapClasses(input, { assigne: User }, this);
   }
 
   /**

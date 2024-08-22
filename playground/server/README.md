@@ -1,5 +1,5 @@
-# todo
-
+# server
+Nuxt playground server for testing
 
 ## Requirements
 
@@ -20,7 +20,7 @@ the database for your objects
 This server is based on [lenne.Tech Nest Server](https://github.com/lenneTech/nest-server).
 
 Since the lenne.Tech Nest Server is based on [Nest](https://nestjs.com/), you can find all information about extending
-the **todo** in the [documentation of Nest](https://docs.nestjs.com/).
+the **server** in the [documentation of Nest](https://docs.nestjs.com/).
 
 The documentation of the extensions and auxiliary classes that the
 [lenne.Tech Nest Server](https://github.com/lenneTech/nest-server) contains is currently under construction.

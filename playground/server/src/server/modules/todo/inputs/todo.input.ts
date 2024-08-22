@@ -5,14 +5,14 @@ import { IsOptional } from 'class-validator';
 /**
  * Todo input
  */
-@Restricted(RoleEnum.S_EVERYONE)
+@Restricted(RoleEnum.ADMIN)
 @InputType({ description: 'Input data to update an existing Todo' })
 export class TodoInput extends CoreInput {
 
   // ===================================================================================================================
   // Properties
   // ===================================================================================================================
-
+      
   /**
    * Name of Todo
    */
@@ -23,18 +23,7 @@ export class TodoInput extends CoreInput {
   })
   @IsOptional()
   name?: string = undefined;
-
-  /**
-   * AssigneesId of Todo
-   */
-  @Restricted(RoleEnum.S_EVERYONE)
-  @Field(() => [String], {
-    description: 'AssigneesId of Todo',
-    nullable: true,
-  })
-  @IsOptional()
-  assignees?: string[] = undefined;
-
+      
   /**
    * Description of Todo
    */
@@ -45,16 +34,27 @@ export class TodoInput extends CoreInput {
   })
   @IsOptional()
   description?: string = undefined;
-
+      
   /**
-   * Status of Todo
+   * AssigneId of Todo
    */
   @Restricted(RoleEnum.S_EVERYONE)
   @Field(() => String, {
-    description: 'Status of Todo',
+    description: 'AssigneId of Todo',
     nullable: true,
   })
   @IsOptional()
-  status?: string = undefined;
-
+  assigne?: string = undefined;
+      
+  /**
+   * Deadline of Todo
+   */
+  @Restricted(RoleEnum.S_EVERYONE)
+  @Field(() => Number, {
+    description: 'Deadline of Todo',
+    nullable: true,
+  })
+  @IsOptional()
+  deadline?: Date = undefined;
+  
 }

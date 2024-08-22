@@ -31,7 +31,7 @@ export class TodoResolver {
   /**
    * Get and total count Todos (via filter)
    */
-  @Roles(RoleEnum.S_EVERYONE)
+  @Roles(RoleEnum.S_USER)
   @Query(() => FindAndCountTodosResult, { description: 'Find Todos (via filter)' })
   async findAndCountTodos(
     @GraphQLServiceOptions({ gqlPath: 'findAndCountTodos.items' }) serviceOptions: ServiceOptions,
@@ -46,7 +46,7 @@ export class TodoResolver {
   /**
    * Get Todos (via filter)
    */
-   @Roles(RoleEnum.S_EVERYONE)
+   @Roles(RoleEnum.S_USER)
    @Query(() => [Todo], { description: 'Find Todos (via filter)' })
    async findTodos(
      @GraphQLServiceOptions() serviceOptions: ServiceOptions,
@@ -61,7 +61,7 @@ export class TodoResolver {
   /**
    * Get Todo via ID
    */
-  @Roles(RoleEnum.S_EVERYONE)
+  @Roles(RoleEnum.S_USER)
   @Query(() => Todo, { description: 'Get Todo with specified ID' })
   async getTodo(
     @GraphQLServiceOptions() serviceOptions: ServiceOptions,
@@ -77,7 +77,7 @@ export class TodoResolver {
   /**
    * Create new Todo
    */
-  @Roles(RoleEnum.S_EVERYONE)
+  @Roles(RoleEnum.S_USER)
   @Mutation(() => Todo, { description: 'Create a new Todo' })
   async createTodo(
     @GraphQLServiceOptions() serviceOptions: ServiceOptions,
@@ -92,7 +92,7 @@ export class TodoResolver {
   /**
    * Delete existing Todo
    */
-  @Roles(RoleEnum.S_EVERYONE)
+  @Roles(RoleEnum.S_USER)
   @Mutation(() => Todo, { description: 'Delete existing Todo' })
   async deleteTodo(
     @GraphQLServiceOptions() serviceOptions: ServiceOptions,
@@ -107,7 +107,7 @@ export class TodoResolver {
   /**
    * Update existing Todo
    */
-  @Roles(RoleEnum.S_EVERYONE)
+  @Roles(RoleEnum.S_USER)
   @Mutation(() => Todo, { description: 'Update existing Todo' })
   async updateTodo(
     @GraphQLServiceOptions() serviceOptions: ServiceOptions,
