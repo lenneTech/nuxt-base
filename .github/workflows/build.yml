@@ -33,7 +33,7 @@ jobs:
         run: pnpm install
 
       - name: Install dependencies
-        run: cd playground/nuxt-app && npm install
+        run: cd playground/nuxt-app && npm install && npm run build
 
       - name: Build
         run: pnpm build
