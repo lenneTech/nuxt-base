@@ -1,0 +1,5 @@
+{
+  "name": "Nest Server Starter",
+  "version": "0.0.1",
+  "description": "Nest Server with optimized GraphQL and MongoDB handling"
+}

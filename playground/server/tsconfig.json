@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "target": "es2020",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noImplicitOverride": true
+  },
+  "exclude": ["node_modules", "dist"]
+}

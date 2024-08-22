@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "my-module-playground",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate-types": "rm -rf ./src/base && GENERATE_TYPES=1 nuxt dev"
+  }
+}
