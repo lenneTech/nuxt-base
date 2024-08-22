@@ -1,4 +1,4 @@
-import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
+import { callWithNuxt, defineNuxtPlugin, navigateTo, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import { ofetch } from 'ofetch';
 
 import { useAuth } from '../composables/use-auth';
@@ -10,43 +10,65 @@ export default defineNuxtPlugin({
   async setup() {
     const _nuxt = useNuxtApp();
     const config = await callWithNuxt(_nuxt, useRuntimeConfig);
-    const { getDecodedAccessToken, setCurrentUser, setTokens } = await callWithNuxt(_nuxt, useAuth);
-    const { accessTokenState, refreshTokenState } = await callWithNuxt(_nuxt, useAuthState);
-    const { data: refreshTokenResult } = await ofetch(config.public.host, {
-      body: JSON.stringify({
-        query: 'mutation refreshToken {refreshToken {token, refreshToken}}',
-        variables: {},
-      }),
-      headers: {
-        Authorization: `Bearer ${refreshTokenState.value}`,
-      },
-      method: 'POST',
-    }).catch((err) => {
-      console.error('2.auth.server.ts::refreshToken::catch', err.data);
-    });
+    const { accessTokenState, currentUserState, refreshTokenState } = await callWithNuxt(_nuxt, useAuthState);
+    const { clearSession, getDecodedAccessToken, isTokenExpired, setCurrentUser, setTokens } = await callWithNuxt(_nuxt, useAuth);
+    const payload = accessTokenState.value ? getDecodedAccessToken(accessTokenState.value) : null;
 
-    if (refreshTokenResult) {
-      console.debug('2.auth.server.ts::token', refreshTokenResult.refreshToken?.token);
-      console.debug('2.auth.server.ts::refreshToken', refreshTokenResult.refreshToken?.refreshToken);
-      setTokens(refreshTokenResult.refreshToken?.token, refreshTokenResult.refreshToken?.refreshToken);
-      const payload = getDecodedAccessToken(accessTokenState?.value);
-      const { data: getUserData } = await ofetch(config.public.host, {
+    if (!accessTokenState.value || !refreshTokenState.value || currentUserState.value) {
+      return;
+    }
+
+    let token = accessTokenState.value;
+    if (isTokenExpired(accessTokenState.value)) {
+      const refreshTokenResult = await ofetch(config.public.host, {
         body: JSON.stringify({
-          query: 'query getUser($id: String!){getUser(id: $id){id firstName lastName email avatar verified}}',
+          query: 'mutation refreshToken {refreshToken {token, refreshToken}}',
+          variables: {},
+        }),
+        headers: {
+          Authorization: `Bearer ${refreshTokenState.value}`,
+        },
+        method: 'POST',
+      }).catch((err) => {
+        console.error('2.auth.server.ts::refreshToken::catch', err.data);
+        clearSession();
+        navigateTo('/auth/login');
+      });
+
+      const data = refreshTokenResult?.data?.refreshToken;
+      if (data) {
+        setTokens(data.token, data.refreshToken);
+        token = data?.token;
+      } else {
+        clearSession();
+        await navigateTo('/auth/login');
+      }
+    }
+
+    if (token && payload?.id) {
+      const userResult = await ofetch(config.public.host, {
+        body: JSON.stringify({
+          query: 'query getUser($id: String!) { getUser(id: $id) { id avatar firstName lastName email roles }}',
           variables: {
             id: payload.id,
           },
         }),
         headers: {
-          Authorization: `Bearer ${accessTokenState?.value}`,
+          Authorization: `Bearer ${token}`,
         },
         method: 'POST',
       }).catch((err) => {
-        console.error('2.auth.server.ts::getUser::catch', err.data);
+        console.error('2.auth.server.ts::getUser::catch', err);
       });
-      if (getUserData?.getUser) {
-        console.debug('2.auth.server.ts::getUserData', getUserData);
-        setCurrentUser(getUserData.getUser);
+
+      if (userResult?.errors) {
+        clearSession();
+        navigateTo('/auth/login');
+        return;
+      }
+
+      if (userResult?.data) {
+        setCurrentUser(userResult?.data?.getUser);
       }
     }
   },

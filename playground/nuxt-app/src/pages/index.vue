@@ -1,21 +1,8 @@
-<script setup lang="ts">
-import { navigateTo } from '#app';
-import { useAuth } from '#imports';
-
-import { useSignInMutation } from '../base';
-
-const login = async () => {
-  const { setCurrentUser, setTokens } = useAuth();
-  const { mutate } = await useSignInMutation({ input: { email: 'todo_user@lenne.tech', password: 'asdasd' } }, ['token', 'refreshToken', { user: ['id'] }]);
-  const data = await mutate();
-  setTokens(data.data.signIn.token, data.data.signIn.refreshToken);
-  setCurrentUser(data.data.signIn.user);
-  navigateTo('/hidden');
-};
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <button @click="login()">Login</button>
+  <div class="h-screen flex flex-col items-center justify-center">
+    <div class="text-5xl font-semibold">Nuxt-Base Playground</div>
+    <NuxtLink class="mt-5 bg-teal-500 text-white rounded-lg px-5 p-2" to="/auth">Go to auth</NuxtLink>
   </div>
 </template>
