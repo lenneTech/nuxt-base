@@ -24,7 +24,7 @@
     "dev": "nuxi dev playground/nuxt-app",
     "dev:generate-types": "GENERATE_TYPES=1 nuxi dev playground/nuxt-app",
     "dev:build": "nuxi build playground/nuxt-app",
-    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground/nuxt-app",
+    "dev:prepare": "nuxt-module-build --stub && cd ./playground/nuxt-app && npm i && nuxi prepare",
     "release": "standard-version && git push --follow-tags origin main",
     "release:minor": "standard-version --release-as minor && git push --follow-tags origin main",
     "release:major": "standard-version --release-as major && git push --follow-tags origin main",

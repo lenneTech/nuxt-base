@@ -32,10 +32,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - run: pnpm dev:prepare
-
       - name: Build
         run: pnpm build
-
-      - name: Build Playground
-        run: pnpm dev:build
