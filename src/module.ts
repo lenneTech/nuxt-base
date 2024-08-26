@@ -1,6 +1,15 @@
-import { addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, extendViteConfig, installModule, useLogger } from '@nuxt/kit';
+import {
+  addImportsDir,
+  addPlugin,
+  addTemplate,
+  createResolver,
+  defineNuxtModule,
+  extendViteConfig,
+  installModule,
+  useLogger
+} from '@nuxt/kit';
 
-import { generateFiles } from './generate';
+import {generateFiles} from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -36,7 +45,7 @@ export default defineNuxtModule<ModuleOptions>({
   }),
   meta: {
     compatibility: {
-      nuxt: '3.*.*',
+      nuxt: '3.13.*',
     },
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',
@@ -99,11 +108,11 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.alias['#base-types'] = resolver.resolve(nuxt.options.buildDir, 'base-types');
     nuxt.options.alias['#base-types/*'] = resolver.resolve(nuxt.options.buildDir, 'base-types', '*');
 
+    addImportsDir(resolver.resolve('runtime/classes'));
     addImportsDir(resolver.resolve('runtime/composables'));
     addImportsDir(resolver.resolve('runtime/states'));
     addImportsDir(resolver.resolve('runtime/interfaces'));
     addImportsDir(resolver.resolve('runtime/enums'));
-    addImportsDir(resolver.resolve('runtime/classes'));
     addImportsDir(resolver.resolve('runtime/functions'));
 
     logger.success('[@lenne.tech/nuxt-base] Added imports');

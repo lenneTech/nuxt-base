@@ -2,24 +2,25 @@
   "private": true,
   "name": "my-module-playground",
   "scripts": {
+    "start": "nuxt dev",
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate-types": "rm -rf ./src/base && GENERATE_TYPES=1 nuxt dev"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "6.12.1",
-    "nuxi": "3.11.1",
-    "pinia": "2.1.7",
-    "vue": "3.4.21"
+    "nuxi": "3.13.0",
+    "pinia": "2.2.2",
+    "vue": "3.4.38"
   },
   "devDependencies": {
     "@lenne.tech/eslint-config-vue": "0.0.16",
-    "@nuxt/schema": "3.11.2",
-    "@types/node": "20.12.7",
+    "@nuxt/schema": "3.13.0",
+    "@types/node": "22.5.0",
     "eslint": "8.57.0",
-    "nuxt": "3.11.2",
-    "prettier": "3.2.5",
-    "typescript": "5.4.5",
-    "vitest": "1.4.0"
+    "nuxt": "3.13.0",
+    "prettier": "3.3.3",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
   }
 }
