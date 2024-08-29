@@ -2,5 +2,8 @@
   "extends": "./playground/nuxt-app/.nuxt/tsconfig.json",
   "compilerOptions": {
     "noImplicitAny": false,
-  }
+  },
+  "include": [
+    "src",
+  ]
 }

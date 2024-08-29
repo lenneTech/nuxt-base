@@ -61,8 +61,8 @@ importers:
         specifier: 0.0.16
         version: 0.0.16(eslint@8.57.0)(prettier@3.3.3)(typescript@5.5.4)(vitest@2.0.5(@types/node@22.5.0)(terser@5.18.0))(vue-eslint-parser@9.3.1(eslint@8.57.0))
       '@nuxt/module-builder':
-        specifier: 0.5.5
-        version: 0.5.5(@nuxt/kit@3.13.0(magicast@0.3.4)(rollup@4.20.0))(nuxi@3.13.0)(typescript@5.5.4)
+        specifier: 0.8.3
+        version: 0.8.3(@nuxt/kit@3.13.0(magicast@0.3.4)(rollup@4.20.0))(nuxi@3.13.0)(typescript@5.5.4)
       '@nuxt/schema':
         specifier: 3.13.0
         version: 3.13.0(rollup@4.20.0)
@@ -1562,12 +1562,12 @@ packages:
     resolution: {integrity: sha512-gbhSbDvYfkGQ0R2ztqTLQLHRMv+7g50kAKKuN6mbF4tL9jg7NPnQ8bAarn2I4Qx8xtmwO+qY1ABkmYMn5S1CpA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
-  '@nuxt/module-builder@0.5.5':
-    resolution: {integrity: sha512-ifFfwA1rbSXSae25RmqA2kAbV3xoShZNrq1yK8VXB/EnIcDn4WiaYR1PytaSxIt5zsvWPn92BJXiIUBiMQZ0hw==}
+  '@nuxt/module-builder@0.8.3':
+    resolution: {integrity: sha512-m9W3P6f6TFnHmVFKRo/2gELWDi3r0k8i93Z1fY5z410GZmttGVPv8KgRgOgC79agRi/OtpbyG3BPRaWdbDZa5w==}
     hasBin: true
     peerDependencies:
-      '@nuxt/kit': ^3.8.2
-      nuxi: ^3.10.0
+      '@nuxt/kit': ^3.12.4
+      nuxi: ^3.12.0
 
   '@nuxt/schema@3.13.0':
     resolution: {integrity: sha512-JBGSjF9Hd8guvTV2312eM1RulCMJc50yR3CeMZPLDsI02A8TXQnABS8EbgvGRvxD43q/ITjj21B2ffG1wEVrnQ==}
@@ -4255,6 +4255,9 @@ packages:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
 
+  magic-regexp@0.8.0:
+    resolution: {integrity: sha512-lOSLWdE156csDYwCTIGiAymOLN7Epu/TU5e/oAnISZfU6qP+pgjkE+xbVjVn3yLPKN8n1G2yIAYTAM5KRk6/ow==}
+
   magic-string-ast@0.6.2:
     resolution: {integrity: sha512-oN3Bcd7ZVt+0VGEs7402qR/tjgjbM7kPlH/z7ufJnzTLVBzXJITRHOJiwMmmYMgZfdoWQsfQcY+iKlxiBppnMA==}
     engines: {node: '>=16.14.0'}
@@ -5124,6 +5127,10 @@ packages:
   regenerator-runtime@0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
 
+  regexp-tree@0.1.27:
+    resolution: {integrity: sha512-iETxpjK6YoRWJG5o6hXLwvjYAoW+FEZn9os0PD/b6AP6xQwsa/Y7lCVgIixBbUPMfhu+i2LtdeAqVTgGlQarfA==}
+    hasBin: true
+
   regexp.prototype.flags@1.5.1:
     resolution: {integrity: sha512-sy6TXMN+hnP/wMy+ISxg3krXx7BAtWVO4UouuCN/ziM9UEne0euamVNafDfvC83bRNr95y0V5iijeDQFUNpvrg==}
     engines: {node: '>= 0.4'}
@@ -5680,6 +5687,16 @@ packages:
   ts-log@2.2.5:
     resolution: {integrity: sha512-PGcnJoTBnVGy6yYNFxWVNkdcAuAMstvutN9MgDJIV6L0oG8fB+ZNNy1T+wJzah8RPGor1mZuPQkVfXNDpy9eHA==}
 
+  tsconfck@3.1.1:
+    resolution: {integrity: sha512-00eoI6WY57SvZEVjm13stEVE90VkEdJAFGgpFLTsZbJyW/LwFQ7uQxJHWpZ2hzSWgCPKc9AnBnNP+0X7o3hAmQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    peerDependencies:
+      typescript: ^5.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   tsconfig-paths@3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
 
@@ -5716,6 +5733,9 @@ packages:
   type-fest@3.13.1:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
     engines: {node: '>=14.16'}
+
+  type-level-regexp@0.1.17:
+    resolution: {integrity: sha512-wTk4DH3cxwk196uGLK/E9pE45aLfeKJacKmcEgEOA/q5dnPGNxXt0cfYdFxb57L+sEpf1oJH4Dnx/pnRcku9jg==}
 
   typed-array-buffer@1.0.0:
     resolution: {integrity: sha512-Y8KTSIglk9OZEr8zywiIHG/kmQ7KWyjseXs1CbSo8vC42w7hg2HgYTxSWwP0+is7bWDc1H+Fo026CpHFwm8tkw==}
@@ -7883,14 +7903,18 @@ snapshots:
       - rollup
       - supports-color
 
-  '@nuxt/module-builder@0.5.5(@nuxt/kit@3.13.0(magicast@0.3.4)(rollup@4.20.0))(nuxi@3.13.0)(typescript@5.5.4)':
+  '@nuxt/module-builder@0.8.3(@nuxt/kit@3.13.0(magicast@0.3.4)(rollup@4.20.0))(nuxi@3.13.0)(typescript@5.5.4)':
     dependencies:
       '@nuxt/kit': 3.13.0(magicast@0.3.4)(rollup@4.20.0)
       citty: 0.1.6
       consola: 3.2.3
+      defu: 6.1.4
+      magic-regexp: 0.8.0
       mlly: 1.7.1
       nuxi: 3.13.0
       pathe: 1.1.2
+      pkg-types: 1.2.0
+      tsconfck: 3.1.1(typescript@5.5.4)
       unbuild: 2.0.0(typescript@5.5.4)
     transitivePeerDependencies:
       - sass
@@ -11163,6 +11187,16 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
+  magic-regexp@0.8.0:
+    dependencies:
+      estree-walker: 3.0.3
+      magic-string: 0.30.11
+      mlly: 1.7.1
+      regexp-tree: 0.1.27
+      type-level-regexp: 0.1.17
+      ufo: 1.5.4
+      unplugin: 1.12.2
+
   magic-string-ast@0.6.2:
     dependencies:
       magic-string: 0.30.11
@@ -12178,6 +12212,8 @@ snapshots:
 
   regenerator-runtime@0.13.11: {}
 
+  regexp-tree@0.1.27: {}
+
   regexp.prototype.flags@1.5.1:
     dependencies:
       call-bind: 1.0.2
@@ -12726,6 +12762,10 @@ snapshots:
 
   ts-log@2.2.5: {}
 
+  tsconfck@3.1.1(typescript@5.5.4):
+    optionalDependencies:
+      typescript: 5.5.4
+
   tsconfig-paths@3.14.2:
     dependencies:
       '@types/json5': 0.0.29
@@ -12752,6 +12792,8 @@ snapshots:
   type-fest@0.8.1: {}
 
   type-fest@3.13.1: {}
+
+  type-level-regexp@0.1.17: {}
 
   typed-array-buffer@1.0.0:
     dependencies:
