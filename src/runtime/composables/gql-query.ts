@@ -19,6 +19,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
 
   // Get config
   const config = {
+    asyncDataOptions: {},
     fields: null,
     lazy: false,
     log: false,
@@ -122,5 +123,5 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     }
 
     return data.value;
-  });
+  }, config.asyncDataOptions);
 }
