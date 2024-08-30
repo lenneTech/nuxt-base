@@ -24,20 +24,17 @@ const logger = useLogger('[@lenne.tech/nuxt-base] ');
 
 export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
-  defaults: (_nuxt) => ({
+  defaults: {
     autoImport: false,
     disableGraphql: false,
     generateTypes: true,
     host: '',
     registerAuthPlugins: false,
     registerPlugins: true,
-    schema: null,
+    schema: undefined,
     storagePrefix: 'base',
-  }),
+  },
   meta: {
-    compatibility: {
-      nuxt: '3.*.*',
-    },
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',
   },
@@ -99,11 +96,11 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.alias['#base-types'] = resolver.resolve(nuxt.options.buildDir, 'base-types');
     nuxt.options.alias['#base-types/*'] = resolver.resolve(nuxt.options.buildDir, 'base-types', '*');
 
+    addImportsDir(resolver.resolve('runtime/classes'));
     addImportsDir(resolver.resolve('runtime/composables'));
     addImportsDir(resolver.resolve('runtime/states'));
     addImportsDir(resolver.resolve('runtime/interfaces'));
     addImportsDir(resolver.resolve('runtime/enums'));
-    addImportsDir(resolver.resolve('runtime/classes'));
     addImportsDir(resolver.resolve('runtime/functions'));
 
     logger.success('[@lenne.tech/nuxt-base] Added imports');

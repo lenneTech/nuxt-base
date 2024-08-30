@@ -1,7 +1,7 @@
 import { callWithNuxt, defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 
+import { GraphQLMeta } from '../../generate';
 import { loadMeta } from '../functions/graphql-meta';
 
 export default defineNuxtPlugin({

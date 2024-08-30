@@ -26,14 +26,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: "pnpm"
+          cache: "npm"
           node-version: ${{ matrix.node }}
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Install dependencies
-        run: cd playground/nuxt-app && pnpm install && pnpm build
+        run: cd playground/nuxt-app && npm install && npm run build
 
       - name: Build
-        run: pnpm build
+        run: npm run build

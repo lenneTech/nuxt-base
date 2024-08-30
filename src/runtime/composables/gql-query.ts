@@ -1,9 +1,9 @@
-import { useAsyncQuery, useLazyAsyncQuery } from '#imports';
+import { useAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { type AsyncData, callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { type AsyncData, useAsyncData, useNuxtApp } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
+import type { GraphQLMeta } from '../../generate';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
@@ -114,5 +114,13 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     variables: variables,
   };
 
-  return callWithNuxt(_nuxt, config.lazy ? useLazyAsyncQuery<T> : useAsyncQuery<T>, [queryConfig]);
+  return useAsyncData(async () => {
+    const { data, error } = await useAsyncQuery<T>(queryConfig);
+
+    if (error.value) {
+      throw new Error(error.value);
+    }
+
+    return data.value;
+  });
 }

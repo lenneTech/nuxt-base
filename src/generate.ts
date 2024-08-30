@@ -6,7 +6,8 @@ import { addTemplate } from '@nuxt/kit';
 import { buildClientSchema, getIntrospectionQuery } from 'graphql';
 import { ofetch } from 'ofetch';
 
-import { GraphQLMeta } from './runtime/classes/graphql-meta.class';
+import { useGraphQLMeta } from './runtime/composables/use-graphql-meta';
+export type GraphQLMeta = ReturnType<typeof useGraphQLMeta>;
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const { loadSchema } = require('@graphql-tools/load');
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
@@ -39,7 +40,7 @@ export async function loadMetaServer(config: Partial<{ public: { host: string; s
     });
   }
 
-  return new GraphQLMeta(schema);
+  return useGraphQLMeta(schema);
 }
 
 export default async function generateGraphQLTypes(schema: string) {

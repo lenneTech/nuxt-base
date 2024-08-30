@@ -1,5 +1,4 @@
 import {IServerOptions, merge} from '@lenne.tech/nest-server';
-import {CronExpression} from '@nestjs/schedule';
 import {join} from 'path';
 
 /**
@@ -14,29 +13,6 @@ export const config: { [env: string]: Partial<IServerOptions> } = {
     automaticObjectIdFiltering: true,
     compression: true,
     cookies: false,
-    cronJobs: {
-      sayHello: {
-        cronTime: CronExpression.EVERY_5_MINUTES,
-        disabled: true,
-        runOnInit: false,
-        timeZone: 'Europe/Berlin',
-      },
-    },
-    email: {
-      defaultSender: {
-        email: 'cade72@ethereal.email',
-        name: 'Nest Server Starter Local',
-      },
-      smtp: {
-        auth: {
-          pass: 'jpvTwGYeSajEqDvRKT',
-          user: 'cade72@ethereal.email',
-        },
-        host: 'mailhog.lenne.tech',
-        port: 1025,
-        secure: false,
-      },
-    },
     env: 'local',
     execAfterInit: 'npm run docs:bootstrap',
     filter: {
