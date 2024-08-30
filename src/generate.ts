@@ -7,6 +7,7 @@ import { buildClientSchema, getIntrospectionQuery } from 'graphql';
 import { ofetch } from 'ofetch';
 
 import { useGraphQLMeta } from './runtime/composables/use-graphql-meta';
+
 export type GraphQLMeta = ReturnType<typeof useGraphQLMeta>;
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 const { loadSchema } = require('@graphql-tools/load');
@@ -101,7 +102,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
         } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} lazy?: boolean, log?: boolean): Promise<AsyncData<{${query}: ${
           types.returnType
-        }}, any>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, lazy, log})`,
+        }}, Error>> => gqlQuery<{${query}: ${types.returnType}}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, lazy, log})`,
       );
     }
   }
@@ -116,7 +117,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<UseMutationReturn<{${mutation}: ${types.returnType}}, any>> => gqlMutation<{${mutation}: ${
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<AsyncData<{${mutation}: ${types.returnType}}, Error>> => gqlMutation<{${mutation}: ${
           types.returnType
         }}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
       );

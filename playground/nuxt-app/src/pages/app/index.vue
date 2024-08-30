@@ -17,8 +17,7 @@ function logout() {
 }
 
 async function createNewTodo() {
-  const { mutate } = await useCreateTodoMutation({ input: { name: 'New todo' } }, ['id']);
-  await mutate();
+  const { data } = await useCreateTodoMutation({ input: { name: 'New todo' } }, ['id']);
   await refresh();
 }
 </script>

@@ -4,12 +4,6 @@ import { generateFiles } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
-  apollo?: {
-    httpLinkOptions?: any;
-    websocketsOnly?: boolean;
-    wsEndpoint?: string;
-    wsLinkOptions?: any;
-  };
   autoImport?: boolean;
   disableGraphql?: boolean;
   generateTypes?: boolean;
@@ -21,6 +15,13 @@ export interface ModuleOptions {
 }
 
 const logger = useLogger('[@lenne.tech/nuxt-base] ');
+
+function requestMiddleware(request: RequestInit) {
+  console.log(request);
+  return {
+    ...request,
+  };
+}
 
 export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
@@ -55,7 +56,6 @@ export default defineNuxtModule<ModuleOptions>({
 
     if (options.registerPlugins) {
       addPlugin(resolver.resolve('runtime/plugins/cookies'));
-      addPlugin(resolver.resolve('runtime/plugins/apollo-error'));
 
       if (!options.disableGraphql) {
         addPlugin(resolver.resolve('runtime/plugins/graphql'));
@@ -64,10 +64,6 @@ export default defineNuxtModule<ModuleOptions>({
 
     if (options.registerAuthPlugins && options.registerPlugins) {
       addPlugin(resolver.resolve('runtime/plugins/auth.server'));
-    }
-
-    if (options.registerPlugins && !options.disableGraphql) {
-      addPlugin(resolver.resolve('runtime/plugins/apollo'));
     }
 
     // prettier-ignore
@@ -137,40 +133,19 @@ export default defineNuxtModule<ModuleOptions>({
 
     logger.success('[@lenne.tech/nuxt-base] Set WebSocket url:', wsUrl);
     if (!options.disableGraphql) {
-      await installModule(await resolver.resolvePath('@nuxtjs/apollo'), {
-        autoImports: true,
+      await installModule(await resolver.resolvePath('nuxt-graphql-request'), {
         clients: {
           default: {
-            authHeader: 'Authorization',
-            authType: 'Bearer',
-            defaultOptions: {
-              mutate: {
-                fetchPolicy: 'no-cache',
-              },
-              query: {
-                fetchPolicy: 'no-cache',
-              },
-              watchQuery: {
-                fetchPolicy: 'no-cache',
-              },
+            endpoint: options.host,
+            options: {
+              requestMiddleware,
             },
-            httpEndpoint: options.host || null,
-            httpLinkOptions: {
-              credentials: 'include',
-              fetchOptions: {
-                credentials: 'include',
-              },
-            },
-            tokenName: `apollo:${options.storagePrefix}.token`,
-            tokenStorage: 'cookie',
-            wsEndpoint: wsUrl || null,
-            ...options.apollo,
           },
         },
       });
     }
 
-    logger.success('[@lenne.tech/nuxt-base] Installed @nuxtjs/apollo');
+    logger.success('[@lenne.tech/nuxt-base] Installed nuxt-graphql-request');
     logger.success('[@lenne.tech/nuxt-base] Initialize done!');
   },
 });

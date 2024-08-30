@@ -1,16 +1,15 @@
-import { useAsyncQuery } from '#imports';
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { type AsyncData, useAsyncData, useNuxtApp } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../../generate';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
+import { useAuthState } from '../states/auth';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
-  const _nuxt = useNuxtApp();
-  const { $graphQl } = _nuxt;
+  const { $graphql, _meta } = useNuxtApp();
+  const { accessTokenState } = useAuthState();
 
   // Check parameters
   if (!method) {
@@ -34,8 +33,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::variables ', config.variables);
   }
 
-  const meta = $graphQl() as GraphQLMeta;
-  if (!meta) {
+  if (!_meta) {
     throw new Error('GraphQLMeta is not available.');
   }
 
@@ -43,11 +41,11 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     config.variables = await hashPasswords(config.variables);
   }
 
-  const argType = meta.getArgs(method);
+  const argType = _meta.getArgs(method);
   const builderInput = {};
-  const metaFields = meta.getFields(method);
+  const metaFields = _meta.getFields(method);
   const availableFields = [];
-  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
+  const variables = _meta.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -107,20 +105,11 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::documentNode ', documentNode);
   }
 
-  const queryConfig = {
-    cache: false,
-    fetchPolicy: 'no-cache',
-    query: documentNode,
-    variables: variables,
+  const requestHeaders = {
+    authorization: `Bearer ${accessTokenState.value}`,
   };
 
   return useAsyncData(async () => {
-    const { data, error } = await useAsyncQuery<T>(queryConfig, { lazy: config.lazy });
-
-    if (error.value) {
-      throw new Error(error.value);
-    }
-
-    return data.value;
+    return await $graphql.default.request(documentNode, variables, requestHeaders);
   });
 }

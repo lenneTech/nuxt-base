@@ -1,18 +1,17 @@
-import type { UseMutationReturn } from '@vue/apollo-composable';
+import type { AsyncData } from 'nuxt/app';
 
-import { useMutation } from '@vue/apollo-composable';
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useAsyncData, useNuxtApp } from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
-import { GraphQLMeta } from '../../generate';
 import { hashPasswords } from '../functions/graphql-meta';
+import { useAuthState } from '../states/auth';
 
-export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseMutationReturn<T, any>> {
-  const _nuxt = useNuxtApp();
-  const { $graphQl } = _nuxt;
+export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
+  const { $graphql, _meta } = useNuxtApp();
+  const { accessTokenState } = useAuthState();
 
   // Check parameters
   if (!method) {
@@ -34,8 +33,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::fields ', fields);
   }
 
-  const meta = $graphQl() as GraphQLMeta;
-  if (!meta) {
+  if (!_meta) {
     throw new Error('GraphQLMeta is not available.');
   }
 
@@ -43,11 +41,11 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     config.variables = await hashPasswords(config.variables);
   }
 
-  const argType = meta.getArgs(method);
+  const argType = _meta.getArgs(method);
   const builderInput = {};
-  const metaFields = meta.getFields(method);
+  const metaFields = _meta.getFields(method);
   const availableFields = [];
-  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
+  const variables = _meta.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -125,5 +123,11 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  return callWithNuxt(_nuxt, useMutation<T>, [documentNode, { fetchPolicy: 'no-cache', variables }]);
+  const requestHeaders = {
+    authorization: `Bearer ${accessTokenState.value}`,
+  };
+
+  return useAsyncData(async () => {
+    return await $graphql.default.request(documentNode, variables, requestHeaders);
+  });
 }

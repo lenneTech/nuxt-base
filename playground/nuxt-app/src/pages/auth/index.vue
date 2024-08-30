@@ -6,10 +6,9 @@ import { useSignInMutation } from '~/base';
 
 const login = async () => {
   const { setCurrentUser, setTokens } = useAuth();
-  const { mutate } = await useSignInMutation({ input: { email: 'todo_user@lenne.tech', password: 'asdasd' } }, ['token', 'refreshToken', { user: ['id'] }]);
-  const data = await mutate();
-  setTokens(data.data.signIn.token, data.data.signIn.refreshToken);
-  setCurrentUser(data.data.signIn.user);
+  const { data } = await useSignInMutation({ input: { email: 'todo_user@lenne.tech', password: 'asdasd' } }, ['token', 'refreshToken', { user: ['id'] }]);
+  setTokens(data.value.signIn.token, data.value.signIn.refreshToken);
+  setCurrentUser(data.value.signIn.user);
   navigateTo('/app');
 };
 </script>

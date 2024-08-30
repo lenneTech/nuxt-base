@@ -34,21 +34,19 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.11.5",
     "@babel/core": "7.25.2",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/client-preset": "4.3.3",
     "@graphql-codegen/typescript": "4.0.9",
     "@nuxt/kit": "3.13.0",
-    "@nuxtjs/apollo": "5.0.0-alpha.14",
     "@pinia/nuxt": "0.5.4",
-    "@vue/apollo-composable": "4.2.1",
     "gql-query-builder": "3.8.0",
     "graphql": "16.9.0",
     "graphql-tag": "2.12.6",
     "graphql-tools": "9.0.1",
     "jwt-decode": "4.0.0",
     "nuxi": "3.13.1",
+    "nuxt-graphql-request": "^8.1.1",
     "vue": "3.4.38"
   },
   "devDependencies": {
