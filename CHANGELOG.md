@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.12.0](https://github.com/lenneTech/nuxt-base/compare/v3.11.0...v3.12.0) (2024-08-30)
+
+
+### Features
+
+* add async data options for gqlQuery ([8668e99](https://github.com/lenneTech/nuxt-base/commit/8668e993fe5eb7d79550517ad94d7e0155541e24))
+
 ## [3.11.0](https://github.com/lenneTech/nuxt-base/compare/v3.9.1...v3.11.0) (2024-08-30)
 
 
