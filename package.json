@@ -1,6 +1,6 @@
 {
   "name": "@lenne.tech/nuxt-base",
-  "version": "3.10.1-dev.2",
+  "version": "3.11.0",
   "description": "Nuxt base module of @lenne.tech",
   "repository": "https://github.com/lenneTech/nuxt-base",
   "license": "MIT",
