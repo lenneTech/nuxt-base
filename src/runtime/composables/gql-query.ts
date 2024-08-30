@@ -115,7 +115,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   };
 
   return useAsyncData(async () => {
-    const { data, error } = await useAsyncQuery<T>(queryConfig);
+    const { data, error } = await useAsyncQuery<T>(queryConfig, { lazy: config.lazy });
 
     if (error.value) {
       throw new Error(error.value);
