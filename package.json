@@ -21,7 +21,6 @@
   "scripts": {
     "reinit": "rm -rf node_modules && rm -rf package-lock.json && yes | npx nuxt cleanup && npm cache clean --force && npm i",
     "build": "nuxt-module-build build",
-    "prepack": "pnpm build",
     "dev": "nuxi dev playground/nuxt-app",
     "dev:generate-types": "GENERATE_TYPES=1 nuxi dev playground/nuxt-app",
     "dev:build": "nuxi build playground/nuxt-app",

@@ -42,8 +42,8 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Install dependencies
-        run: cd playground/nuxt-app && npm install && npm build
-      - run: npm build
+        run: cd playground/nuxt-app && npm install && npm run build
+      - run: npm run build
       - name: Publish Package
         run: npm publish --access public --tag latest --no-git-checks
         env:
