@@ -24,7 +24,7 @@ const logger = useLogger('[@lenne.tech/nuxt-base] ');
 
 export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
-  defaults: (_nuxt) => ({
+  defaults: {
     autoImport: false,
     disableGraphql: false,
     generateTypes: true,
@@ -33,7 +33,7 @@ export default defineNuxtModule<ModuleOptions>({
     registerPlugins: true,
     schema: undefined,
     storagePrefix: 'base',
-  }),
+  },
   meta: {
     configKey: 'nuxtBase',
     name: '@lenne.tech/nuxt-base',

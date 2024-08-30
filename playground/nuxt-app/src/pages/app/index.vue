@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { navigateTo, useAsyncData } from '#app';
+import { navigateTo } from '#app';
 import { useAuth, useAuthState } from '#imports';
 import { computed } from 'vue';
 
@@ -8,8 +8,8 @@ import { useCreateTodoMutation, useFindTodosQuery } from '~/base';
 const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
 const { clearSession } = useAuth();
 
-const { data, refresh } = await useAsyncData(() => useFindTodosQuery({}, ['id', 'name']));
-const todos = computed(() => data.value?.data?.findTodos || []);
+const { data, refresh } = await useFindTodosQuery({}, ['id', 'name']);
+const todos = computed(() => data.value?.findTodos || []);
 
 function logout() {
   clearSession();
@@ -37,7 +37,7 @@ async function createNewTodo() {
       <button @click="createNewTodo">Create new Todo</button>
     </div>
     <ul>
-      <li v-for="todo of todos">{{ todo?.name }}</li>
+      <li v-for="todo of todos" :key="todo.name">{{ todo?.name }}</li>
     </ul>
   </div>
 </template>

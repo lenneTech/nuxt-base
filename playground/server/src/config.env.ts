@@ -1,5 +1,4 @@
 import {IServerOptions, merge} from '@lenne.tech/nest-server';
-import {CronExpression} from '@nestjs/schedule';
 import {join} from 'path';
 
 /**

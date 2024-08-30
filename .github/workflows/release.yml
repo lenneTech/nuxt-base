@@ -33,19 +33,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          cache: "pnpm"
+          cache: "npm"
           node-version: ${{ matrix.node }}
           registry-url: "https://registry.npmjs.org/"
       - uses: actions/checkout@v2
         with:
           fetch-depth: 3
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
       - name: Install dependencies
-        run: cd playground/nuxt-app && pnpm install && pnpm build
-      - run: pnpm build
+        run: cd playground/nuxt-app && npm install && npm build
+      - run: npm build
       - name: Publish Package
-        run: pnpm publish --access public --tag latest --no-git-checks
+        run: npm publish --access public --tag latest --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Deploy notification

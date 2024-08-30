@@ -1,6 +1,7 @@
 {
   "extends": "./playground/nuxt-app/.nuxt/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "noImplicitAny": false,
     "target": "ES2020"
   },
