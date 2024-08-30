@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.10.0](https://github.com/lenneTech/nuxt-base/compare/v3.9.1...v3.10.0) (2024-08-30)
+
+
+### Features
+
+* add playground ([c07f943](https://github.com/lenneTech/nuxt-base/commit/c07f943eb657e2770505f6600d1a0c4d286b826e))
+* add playground ([f8edff2](https://github.com/lenneTech/nuxt-base/commit/f8edff263c08b8694cf94a197158fb193f478c46))
+* add server for playground ([968f8ba](https://github.com/lenneTech/nuxt-base/commit/968f8ba6fccc88e1330519633e11859c4e2a62a4))
+* add server update for playground ([20831bb](https://github.com/lenneTech/nuxt-base/commit/20831bb184b45b60d99b7e2ac4e528e8128578dd))
+* update packages ([719ad1c](https://github.com/lenneTech/nuxt-base/commit/719ad1c843aa91316cbd6bcb4afb933e74c2a7bb))
+
+
+### Bug Fixes
+
+* update pnpm lock ([bd47aa6](https://github.com/lenneTech/nuxt-base/commit/bd47aa6f961d9a32c2024a7786d3a8b40b8a1dbd))
+* update pnpm lock ([a119347](https://github.com/lenneTech/nuxt-base/commit/a1193475cdbcc6aa53fc6c43dc5d78c3720e4fbc))
+* update pnpm lock ([f787463](https://github.com/lenneTech/nuxt-base/commit/f7874637cb97afb8c2a0fed5ca87f0a4109e8d7b))
+* update pnpm lock ([62f0194](https://github.com/lenneTech/nuxt-base/commit/62f01943e1bbfc44e6d1f17c05076bc47aae1909))
+
 ### [3.9.1](https://github.com/lenneTech/nuxt-base/compare/v3.8.0...v3.9.1) (2024-06-17)
 
 
