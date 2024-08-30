@@ -5,9 +5,9 @@ import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
+import { GraphQLMeta } from '../../generate';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<UseSubscriptionReturn<T, any>> {

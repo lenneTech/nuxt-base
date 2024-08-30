@@ -2,6 +2,7 @@
   "extends": "./playground/nuxt-app/.nuxt/tsconfig.json",
   "compilerOptions": {
     "noImplicitAny": false,
+    "target": "ES2020"
   },
   "include": [
     "src",

@@ -3,9 +3,9 @@ import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { type AsyncData, callWithNuxt, useNuxtApp } from 'nuxt/app';
 
-import type { GraphQLMeta } from '../classes/graphql-meta.class';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
+import { GraphQLMeta } from '../../generate';
 import { hashPasswords } from '../functions/graphql-meta';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, any>> {
