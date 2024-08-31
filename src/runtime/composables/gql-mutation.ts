@@ -8,10 +8,12 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
+import { useAuth } from './use-auth';
 
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
-  const { accessTokenState } = useAuthState();
+  const { accessTokenState, refreshTokenState } = useAuthState();
+  const { checkTokenAndRenew } = useAuth();
 
   // Check parameters
   if (!method) {
@@ -123,8 +125,10 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
+  await checkTokenAndRenew();
+
   const requestHeaders = {
-    authorization: `Bearer ${accessTokenState.value}`,
+    authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
   };
 
   return useAsyncData(async () => {

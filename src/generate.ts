@@ -86,9 +86,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const defaultTypes = ['boolean', 'string', 'date', 'int', 'number', 'float'];
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';\n');
-  template.push('import { gqlQuery, gqlMutation, gqlSubscription } from \'#imports\';\n');
-  template.push('import type { UseMutationReturn, UseSubscriptionReturn } from \'@vue/apollo-composable\';\n');
+  template.push('import { gqlQuery, gqlMutation, gqlSubscription, type ReturnTypeOfSubscription } from \'#imports\';\n');
   template.push('import type { AsyncData } from \'nuxt/app\';');
+  template.push('import type { ExecutionResult } from \'graphql-ws\';');
 
   if (methods?.query) {
     for (const query of methods.query) {
@@ -134,9 +134,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(subscription)}Subscription = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<UseSubscriptionReturn<{${subscription}: ${
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<ReturnTypeOfSubscription<{${subscription}: ${
           types.returnType
-        }}, any>> => gqlSubscription<{${subscription}: ${types.returnType}}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
+        }}>> => gqlSubscription<{${subscription}: ${types.returnType}}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
       );
     }
   }

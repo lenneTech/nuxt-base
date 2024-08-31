@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { navigateTo } from '#app';
+import { navigateTo, useNuxtApp } from '#app';
 import { useAuth, useAuthState } from '#imports';
 import { computed } from 'vue';
 
-import { useCreateTodoMutation, useFindTodosQuery } from '~/base';
+import { useCreateTodoMutation, useFindTodosQuery, useTodoCreatedSubscription } from '~/base';
 
 const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
 const { clearSession } = useAuth();
-
+const { _wsClient } = useNuxtApp();
 const { data, refresh } = await useFindTodosQuery({}, ['id', 'name']);
 const todos = computed(() => data.value?.findTodos || []);
 
@@ -18,8 +18,9 @@ function logout() {
 
 async function createNewTodo() {
   const { data } = await useCreateTodoMutation({ input: { name: 'New todo' } }, ['id']);
-  await refresh();
 }
+
+const { data: subData, error, loading, start, stop } = await useTodoCreatedSubscription(['id', 'name']);
 </script>
 
 <template>
@@ -31,9 +32,17 @@ async function createNewTodo() {
     <pre> {{ { currentUserState } }}</pre>
     <pre> {{ { accessTokenState } }}</pre>
     <pre> {{ { refreshTokenState } }}</pre>
-    <div class="mt-5">
+    <div class="mt-5 space-x-3">
       <h2>Todo's</h2>
-      <button @click="createNewTodo">Create new Todo</button>
+      <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="createNewTodo">Create new Todo</button>
+      <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="start">Start subscription</button>
+      <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="stop">Stop subscription</button>
+    </div>
+    <div class="mt-5 mb-5 space-y-3">
+      Subscriptions
+      <pre> {{ { subData } }}</pre>
+      <pre> {{ { error } }}</pre>
+      <pre> {{ { loading } }}</pre>
     </div>
     <ul>
       <li v-for="todo of todos" :key="todo.name">{{ todo?.name }}</li>

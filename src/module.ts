@@ -16,13 +16,6 @@ export interface ModuleOptions {
 
 const logger = useLogger('[@lenne.tech/nuxt-base] ');
 
-function requestMiddleware(request: RequestInit) {
-  console.log(request);
-  return {
-    ...request,
-  };
-}
-
 export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {
@@ -59,6 +52,7 @@ export default defineNuxtModule<ModuleOptions>({
 
       if (!options.disableGraphql) {
         addPlugin(resolver.resolve('runtime/plugins/graphql'));
+        addPlugin(resolver.resolve('runtime/plugins/ws.client'));
       }
     }
 
@@ -137,9 +131,6 @@ export default defineNuxtModule<ModuleOptions>({
         clients: {
           default: {
             endpoint: options.host,
-            options: {
-              requestMiddleware,
-            },
           },
         },
       });

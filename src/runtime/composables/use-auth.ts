@@ -37,19 +37,18 @@ export function useAuth() {
 
     // Get and set new tokens
     const _nuxt = useNuxtApp();
-    const { mutate } = await callWithNuxt(_nuxt, gqlMutation, [
+    const { data } = await callWithNuxt(_nuxt, gqlMutation, [
       'refreshToken',
       {
         fields: ['token', 'refreshToken'],
       },
     ]);
-    const response: any = await callWithNuxt(_nuxt, mutate);
-    if (response?.data?.refreshToken) {
-      setTokens(response.data.refreshToken.token, response.data.refreshToken.refreshToken);
+    if (data.value?.refreshToken) {
+      setTokens(data.value.refreshToken.token, data.value.refreshToken.refreshToken);
     }
     const result = {
-      refreshToken: response.data.refreshToken.refreshToken,
-      token: response.data.refreshToken.token,
+      refreshToken: data.value.refreshToken.refreshToken,
+      token: data.value.refreshToken.token,
     };
 
     // Allow further calls again and transfer the result to waiting processes
@@ -57,6 +56,14 @@ export function useAuth() {
 
     // Return result
     return result;
+  }
+
+  async function checkTokenAndRenew() {
+    const { accessTokenState } = useAuthState();
+
+    if (isTokenExpired(accessTokenState.value)) {
+      await requestNewToken();
+    }
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
@@ -102,6 +109,7 @@ export function useAuth() {
   }
 
   return {
+    checkTokenAndRenew,
     clearSession,
     getDecodedAccessToken,
     isTokenExpired,

@@ -1,11 +1,10 @@
 import type {CoreHealthCheckResult, FindAndCountUsersResult, SortInput, FilterInput, User, Meta, FileInfo, FindAndCountTodosResult, Todo, CoreAuthModel, Auth, AuthSignInInput, AuthSignUpInput, UserCreateInput, UserInput, TodoCreateInput, TodoInput} from "./default"
 import type { InputFields } from '#base-types/fields';
 
-import { gqlQuery, gqlMutation, gqlSubscription } from '#imports';
-
-import type { UseMutationReturn, UseSubscriptionReturn } from '@vue/apollo-composable';
+import { gqlQuery, gqlMutation, gqlSubscription, type ReturnTypeOfSubscription } from '#imports';
 
 import type { AsyncData } from 'nuxt/app';
+import type { ExecutionResult } from 'graphql-ws';
 export const useHealthCheckQuery = ( fields?: InputFields<CoreHealthCheckResult>[] | null, lazy?: boolean, log?: boolean): Promise<AsyncData<{healthCheck: CoreHealthCheckResult}, Error>> => gqlQuery<{healthCheck: CoreHealthCheckResult}>('healthCheck', { fields, lazy, log})
 export const useFindAndCountUsersQuery = (variables: { limit?: number, offset?: number, skip?: number, sort?: SortInput[], take?: number, filter?: FilterInput, samples?: number }, fields?: InputFields<FindAndCountUsersResult>[] | null, lazy?: boolean, log?: boolean): Promise<AsyncData<{findAndCountUsers: FindAndCountUsersResult}, Error>> => gqlQuery<{findAndCountUsers: FindAndCountUsersResult}>('findAndCountUsers', {variables, fields, lazy, log})
 export const useFindUsersQuery = (variables: { limit?: number, offset?: number, skip?: number, sort?: SortInput[], take?: number, filter?: FilterInput, samples?: number }, fields?: InputFields<User>[] | null, lazy?: boolean, log?: boolean): Promise<AsyncData<{findUsers: User[]}, Error>> => gqlQuery<{findUsers: User[]}>('findUsers', {variables, fields, lazy, log})
@@ -32,5 +31,5 @@ export const useUploadFilesMutation = (variables: { files: any[] },  log?: boole
 export const useCreateTodoMutation = (variables: { input: TodoCreateInput }, fields?: InputFields<Todo>[] | null, log?: boolean): Promise<AsyncData<{createTodo: Todo}, Error>> => gqlMutation<{createTodo: Todo}>('createTodo', {variables, fields, log})
 export const useDeleteTodoMutation = (variables: { id: string }, fields?: InputFields<Todo>[] | null, log?: boolean): Promise<AsyncData<{deleteTodo: Todo}, Error>> => gqlMutation<{deleteTodo: Todo}>('deleteTodo', {variables, fields, log})
 export const useUpdateTodoMutation = (variables: { id: string, input: TodoInput }, fields?: InputFields<Todo>[] | null, log?: boolean): Promise<AsyncData<{updateTodo: Todo}, Error>> => gqlMutation<{updateTodo: Todo}>('updateTodo', {variables, fields, log})
-export const useUserCreatedSubscription = ( fields?: InputFields<User>[] | null, log?: boolean): Promise<UseSubscriptionReturn<{userCreated: User}, any>> => gqlSubscription<{userCreated: User}>('userCreated', { fields, log})
-export const useTodoCreatedSubscription = ( fields?: InputFields<Todo>[] | null, log?: boolean): Promise<UseSubscriptionReturn<{todoCreated: Todo}, any>> => gqlSubscription<{todoCreated: Todo}>('todoCreated', { fields, log})
+export const useUserCreatedSubscription = ( fields?: InputFields<User>[] | null, log?: boolean): Promise<ReturnTypeOfSubscription<{userCreated: User}>> => gqlSubscription<{userCreated: User}>('userCreated', { fields, log})
+export const useTodoCreatedSubscription = ( fields?: InputFields<Todo>[] | null, log?: boolean): Promise<ReturnTypeOfSubscription<{todoCreated: Todo}>> => gqlSubscription<{todoCreated: Todo}>('todoCreated', { fields, log})

@@ -6,10 +6,12 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
+import { useAuth } from './use-auth';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
   const { accessTokenState } = useAuthState();
+  const { checkTokenAndRenew } = useAuth();
 
   // Check parameters
   if (!method) {
@@ -104,6 +106,8 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::query ', queryBody.query);
     console.debug('gqlQuery::documentNode ', documentNode);
   }
+
+  await checkTokenAndRenew();
 
   const requestHeaders = {
     authorization: `Bearer ${accessTokenState.value}`,

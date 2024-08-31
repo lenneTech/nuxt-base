@@ -1,16 +1,32 @@
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { useNuxtApp } from 'nuxt/app';
+import { type Ref, ref } from 'vue';
 
-import type { GraphQLMeta } from '../../generate';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 
-//
-export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): any {
-  const _nuxt = useNuxtApp();
-  const { $graphQl } = _nuxt;
+export interface ReturnTypeOfSubscription<T> {
+  data: Ref<T>;
+  error: Ref<string>;
+  loading: Ref<boolean>;
+  start: void;
+  stop: void;
+}
+
+export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<ReturnTypeOfSubscription<T>> {
+  const { _meta, _wsClient } = useNuxtApp();
+
+  if (import.meta.server) {
+    return {
+      data: ref(null),
+      error: ref(null),
+      loading: ref(false),
+      start: () => {},
+      stop: () => {},
+    };
+  }
 
   // Check parameters
   if (!method) {
@@ -27,8 +43,8 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const fields = config.fields as unknown as string[];
-  const meta = $graphQl() as GraphQLMeta;
-  if (!meta) {
+
+  if (!_meta) {
     throw new Error('GraphQLMeta is not available.');
   }
 
@@ -36,11 +52,11 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     config.variables = await hashPasswords(config.variables);
   }
 
-  const argType = meta.getArgs(method);
+  const argType = _meta.getArgs(method);
   const builderInput = {};
-  const metaFields = meta.getFields(method);
+  const metaFields = _meta.getFields(method);
   const availableFields = [];
-  const variables = meta.parseVariables(config.variables, argType.fields, config.log);
+  const variables = _meta.parseVariables(config.variables, argType.fields, config.log);
 
   if (!fields) {
     for (const [key] of Object.entries(metaFields.fields)) {
@@ -114,5 +130,45 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     console.debug('gqlSubscription::documentNode ', documentNode);
   }
 
-  return null;
+  const data = ref(null);
+  const error = ref(null);
+  const loading = ref(true);
+  let subscriptionState = null;
+
+  const start = () => {
+    loading.value = true;
+    error.value = null;
+
+    subscriptionState = _wsClient.subscribe(
+      { query: queryBody.query, variables: variables },
+      {
+        complete: () => {
+          loading.value = false;
+        },
+        error: (err) => {
+          error.value = err;
+          loading.value = false;
+        },
+        next: (result) => {
+          data.value = result.data;
+          loading.value = false;
+        },
+      },
+    );
+  };
+
+  const stop = () => {
+    if (subscriptionState) {
+      subscriptionState.unsubscribe();
+      subscriptionState = null;
+    }
+  };
+
+  return {
+    data,
+    error,
+    loading,
+    start,
+    stop,
+  };
 }
