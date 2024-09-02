@@ -1,6 +1,6 @@
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { type AsyncData, useAsyncData, useNuxtApp } from 'nuxt/app';
+import {type AsyncData, callWithNuxt, useAsyncData, useNuxtApp} from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
@@ -10,6 +10,7 @@ import { useAuth } from './use-auth';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
+  const _nuxtApp = useNuxtApp();
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
 
@@ -107,7 +108,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     console.debug('gqlQuery::documentNode ', documentNode);
   }
 
-  await checkTokenAndRenew();
+  await callWithNuxt(_nuxtApp, checkTokenAndRenew);
 
   const requestHeaders = {
     authorization: `Bearer ${accessTokenState.value}`,

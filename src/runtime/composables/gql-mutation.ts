@@ -2,7 +2,7 @@ import type { AsyncData } from 'nuxt/app';
 
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { useAsyncData, useNuxtApp } from 'nuxt/app';
+import { callWithNuxt, useAsyncData, useNuxtApp } from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
@@ -12,6 +12,7 @@ import { useAuth } from './use-auth';
 
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
+  const _nuxtApp = useNuxtApp();
   const { accessTokenState, refreshTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
 
@@ -127,7 +128,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   }
 
   if (method !== 'refreshToken' || !config.disableTokenCheck) {
-    await checkTokenAndRenew();
+    await callWithNuxt(_nuxtApp, checkTokenAndRenew);
   }
 
   const requestHeaders = {
