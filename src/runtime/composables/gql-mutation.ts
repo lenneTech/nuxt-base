@@ -1,8 +1,6 @@
-import type { AsyncData } from 'nuxt/app';
-
 import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { callWithNuxt, useAsyncData, useNuxtApp } from 'nuxt/app';
+import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
@@ -10,7 +8,7 @@ import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 
-export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
+export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<T> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState, refreshTokenState } = useAuthState();
@@ -135,7 +133,13 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
   };
 
-  return useAsyncData(async () => {
-    return await $graphql.default.request(documentNode, variables, requestHeaders);
-  });
+  let data;
+  try {
+    data = await $graphql.default.request(documentNode, variables, requestHeaders);
+  } catch (error) {
+    console.error('gqlMutation::error ', error);
+    throw error;
+  }
+
+  return data;
 }
