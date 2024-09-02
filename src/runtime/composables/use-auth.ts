@@ -77,6 +77,15 @@ export function useAuth() {
     currentUserState.value = user;
   }
 
+  function signIn(input: { refreshToken: string; token: string; user: any }) {
+    const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
+    const { $setAuthCookies } = useNuxtApp();
+    accessTokenState.value = input.token;
+    refreshTokenState.value = input.refreshToken;
+    currentUserState.value = input.user;
+    $setAuthCookies(input.token, input.refreshToken);
+  }
+
   function clearSession() {
     const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
     const { $setAuthCookies } = useNuxtApp();
@@ -114,5 +123,6 @@ export function useAuth() {
     requestNewToken,
     setCurrentUser,
     setTokens,
+    signIn,
   };
 }
