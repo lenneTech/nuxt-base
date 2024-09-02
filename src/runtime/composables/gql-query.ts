@@ -116,7 +116,11 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     authorization: `Bearer ${accessTokenState.value}`,
   };
 
-  return useAsyncData(async () => {
-    return await $graphql.default.request(documentNode, variables, requestHeaders);
-  }, options.asyncDataOptions);
+  return useAsyncData(
+    method,
+    async () => {
+      return await $graphql.default.request(documentNode, variables, requestHeaders);
+    },
+    options.asyncDataOptions,
+  );
 }
