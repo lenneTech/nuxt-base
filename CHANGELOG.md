@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.13.0](https://github.com/lenneTech/nuxt-base/compare/v3.12.0...v3.13.0) (2024-09-02)
+
+
+### Features
+
+* add async data options ([e8cae8d](https://github.com/lenneTech/nuxt-base/commit/e8cae8d7567d31097a7418839239acc1e3d7245f))
+* add lazy for query ([b096756](https://github.com/lenneTech/nuxt-base/commit/b096756a3abcb6bec25b469af8af2fac8a0d854d))
+
+
+### Bug Fixes
+
+* use callWithNuxt ([0d41c84](https://github.com/lenneTech/nuxt-base/commit/0d41c84d50a4d811dddabdab7b0bf3705f30ac25))
+
 ## [3.12.0](https://github.com/lenneTech/nuxt-base/compare/v3.11.0...v3.12.0) (2024-08-30)
 
 
