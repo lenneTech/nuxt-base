@@ -1,7 +1,7 @@
 import type { JwtPayload } from 'jwt-decode';
 
 import { jwtDecode } from 'jwt-decode';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useNuxtApp } from 'nuxt/app';
 
 import { useAuthState } from '../states/auth';
 import { gqlMutation } from './gql-mutation';
@@ -36,16 +36,14 @@ export function useAuth() {
     [inProgress, progressResult] = [true, null];
 
     // Get and set new tokens
-    const _nuxt = useNuxtApp();
-    const { data } = await callWithNuxt(_nuxt, gqlMutation, [
-      'refreshToken',
-      {
-        fields: ['token', 'refreshToken'],
-      },
-    ]);
+    const { data } = await gqlMutation('refreshToken', { disableTokenCheck: true, fields: ['token', 'refreshToken'] });
+
     if (data.value?.refreshToken) {
       setTokens(data.value.refreshToken.token, data.value.refreshToken.refreshToken);
+    } else {
+      return null;
     }
+
     const result = {
       refreshToken: data.value.refreshToken.refreshToken,
       token: data.value.refreshToken.token,

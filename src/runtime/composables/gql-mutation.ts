@@ -22,6 +22,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
 
   // Get config
   const config = {
+    disableTokenCheck: false,
     fields: null,
     log: false,
     variables: null,
@@ -125,7 +126,9 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  await checkTokenAndRenew();
+  if (method !== 'refreshToken' || !config.disableTokenCheck) {
+    await checkTokenAndRenew();
+  }
 
   const requestHeaders = {
     authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,

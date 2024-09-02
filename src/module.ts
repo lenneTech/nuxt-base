@@ -16,6 +16,22 @@ export interface ModuleOptions {
 
 const logger = useLogger('[@lenne.tech/nuxt-base] ');
 
+function responseMiddleware(response: any) {
+  if (response.errors) {
+    const traceId = response.headers.get('x-b3-traceid') || 'unknown';
+    console.error(
+      `[${traceId}] Request error:
+        status ${response.status}
+        details: ${response.errors}`,
+    );
+
+    // ToDo: Check for error.message === 'Expired refresh token' and clearSession
+    if (response.errors.some((error) => error.message === 'Expired refresh token')) {
+      console.error('Expired refresh token');
+    }
+  }
+}
+
 export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {
@@ -51,7 +67,7 @@ export default defineNuxtModule<ModuleOptions>({
       addPlugin(resolver.resolve('runtime/plugins/cookies'));
 
       if (!options.disableGraphql) {
-        addPlugin(resolver.resolve('runtime/plugins/graphql'));
+        addPlugin(resolver.resolve('runtime/plugins/graphql-meta'));
         addPlugin(resolver.resolve('runtime/plugins/ws.client'));
       }
     }
@@ -131,6 +147,9 @@ export default defineNuxtModule<ModuleOptions>({
         clients: {
           default: {
             endpoint: options.host,
+            options: {
+              responseMiddleware,
+            },
           },
         },
       });

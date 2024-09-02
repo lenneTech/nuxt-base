@@ -9,14 +9,14 @@
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "6.12.1",
-    "nuxi": "3.13.0",
+    "nuxi": "3.13.1",
     "pinia": "2.2.2",
     "vue": "3.4.38"
   },
   "devDependencies": {
     "@lenne.tech/eslint-config-vue": "0.0.16",
     "@nuxt/schema": "3.13.0",
-    "@types/node": "22.5.0",
+    "@types/node": "22.5.2",
     "eslint": "8.57.0",
     "nuxt": "3.13.0",
     "prettier": "3.3.3",
