@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   if (to.fullPath.startsWith('/app') || to.fullPath === '/app') {
     if (!accessTokenState?.value) {
-      return navigateTo({ path: '/auth/login', query: { redirect: to.fullPath } });
+      return navigateTo({ path: '/auth', query: { redirect: to.fullPath } });
     }
   }
 });

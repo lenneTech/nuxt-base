@@ -5,9 +5,10 @@ import { useAuth } from '../composables/use-auth';
 import { useAuthState } from '../states/auth';
 
 export default defineNuxtPlugin({
-  dependsOn: ['cookies', 'graphql'],
+  dependsOn: ['cookies', 'graphql-meta'],
   name: 'auth-server',
   async setup() {
+    const { $graphql } = useNuxtApp();
     const _nuxt = useNuxtApp();
     const config = await callWithNuxt(_nuxt, useRuntimeConfig);
     const { accessTokenState, currentUserState, refreshTokenState } = await callWithNuxt(_nuxt, useAuthState);
@@ -44,6 +45,9 @@ export default defineNuxtPlugin({
         await navigateTo('/auth/login');
       }
     }
+
+    // Override all existing headers
+    $graphql.default.setHeaders({ authorization: `Bearer ${token}` });
 
     if (token && payload?.id) {
       const userResult = await ofetch(config.public.host, {

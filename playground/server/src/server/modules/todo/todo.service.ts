@@ -1,12 +1,12 @@
-import { ConfigService, CrudService, ServiceOptions, assignPlain } from '@lenne.tech/nest-server';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { PubSub } from 'graphql-subscriptions';
-import { Model } from 'mongoose';
+import {assignPlain, ConfigService, CrudService, ServiceOptions} from '@lenne.tech/nest-server';
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {InjectModel} from '@nestjs/mongoose';
+import {PubSub} from 'graphql-subscriptions';
+import {Model} from 'mongoose';
 
-import { TodoInput } from './inputs/todo.input';
-import { TodoCreateInput } from './inputs/todo-create.input';
-import { Todo, TodoDocument } from './todo.model';
+import {TodoInput} from './inputs/todo.input';
+import {TodoCreateInput} from './inputs/todo-create.input';
+import {Todo, TodoDocument} from './todo.model';
 
 
 /**
@@ -51,9 +51,7 @@ export class TodoService extends CrudService<Todo, TodoCreateInput, TodoInput> {
     const createdTodo = await super.create(input, serviceOptions);
 
     // Inform subscriber
-    if (serviceOptions?.pubSub === undefined || serviceOptions.pubSub) {
-      await this.pubSub.publish('todoCreated', Todo.map(createdTodo));
-    }
+    await this.pubSub.publish('todoCreated', Todo.map(createdTodo));
 
     // Return created Todo
     return createdTodo;

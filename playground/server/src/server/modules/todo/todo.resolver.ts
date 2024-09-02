@@ -1,13 +1,13 @@
-import { FilterArgs, GraphQLServiceOptions, RoleEnum, Roles, ServiceOptions } from '@lenne.tech/nest-server';
-import { Inject } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { PubSub } from 'graphql-subscriptions';
+import {FilterArgs, GraphQLServiceOptions, RoleEnum, Roles, ServiceOptions} from '@lenne.tech/nest-server';
+import {Inject} from '@nestjs/common';
+import {Args, Mutation, Query, Resolver, Subscription} from '@nestjs/graphql';
+import {PubSub} from 'graphql-subscriptions';
 
-import { TodoInput } from './inputs/todo.input';
-import { TodoCreateInput } from './inputs/todo-create.input';
-import { FindAndCountTodosResult } from './outputs/find-and-count-todos-result.output';
-import { Todo } from './todo.model';
-import { TodoService } from './todo.service';
+import {TodoInput} from './inputs/todo.input';
+import {TodoCreateInput} from './inputs/todo-create.input';
+import {FindAndCountTodosResult} from './outputs/find-and-count-todos-result.output';
+import {Todo} from './todo.model';
+import {TodoService} from './todo.service';
 
 /**
  * Resolver to process with Todo data
@@ -129,9 +129,6 @@ export class TodoResolver {
    * Subscription for create Todo
    */
   @Subscription(() => Todo, {
-    filter(this: TodoResolver, payload, variables, context) {
-      return context?.user?.hasRole?.(RoleEnum.ADMIN);
-    },
     resolve: (value) => value,
   })
   async todoCreated() {

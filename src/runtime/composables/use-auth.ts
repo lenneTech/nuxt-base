@@ -1,7 +1,7 @@
 import type { JwtPayload } from 'jwt-decode';
 
 import { jwtDecode } from 'jwt-decode';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { useNuxtApp } from 'nuxt/app';
 
 import { useAuthState } from '../states/auth';
 import { gqlMutation } from './gql-mutation';
@@ -36,20 +36,17 @@ export function useAuth() {
     [inProgress, progressResult] = [true, null];
 
     // Get and set new tokens
-    const _nuxt = useNuxtApp();
-    const { mutate } = await callWithNuxt(_nuxt, gqlMutation, [
-      'refreshToken',
-      {
-        fields: ['token', 'refreshToken'],
-      },
-    ]);
-    const response: any = await callWithNuxt(_nuxt, mutate);
-    if (response?.data?.refreshToken) {
-      setTokens(response.data.refreshToken.token, response.data.refreshToken.refreshToken);
+    const { data } = await gqlMutation('refreshToken', { disableTokenCheck: true, fields: ['token', 'refreshToken'] });
+
+    if (data.value?.refreshToken) {
+      setTokens(data.value.refreshToken.token, data.value.refreshToken.refreshToken);
+    } else {
+      return null;
     }
+
     const result = {
-      refreshToken: response.data.refreshToken.refreshToken,
-      token: response.data.refreshToken.token,
+      refreshToken: data.value.refreshToken.refreshToken,
+      token: data.value.refreshToken.token,
     };
 
     // Allow further calls again and transfer the result to waiting processes
@@ -57,6 +54,14 @@ export function useAuth() {
 
     // Return result
     return result;
+  }
+
+  async function checkTokenAndRenew() {
+    const { accessTokenState } = useAuthState();
+
+    if (isTokenExpired(accessTokenState.value)) {
+      await requestNewToken();
+    }
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
@@ -70,6 +75,15 @@ export function useAuth() {
   function setCurrentUser<T>(user: T) {
     const { currentUserState } = useAuthState();
     currentUserState.value = user;
+  }
+
+  function signIn(input: { refreshToken: string; token: string; user: any }) {
+    const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
+    const { $setAuthCookies } = useNuxtApp();
+    accessTokenState.value = input.token;
+    refreshTokenState.value = input.refreshToken;
+    currentUserState.value = input.user;
+    $setAuthCookies(input.token, input.refreshToken);
   }
 
   function clearSession() {
@@ -102,11 +116,13 @@ export function useAuth() {
   }
 
   return {
+    checkTokenAndRenew,
     clearSession,
     getDecodedAccessToken,
     isTokenExpired,
     requestNewToken,
     setCurrentUser,
     setTokens,
+    signIn,
   };
 }
