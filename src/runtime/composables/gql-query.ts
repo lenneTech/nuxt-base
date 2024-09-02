@@ -21,8 +21,10 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
 
   // Get config
   const config = {
+    asyncDataOptions: {
+      lazy: false,
+    },
     fields: null,
-    lazy: false,
     log: false,
     variables: null,
     ...options,
@@ -114,10 +116,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     authorization: `Bearer ${accessTokenState.value}`,
   };
 
-  return useAsyncData(
-    async () => {
-      return await $graphql.default.request(documentNode, variables, requestHeaders);
-    },
-    { lazy: config.lazy },
-  );
+  return useAsyncData(async () => {
+    return await $graphql.default.request(documentNode, variables, requestHeaders);
+  }, options.asyncDataOptions);
 }
