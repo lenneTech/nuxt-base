@@ -8,7 +8,7 @@ import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 
-export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<T> {
+export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: Error }> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState, refreshTokenState } = useAuthState();
@@ -134,12 +134,13 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   };
 
   let data;
+  let error;
   try {
     data = await $graphql.default.request(documentNode, variables, requestHeaders);
-  } catch (error) {
-    console.error('gqlMutation::error ', error);
-    throw error;
+  } catch (err) {
+    console.error('gqlMutation::error ', err);
+    error = err;
   }
 
-  return data;
+  return { data, error };
 }
