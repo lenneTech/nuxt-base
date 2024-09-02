@@ -1,6 +1,6 @@
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import {type AsyncData, callWithNuxt, useAsyncData, useNuxtApp} from 'nuxt/app';
+import { type AsyncData, callWithNuxt, useAsyncData, useNuxtApp } from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
@@ -114,7 +114,10 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     authorization: `Bearer ${accessTokenState.value}`,
   };
 
-  return useAsyncData(async () => {
-    return await $graphql.default.request(documentNode, variables, requestHeaders);
-  });
+  return useAsyncData(
+    async () => {
+      return await $graphql.default.request(documentNode, variables, requestHeaders);
+    },
+    { lazy: config.lazy },
+  );
 }
