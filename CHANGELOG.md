@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.15.0](https://github.com/lenneTech/nuxt-base/compare/v3.14.0...v3.15.0) (2024-09-03)
+
+
+### Features
+
+* change host to gqlHost and add rest host ([bcb5d6b](https://github.com/lenneTech/nuxt-base/commit/bcb5d6be78a30e469ae2685baa44b5673dfd9db3))
+
 ## [3.14.0](https://github.com/lenneTech/nuxt-base/compare/v3.13.0...v3.14.0) (2024-09-03)
 
 
