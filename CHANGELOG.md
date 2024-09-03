@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.14.0](https://github.com/lenneTech/nuxt-base/compare/v3.13.0...v3.14.0) (2024-09-03)
+
+
+### Features
+
+* split query into normal and async query ([ea18d4b](https://github.com/lenneTech/nuxt-base/commit/ea18d4bc7d2415d1edc7e7807ad4464687c493df))
+
+
+### Bug Fixes
+
+* fix missing import and wrong error log ([5753761](https://github.com/lenneTech/nuxt-base/commit/57537616626cd2dd69b26a54176ca5435a3bfb74))
+
 ## [3.13.0](https://github.com/lenneTech/nuxt-base/compare/v3.12.0...v3.13.0) (2024-09-02)
 
 
