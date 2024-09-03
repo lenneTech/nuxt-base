@@ -150,7 +150,12 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
           loading.value = false;
         },
         next: (result) => {
-          data.value = result.data;
+          if (result.data) {
+            data.value = result.data[method] ? result.data[method] : result.data;
+          } else {
+            data.value = result.data;
+          }
+
           loading.value = false;
         },
       },

@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { navigateTo, useNuxtApp } from '#app';
+import { navigateTo } from '#app';
 import { useAuth, useAuthState } from '#imports';
-import { computed } from 'vue';
 
-import { useCreateTodoMutation, useFindTodosQuery, useTodoCreatedSubscription } from '~/base';
+import { useAsyncFindTodosQuery, useCreateTodoMutation, useTodoCreatedSubscription } from '~/base';
 
 const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
 const { clearSession } = useAuth();
-const { _wsClient } = useNuxtApp();
-const { data, refresh } = await useFindTodosQuery({}, ['id', 'name']);
-const todos = computed(() => data.value?.findTodos || []);
+const { data: todos, refresh } = await useAsyncFindTodosQuery({}, ['id', 'name']);
 
 function logout() {
   clearSession();
@@ -17,7 +14,8 @@ function logout() {
 }
 
 async function createNewTodo() {
-  const { data } = await useCreateTodoMutation({ input: { name: 'New todo' } }, ['id']);
+  const { data: todo } = await useCreateTodoMutation({ input: { name: 'New todo' } }, ['id']);
+  console.debug(todo);
 }
 
 const { data: subData, error, loading, start, stop } = await useTodoCreatedSubscription(['id', 'name']);

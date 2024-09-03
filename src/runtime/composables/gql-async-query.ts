@@ -123,7 +123,13 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
         authorization: `Bearer ${accessTokenState.value}`,
       };
 
-      return await $graphql.default.request(documentNode, variables, requestHeaders);
+      const result = await $graphql.default.request(documentNode, variables, requestHeaders);
+
+      if (!result) {
+        return result;
+      }
+
+      return result[method] ? result[method] : result;
     },
     options.asyncDataOptions,
   );

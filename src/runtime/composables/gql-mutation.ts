@@ -137,6 +137,10 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   let error;
   try {
     data = await $graphql.default.request(documentNode, variables, requestHeaders);
+
+    if (data) {
+      data = data[method] ? data[method] : data;
+    }
   } catch (err) {
     console.error('gqlMutation::error ', err);
     error = err;

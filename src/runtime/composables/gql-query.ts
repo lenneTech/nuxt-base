@@ -117,6 +117,10 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   let error = null;
   try {
     data = await $graphql.default.request(documentNode, variables, requestHeaders);
+
+    if (data) {
+      data = data[method] ? data[method] : data;
+    }
   } catch (err) {
     console.error('gqlQuery::error ', err);
     error = err;
