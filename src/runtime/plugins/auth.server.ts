@@ -21,7 +21,7 @@ export default defineNuxtPlugin({
 
     let token = accessTokenState.value;
     if (isTokenExpired(accessTokenState.value)) {
-      const refreshTokenResult = await ofetch(config.public.host, {
+      const refreshTokenResult = await ofetch(config.public.gqlHost, {
         body: JSON.stringify({
           query: 'mutation refreshToken {refreshToken {token, refreshToken}}',
           variables: {},
@@ -50,7 +50,7 @@ export default defineNuxtPlugin({
     $graphql.default.setHeaders({ authorization: `Bearer ${token}` });
 
     if (token && payload?.id) {
-      const userResult = await ofetch(config.public.host, {
+      const userResult = await ofetch(config.public.gqlHost, {
         body: JSON.stringify({
           query: 'query getUser($id: String!) { getUser(id: $id) { id avatar firstName lastName email roles }}',
           variables: {

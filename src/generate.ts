@@ -22,11 +22,11 @@ export async function loadMetaServer(config: Partial<{ public: { host: string; s
   let schema;
 
   if (!config.public.schema) {
-    if (!config.public.host) {
-      throw new Error('Host is not defined in the configuration');
+    if (!config.public.gqlHost) {
+      throw new Error('Gpql Host is not defined in the configuration');
     }
 
-    const { data: result } = await ofetch(config.public.host, {
+    const { data: result } = await ofetch(config.public.gqlHost, {
       body: JSON.stringify({
         query: getIntrospectionQuery({ descriptions: false }),
         variables: {},
@@ -207,7 +207,7 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
     const meta = await loadMetaServer({ public: options });
 
     // Generate graphql types
-    const generatedTypes = await generateGraphQLTypes(options.schema ?? options.host);
+    const generatedTypes = await generateGraphQLTypes(options.schema ?? options.gqlHost);
     addTemplate({
       filename: nuxt.options.rootDir + '/src/base/default.ts',
       getContents: () => generatedTypes[0].content || '',

@@ -1,7 +1,8 @@
 import { buildClientSchema, getIntrospectionQuery } from 'graphql';
 import { ofetch } from 'ofetch';
 
-import { GraphQLMeta } from '../../generate';
+import type { GraphQLMeta } from '../../generate';
+
 import { useGraphQLMeta } from '../composables/use-graphql-meta';
 
 export async function loadMeta(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {
@@ -9,7 +10,7 @@ export async function loadMeta(config: Partial<{ public: { host: string; schema?
   setTimeout(() => controller.abort(), 5000);
 
   return new Promise(async (resolve, reject) => {
-    const { data: result } = await ofetch(config.public.host, {
+    const { data: result } = await ofetch(config.public.gqlHost, {
       body: JSON.stringify({
         query: getIntrospectionQuery({ descriptions: false }),
         variables: {},

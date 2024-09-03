@@ -7,6 +7,7 @@ export interface ModuleOptions {
   autoImport?: boolean;
   disableGraphql?: boolean;
   generateTypes?: boolean;
+  gqlHost: string;
   host: string;
   registerAuthPlugins?: boolean;
   registerPlugins?: boolean;
@@ -38,6 +39,7 @@ export default defineNuxtModule<ModuleOptions>({
     autoImport: false,
     disableGraphql: false,
     generateTypes: true,
+    gqlHost: '',
     host: '',
     registerAuthPlugins: false,
     registerPlugins: true,
@@ -57,8 +59,9 @@ export default defineNuxtModule<ModuleOptions>({
     const runtimeDir = resolver.resolve('runtime');
     nuxt.options.build.transpile.push(runtimeDir);
 
-    const wsUrl = options.host?.replace('https://', 'wss://').replace('http://', 'ws://');
+    const wsUrl = options.gqlHost?.replace('https://', 'wss://').replace('http://', 'ws://');
     nuxt.options.runtimeConfig.public['host'] = options.host ?? 'http://localhost:3000';
+    nuxt.options.runtimeConfig.public['gqlHost'] = options.gqlHost ?? 'http://localhost:3000/graphql';
     nuxt.options.runtimeConfig.public['wsUrl'] = wsUrl ?? 'ws://localhost:3000';
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
@@ -146,7 +149,7 @@ export default defineNuxtModule<ModuleOptions>({
       await installModule(await resolver.resolvePath('nuxt-graphql-request'), {
         clients: {
           default: {
-            endpoint: options.host,
+            endpoint: options.gqlHost,
             options: {
               responseMiddleware,
             },

@@ -14,7 +14,8 @@ export default defineNuxtConfig({
 
   nuxtBase: {
     generateTypes: process.env['GENERATE_TYPES'] === '1',
-    host: 'http://localhost:3000/graphql',
+    gqlHost: 'http://localhost:3000/graphql',
+    host: 'http://localhost:3000',
     registerAuthPlugins: true,
     schema: '../server/schema.gql',
     storagePrefix: 'playground',
