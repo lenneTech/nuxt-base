@@ -35,6 +35,11 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
       };
       const fields = config.fields as unknown as string[];
 
+      // check if config.variables is a function
+      if (typeof config.variables === 'function') {
+        config.variables = config.variables();
+      }
+
       if (config.log) {
         console.debug('gqlQuery::fields ', fields);
         console.debug('gqlQuery::variables ', config.variables);
