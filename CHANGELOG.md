@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.16.0](https://github.com/lenneTech/nuxt-base/compare/v3.15.0...v3.16.0) (2024-09-03)
+
+
+### Features
+
+* try better async query ([cb6556d](https://github.com/lenneTech/nuxt-base/commit/cb6556d9f1f8609a88dd453cb088ac426255827d))
+* try better async query ([4ce82e9](https://github.com/lenneTech/nuxt-base/commit/4ce82e96b9052568c3493324cd1cdde87235a307))
+* try better async query ([5c4cca9](https://github.com/lenneTech/nuxt-base/commit/5c4cca9fba00e002f3bdcf16ade2d17626bbb870))
+
 ## [3.15.0](https://github.com/lenneTech/nuxt-base/compare/v3.14.0...v3.15.0) (2024-09-03)
 
 
