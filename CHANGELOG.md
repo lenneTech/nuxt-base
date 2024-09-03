@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.17.1](https://github.com/lenneTech/nuxt-base/compare/v3.17.0...v3.17.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* fix boolean value in method ([3882f18](https://github.com/lenneTech/nuxt-base/commit/3882f18053862e491bfd886fc056ecd44be9ff70))
+
 ## [3.17.0](https://github.com/lenneTech/nuxt-base/compare/v3.16.0...v3.17.0) (2024-09-03)
 
 
