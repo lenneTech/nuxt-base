@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.17.0](https://github.com/lenneTech/nuxt-base/compare/v3.16.0...v3.17.0) (2024-09-03)
+
+
+### Features
+
+* resolve result object of gql to flat object ([57338db](https://github.com/lenneTech/nuxt-base/commit/57338dbbcee294be9ca0da7df9b5ffc8f000a3bf))
+
 ## [3.16.0](https://github.com/lenneTech/nuxt-base/compare/v3.15.0...v3.16.0) (2024-09-03)
 
 
