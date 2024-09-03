@@ -1,6 +1,6 @@
 import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
-import { callWithNuxt, useNuxtApp } from 'nuxt/app';
+import { type AsyncData, callWithNuxt, useAsyncData, useNuxtApp } from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
@@ -8,7 +8,7 @@ import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 
-export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: Error | null }> {
+export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState } = useAuthState();
@@ -21,6 +21,9 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
 
   // Get config
   const config = {
+    asyncDataOptions: {
+      lazy: false,
+    },
     fields: null,
     log: false,
     variables: null,
@@ -113,14 +116,11 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     authorization: `Bearer ${accessTokenState.value}`,
   };
 
-  let data = null;
-  let error = null;
-  try {
-    data = await $graphql.default.request(documentNode, variables, requestHeaders);
-  } catch (err) {
-    console.error('gqlMutation::error ', err);
-    error = err;
-  }
-
-  return { data, error };
+  return useAsyncData(
+    method,
+    async () => {
+      return await $graphql.default.request(documentNode, variables, requestHeaders);
+    },
+    options.asyncDataOptions,
+  );
 }
