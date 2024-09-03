@@ -139,7 +139,12 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     data = await $graphql.default.request(documentNode, variables, requestHeaders);
 
     if (data) {
-      data = data[method] ? data[method] : data;
+      // check if data[method] is boolean value
+      if (typeof data[method] === 'boolean') {
+        data = data[method];
+      } else {
+        data = data[method] ? data[method] : data;
+      }
     }
   } catch (err) {
     console.error('gqlMutation::error ', err);

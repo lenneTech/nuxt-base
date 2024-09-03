@@ -119,7 +119,12 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     data = await $graphql.default.request(documentNode, variables, requestHeaders);
 
     if (data) {
-      data = data[method] ? data[method] : data;
+      // check if data[method] is boolean value
+      if (typeof data[method] === 'boolean') {
+        data = data[method];
+      } else {
+        data = data[method] ? data[method] : data;
+      }
     }
   } catch (err) {
     console.error('gqlQuery::error ', err);
