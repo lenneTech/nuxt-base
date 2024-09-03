@@ -19,21 +19,20 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
     throw new Error('No method detected');
   }
 
-  // Get config
-  const config = {
-    asyncDataOptions: {
-      lazy: false,
-    },
-    fields: null,
-    log: false,
-    variables: null,
-    ...options,
-    hashPasswords: options.hashPasswords ?? true,
-  };
-
   return useAsyncData(
     method,
     async () => {
+      // Get config
+      const config = {
+        asyncDataOptions: {
+          lazy: false,
+        },
+        fields: null,
+        log: false,
+        variables: null,
+        ...options,
+        hashPasswords: options.hashPasswords ?? true,
+      };
       const fields = config.fields as unknown as string[];
 
       if (config.log) {
