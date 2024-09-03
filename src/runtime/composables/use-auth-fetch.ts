@@ -1,5 +1,7 @@
 import type { ExtractedRouteMethod, NitroFetchOptions, NitroFetchRequest, TypedInternalResponse } from 'nitropack';
 
+import { useRuntimeConfig } from 'nuxt/app';
+
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 
