@@ -11,8 +11,8 @@ import { useAuth } from './use-auth';
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: Error }> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
-  const { accessTokenState, refreshTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
+  const { accessTokenState, refreshTokenState } = useAuthState();
 
   // Check parameters
   if (!method) {
@@ -125,12 +125,17 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
+  let accessToken;
   if (method !== 'refreshToken' || !config.disableTokenCheck) {
-    await callWithNuxt(_nuxtApp, checkTokenAndRenew);
+    const tokens = await callWithNuxt(_nuxtApp, checkTokenAndRenew);
+    console.debug('gqlMutation::tokens ', tokens);
+    if (tokens) {
+      accessToken = tokens.token;
+    }
   }
 
   const requestHeaders = {
-    authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
+    authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessToken}`,
   };
 
   let data;

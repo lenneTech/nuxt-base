@@ -56,12 +56,17 @@ export function useAuth() {
     return result;
   }
 
-  async function checkTokenAndRenew() {
+  async function checkTokenAndRenew(): Promise<{
+    refreshToken: string;
+    token: string;
+  } | null> {
     const { accessTokenState } = useAuthState();
 
     if (isTokenExpired(accessTokenState.value)) {
-      await requestNewToken();
+      return requestNewToken();
     }
+
+    return null;
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {
@@ -112,6 +117,7 @@ export function useAuth() {
       const decoded = getDecodedAccessToken(token);
       return decoded?.exp < Date.now() / 1000;
     }
+
     return false;
   }
 
