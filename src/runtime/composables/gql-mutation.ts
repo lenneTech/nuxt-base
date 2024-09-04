@@ -133,8 +133,6 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
   };
 
-  console.debug('make request with following token', requestHeaders.authorization);
-
   let data;
   let error;
   try {

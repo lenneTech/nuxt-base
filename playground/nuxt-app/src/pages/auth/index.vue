@@ -7,8 +7,8 @@ import { useSignInMutation } from '~/base';
 const login = async () => {
   const { setCurrentUser, setTokens } = useAuth();
   const { data } = await useSignInMutation({ input: { email: 'todo_user@lenne.tech', password: 'asdasd' } }, ['token', 'refreshToken', { user: ['id'] }]);
-  setTokens(data.value.signIn.token, data.value.signIn.refreshToken);
-  setCurrentUser(data.value.signIn.user);
+  setTokens(data.token, data.refreshToken);
+  setCurrentUser(data.user);
   navigateTo('/app');
 };
 </script>
