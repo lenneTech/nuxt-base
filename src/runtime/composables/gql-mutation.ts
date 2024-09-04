@@ -125,18 +125,15 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     console.debug('gqlMutation::documentNode ', documentNode);
   }
 
-  let accessToken;
   if (method !== 'refreshToken' || !config.disableTokenCheck) {
-    const tokens = await callWithNuxt(_nuxtApp, checkTokenAndRenew);
-    console.debug('gqlMutation::tokens ', tokens);
-    if (tokens) {
-      accessToken = tokens.token;
-    }
+    await callWithNuxt(_nuxtApp, checkTokenAndRenew);
   }
 
   const requestHeaders = {
-    authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessToken}`,
+    authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
   };
+
+  console.debug('make request with following token', requestHeaders.authorization);
 
   let data;
   let error;

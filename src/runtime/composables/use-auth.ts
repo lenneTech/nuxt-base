@@ -38,15 +38,15 @@ export function useAuth() {
     // Get and set new tokens
     const { data } = await gqlMutation('refreshToken', { disableTokenCheck: true, fields: ['token', 'refreshToken'] });
 
-    if (data.value?.refreshToken) {
-      setTokens(data.value.refreshToken.token, data.value.refreshToken.refreshToken);
+    if (data?.refreshToken) {
+      setTokens(data.refreshToken.token, data.refreshToken.refreshToken);
     } else {
       return null;
     }
 
     const result = {
-      refreshToken: data.value.refreshToken.refreshToken,
-      token: data.value.refreshToken.token,
+      refreshToken: data.refreshToken.refreshToken,
+      token: data.refreshToken.token,
     };
 
     // Allow further calls again and transfer the result to waiting processes
