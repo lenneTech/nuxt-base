@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.17.2](https://github.com/lenneTech/nuxt-base/compare/v3.17.1...v3.17.2) (2024-09-04)
+
+
+### Bug Fixes
+
+* fix token handling ([544e007](https://github.com/lenneTech/nuxt-base/commit/544e007a42fd3cdd883a96ae80e810b7d4788272))
+
 ### [3.17.1](https://github.com/lenneTech/nuxt-base/compare/v3.17.0...v3.17.1) (2024-09-03)
 
 
