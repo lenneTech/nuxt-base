@@ -56,17 +56,12 @@ export function useAuth() {
     return result;
   }
 
-  async function checkTokenAndRenew(): Promise<{
-    refreshToken: string;
-    token: string;
-  } | null> {
+  async function checkTokenAndRenew() {
     const { accessTokenState } = useAuthState();
 
     if (isTokenExpired(accessTokenState.value)) {
-      return requestNewToken();
+      await requestNewToken();
     }
-
-    return null;
   }
 
   function setTokens(newToken: string, newRefreshToken: string) {

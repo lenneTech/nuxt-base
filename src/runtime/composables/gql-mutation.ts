@@ -11,8 +11,8 @@ import { useAuth } from './use-auth';
 export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: Error }> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
-  const { checkTokenAndRenew } = useAuth();
   const { accessTokenState, refreshTokenState } = useAuthState();
+  const { checkTokenAndRenew } = useAuth();
 
   // Check parameters
   if (!method) {
