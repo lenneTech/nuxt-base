@@ -10,7 +10,7 @@ export interface ModuleOptions {
   gqlHost: string;
   host: string;
   registerAuthPlugins?: boolean;
-  registerPlugins?: boolean;
+  registerCookiePlugin?: boolean;
   schema?: string;
   storagePrefix?: string;
 }
@@ -42,7 +42,7 @@ export default defineNuxtModule<ModuleOptions>({
     gqlHost: '',
     host: '',
     registerAuthPlugins: false,
-    registerPlugins: true,
+    registerCookiePlugin: true,
     schema: undefined,
     storagePrefix: 'base',
   },
@@ -66,16 +66,16 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public['schema'] = options.schema ?? null;
     nuxt.options.runtimeConfig.public['storagePrefix'] = options.storagePrefix ?? null;
 
-    if (options.registerPlugins) {
+    if (options.registerCookiePlugin) {
       addPlugin(resolver.resolve('runtime/plugins/cookies'));
-
-      if (!options.disableGraphql) {
-        addPlugin(resolver.resolve('runtime/plugins/graphql-meta'));
-        addPlugin(resolver.resolve('runtime/plugins/ws.client'));
-      }
     }
 
-    if (options.registerAuthPlugins && options.registerPlugins) {
+    if (!options.disableGraphql) {
+      addPlugin(resolver.resolve('runtime/plugins/graphql-meta'));
+      addPlugin(resolver.resolve('runtime/plugins/ws.client'));
+    }
+
+    if (options.registerAuthPlugins) {
       addPlugin(resolver.resolve('runtime/plugins/auth.server'));
     }
 
