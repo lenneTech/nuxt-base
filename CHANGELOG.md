@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.19.0](https://github.com/lenneTech/nuxt-base/compare/v3.18.0...v3.19.0) (2024-09-06)
+
+
+### Features
+
+* add option for enable of cookie plugin ([fb3336a](https://github.com/lenneTech/nuxt-base/commit/fb3336aa85d9dd8ef2fc6b6905ef4a544ad1a94a))
+
 ## [3.18.0](https://github.com/lenneTech/nuxt-base/compare/v3.17.2...v3.18.0) (2024-09-05)
 
 
