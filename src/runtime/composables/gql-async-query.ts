@@ -14,37 +14,37 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   const _nuxtApp = useNuxtApp();
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
-  const { hashCode } = useHelper();
+  const { generateUniqueHash } = useHelper();
 
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
   }
 
-  const config = {
-    asyncDataOptions: {
-      lazy: false,
-    },
-    fields: null,
-    log: false,
-    variables: null,
-    ...options,
-    hashPasswords: options.hashPasswords ?? true,
-  };
-
-  // check if config.variables is a function
-  if (typeof config.variables === 'function') {
-    config.variables = config.variables();
-  }
-
-  if (config.hashPasswords) {
-    config.variables = await hashPasswords(config.variables);
-  }
-
   return useAsyncData(
-    method + hashCode(config.variables),
+    method + generateUniqueHash,
     async () => {
       // Get config
+      const config = {
+        asyncDataOptions: {
+          lazy: false,
+        },
+        fields: null,
+        log: false,
+        variables: null,
+        ...options,
+        hashPasswords: options.hashPasswords ?? true,
+      };
+
+      // check if config.variables is a function
+      if (typeof config.variables === 'function') {
+        config.variables = config.variables();
+      }
+
+      if (config.hashPasswords) {
+        config.variables = await hashPasswords(config.variables);
+      }
+
       const fields = config.fields as unknown as string[];
 
       if (config.log) {

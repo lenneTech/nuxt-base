@@ -138,5 +138,21 @@ export function useHelper() {
     return hash;
   }
 
-  return { getDifferences, groupBy, hashCode, isValidMongoID, removeFields, removeNullOrUndefined, slugifyDomain };
+  function generateUniqueHash(): string {
+    const now = Date.now();
+    const random = Math.random();
+    const input = now.toString() + random.toString();
+
+    let hash = 0;
+
+    for (let i = 0; i < input.length; i++) {
+      const char = input.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash |= 0;
+    }
+
+    return hash.toString(16);
+  }
+
+  return { generateUniqueHash, getDifferences, groupBy, hashCode, isValidMongoID, removeFields, removeNullOrUndefined, slugifyDomain };
 }
