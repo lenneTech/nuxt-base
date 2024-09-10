@@ -14,8 +14,12 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
 
-  const hashCode = (obj: any) => {
+  const hashCode = (input: any) => {
     let str: string;
+
+    if (!input) {
+      return 0;
+    }
 
     if (typeof input === 'string') {
       str = input;
