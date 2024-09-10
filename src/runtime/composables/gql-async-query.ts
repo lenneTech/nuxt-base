@@ -14,13 +14,33 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
 
+  const hashCode = (obj: any) => {
+    let str: string;
+
+    if (typeof input === 'string') {
+      str = input;
+    } else {
+      str = JSON.stringify(input);
+    }
+
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash |= 0;
+    }
+
+    return hash;
+  };
+
   // Check parameters
   if (!method) {
     throw new Error('No method detected');
   }
 
   return useAsyncData(
-    method,
+    method + hashCode(options.variables),
     async () => {
       // Get config
       const config = {
