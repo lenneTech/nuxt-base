@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.20.0](https://github.com/lenneTech/nuxt-base/compare/v3.19.0...v3.20.0) (2024-09-10)
+
+
+### Features
+
+* update packages ([f2194c2](https://github.com/lenneTech/nuxt-base/commit/f2194c2c3a8a7e0e3be135c5bb4ba6bbaaf90337))
+
+
+### Bug Fixes
+
+* Fix error object of query and mutation ([66230a3](https://github.com/lenneTech/nuxt-base/commit/66230a33d6880382beafa28e53982f3f923b6a54))
+* try unique key for async query ([9bb9d85](https://github.com/lenneTech/nuxt-base/commit/9bb9d85cb72a992ca206a8acced3d311afc38d24))
+* try unique key for async query ([5a67aef](https://github.com/lenneTech/nuxt-base/commit/5a67aef757d2972373df2c2d448fb8ad79e41259))
+* try unique key for async query ([35fbb79](https://github.com/lenneTech/nuxt-base/commit/35fbb790bd2dd1d173e668bdd7d8a8d1f08f6863))
+* try unique key for async query ([3767a95](https://github.com/lenneTech/nuxt-base/commit/3767a955928e0616003bbbc26f2f4cc135a813d1))
+
 ## [3.19.0](https://github.com/lenneTech/nuxt-base/compare/v3.18.0...v3.19.0) (2024-09-06)
 
 
