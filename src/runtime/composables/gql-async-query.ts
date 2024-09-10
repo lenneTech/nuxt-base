@@ -7,40 +7,14 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
+import { useHelper } from './use-helper';
 
 export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
-
-  const hashCode = (input: any) => {
-    let str: string;
-
-    if (!input) {
-      return 0;
-    }
-
-    if (typeof input === 'string') {
-      str = input;
-    } else {
-      str = JSON.stringify(input);
-    }
-
-    if (!str) {
-      return 0;
-    }
-
-    let hash = 0;
-
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash |= 0;
-    }
-
-    return hash;
-  };
+  const { hashCode } = useHelper();
 
   // Check parameters
   if (!method) {
@@ -68,7 +42,7 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   }
 
   return useAsyncData(
-    method + hashCode(options.variables),
+    method + hashCode(config.variables),
     async () => {
       // Get config
       const fields = config.fields as unknown as string[];

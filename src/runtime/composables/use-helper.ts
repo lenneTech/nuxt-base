@@ -110,5 +110,33 @@ export function useHelper() {
       .replace(/-+$/, ''); // Trim - from end of text
   }
 
-  return { getDifferences, groupBy, isValidMongoID, removeFields, removeNullOrUndefined, slugifyDomain };
+  function hashCode(input: any) {
+    let str: string;
+
+    if (!input) {
+      return 0;
+    }
+
+    if (typeof input === 'string') {
+      str = input;
+    } else {
+      str = JSON.stringify(input);
+    }
+
+    if (!str) {
+      return 0;
+    }
+
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash |= 0;
+    }
+
+    return hash;
+  }
+
+  return { getDifferences, groupBy, hashCode, isValidMongoID, removeFields, removeNullOrUndefined, slugifyDomain };
 }
