@@ -27,6 +27,10 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
       str = JSON.stringify(input);
     }
 
+    if (!str) {
+      return 0;
+    }
+
     let hash = 0;
 
     for (let i = 0; i < str.length; i++) {
@@ -43,26 +47,31 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
     throw new Error('No method detected');
   }
 
+  const config = {
+    asyncDataOptions: {
+      lazy: false,
+    },
+    fields: null,
+    log: false,
+    variables: null,
+    ...options,
+    hashPasswords: options.hashPasswords ?? true,
+  };
+
+  // check if config.variables is a function
+  if (typeof config.variables === 'function') {
+    config.variables = config.variables();
+  }
+
+  if (config.hashPasswords) {
+    config.variables = await hashPasswords(config.variables);
+  }
+
   return useAsyncData(
     method + hashCode(options.variables),
     async () => {
       // Get config
-      const config = {
-        asyncDataOptions: {
-          lazy: false,
-        },
-        fields: null,
-        log: false,
-        variables: null,
-        ...options,
-        hashPasswords: options.hashPasswords ?? true,
-      };
       const fields = config.fields as unknown as string[];
-
-      // check if config.variables is a function
-      if (typeof config.variables === 'function') {
-        config.variables = config.variables();
-      }
 
       if (config.log) {
         console.debug('gqlQuery::fields ', fields);
@@ -71,10 +80,6 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
 
       if (!_meta) {
         throw new Error('GraphQLMeta is not available.');
-      }
-
-      if (config.hashPasswords) {
-        config.variables = await hashPasswords(config.variables);
       }
 
       const argType = _meta.getArgs(method);
