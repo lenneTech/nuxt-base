@@ -86,7 +86,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const defaultTypes = ['boolean', 'string', 'date', 'int', 'number', 'float'];
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';');
-  template.push('import { gqlQuery, gqlAsyncQuery, gqlMutation, gqlSubscription, type ReturnTypeOfSubscription } from \'#imports\';');
+  template.push('import { gqlQuery, gqlAsyncQuery, gqlMutation, gqlSubscription, type ReturnTypeOfSubscription, type GraphqlError } from \'#imports\';');
   template.push('import type { AsyncData, AsyncDataOptions } from \'nuxt/app\';\n');
 
   if (methods?.query) {
@@ -99,7 +99,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<{data: ${types.returnType}; error: Error | null}> => gqlQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<{data: ${types.returnType}; error: GraphqlError | null}> => gqlQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
       );
 
       template.push(
@@ -120,7 +120,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<{data: ${types.returnType}; error: Error}> => gqlMutation<${types.returnType}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<{data: ${types.returnType}; error: GraphqlError}> => gqlMutation<${types.returnType}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
       );
     }
   }

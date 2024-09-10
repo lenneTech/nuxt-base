@@ -2,13 +2,14 @@ import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
+import type { GraphqlError } from '../interfaces/graphql-error.interface';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 
-export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: Error | null }> {
+export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: GraphqlError | null }> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState } = useAuthState();
@@ -128,7 +129,11 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     }
   } catch (err) {
     console.error('gqlQuery::error ', err);
-    error = err;
+    if (err?.response?.errors?.length) {
+      error = err.response?.errors[0]?.extensions?.originalError;
+    } else {
+      error = err;
+    }
   }
 
   return { data, error };

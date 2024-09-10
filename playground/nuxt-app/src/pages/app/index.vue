@@ -2,7 +2,7 @@
 import { navigateTo } from '#app';
 import { useAuth, useAuthState } from '#imports';
 
-import { useAsyncFindTodosQuery, useCreateTodoMutation, useTodoCreatedSubscription } from '~/base';
+import { useAsyncFindTodosQuery, useCreateTodoMutation, useErrorTodoMutation, useTodoCreatedSubscription } from '~/base';
 
 const { accessTokenState, currentUserState, refreshTokenState } = useAuthState();
 const { clearSession } = useAuth();
@@ -16,6 +16,11 @@ function logout() {
 async function createNewTodo() {
   const { data: todo } = await useCreateTodoMutation({ input: { name: 'New todo' } }, ['id']);
   console.debug(todo);
+}
+
+async function triggerError() {
+  const { data, error } = await useErrorTodoMutation({ id: 'abx' }, ['id']);
+  console.error(error.error, error.message, error.statusCode);
 }
 
 const { data: subData, error, loading, start, stop } = await useTodoCreatedSubscription(['id', 'name']);
@@ -33,6 +38,7 @@ const { data: subData, error, loading, start, stop } = await useTodoCreatedSubsc
     <div class="mt-5 space-x-3">
       <h2>Todo's</h2>
       <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="createNewTodo">Create new Todo</button>
+      <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="triggerError">Trigger Error</button>
       <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="start">Start subscription</button>
       <button class="bg-teal-500 text-white rounded-lg px-5 p-2" @click="stop">Stop subscription</button>
     </div>

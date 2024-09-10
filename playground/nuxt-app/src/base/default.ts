@@ -200,6 +200,8 @@ export interface Mutation {
   deleteTodo: Todo;
   /** Delete existing user */
   deleteUser: User;
+  /** error Todo */
+  errorTodo: Todo;
   /** Logout user (from specific device) */
   logout: Scalars['Boolean']['output'];
   /** Refresh tokens (for specific device) */
@@ -242,6 +244,11 @@ export interface MutationDeleteTodoArgs {
 
 
 export interface MutationDeleteUserArgs {
+  id: Scalars['String']['input'];
+}
+
+
+export interface MutationErrorTodoArgs {
   id: Scalars['String']['input'];
 }
 

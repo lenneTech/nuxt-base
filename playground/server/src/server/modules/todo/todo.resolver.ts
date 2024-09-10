@@ -1,5 +1,5 @@
 import {FilterArgs, GraphQLServiceOptions, RoleEnum, Roles, ServiceOptions} from '@lenne.tech/nest-server';
-import {Inject} from '@nestjs/common';
+import {Inject, NotFoundException} from '@nestjs/common';
 import {Args, Mutation, Query, Resolver, Subscription} from '@nestjs/graphql';
 import {PubSub} from 'graphql-subscriptions';
 
@@ -119,6 +119,15 @@ export class TodoResolver {
       inputType: TodoInput,
       roles: [RoleEnum.ADMIN, RoleEnum.S_CREATOR],
     });
+  }
+
+  @Roles(RoleEnum.S_USER)
+  @Mutation(() => Todo, { description: 'error Todo' })
+  async errorTodo(
+    @GraphQLServiceOptions() serviceOptions: ServiceOptions,
+    @Args('id') id: string,
+  ): Promise<Todo> {
+    throw new NotFoundException('Error Todo');
   }
 
   // ===========================================================================

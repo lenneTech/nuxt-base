@@ -2,13 +2,14 @@ import { mutation } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
+import type { GraphqlError } from '../interfaces/graphql-error.interface';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 
-export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: Error }> {
+export async function gqlMutation<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: GraphqlError }> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState, refreshTokenState } = useAuthState();
@@ -148,7 +149,11 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     }
   } catch (err) {
     console.error('gqlMutation::error ', err);
-    error = err;
+    if (err?.response?.errors?.length) {
+      error = err.response?.errors[0]?.extensions?.originalError;
+    } else {
+      error = err;
+    }
   }
 
   return { data, error };
