@@ -22,7 +22,7 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   }
 
   return useAsyncData(
-    method + generateUniqueHash,
+    method + generateUniqueHash(),
     async () => {
       // Get config
       const config = {
