@@ -88,6 +88,8 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
 
     if (value.isList) {
       type = value.isItemRequired ? `${value.type}!` : value.type;
+    } else {
+      type = value.isRequired ? `${value.type}!` : value.type;
     }
 
     if (config.log) {
@@ -101,7 +103,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
 
     builderInput[key] = {
       list: value.isList,
-      required: value.isRequired,
+      required: value.isRequired && value.isList,
       type,
       value: variables[key],
     };

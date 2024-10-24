@@ -79,11 +79,13 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
 
     if (value.isList) {
       type = value.isItemRequired ? `${value.type}!` : value.type;
+    } else {
+      type = value.isRequired ? `${value.type}!` : value.type;
     }
 
     builderInput[key] = {
       list: value.isList,
-      required: value.isRequired,
+      required: value.isRequired && value.isList,
       type,
       value: variables[key],
     };
