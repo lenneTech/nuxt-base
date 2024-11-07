@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.21.1](https://github.com/lenneTech/nuxt-base/compare/v3.21.0...v3.21.1) (2024-11-07)
+
+
+### Bug Fixes
+
+* fix wrong required fields in variables ([08daf66](https://github.com/lenneTech/nuxt-base/commit/08daf66183d3e111e1807c81c8c268653e69c579))
+* fix wrong required fields in variables ([8325083](https://github.com/lenneTech/nuxt-base/commit/8325083025426499c7b46588446a397628ef8fc9))
+* fix wrong required fields in variables ([4a82cd6](https://github.com/lenneTech/nuxt-base/commit/4a82cd6329b07d35fe2afedfe87875c8540268f3))
+* fix wrong required fields in variables ([a70783f](https://github.com/lenneTech/nuxt-base/commit/a70783f5471a72801e7c71990b256b9c725851a3))
+
 ## [3.21.0](https://github.com/lenneTech/nuxt-base/compare/v3.20.1...v3.21.0) (2024-09-30)
 
 
