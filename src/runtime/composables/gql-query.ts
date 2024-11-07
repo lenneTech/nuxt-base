@@ -79,13 +79,23 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
 
     if (value.isList) {
       type = value.isItemRequired ? `${value.type}!` : value.type;
+      type = value.isRequired ? `[${value.type}]!` : `[${value.type}]`;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
     }
 
+    if (config.log) {
+      console.debug('gqlQuery::isRequired ', value.isRequired);
+      console.debug('gqlQuery::isItemRequired ', value.isItemRequired);
+      console.debug('gqlQuery::isList ', value.isList);
+      console.debug('gqlQuery::key ', key);
+      console.debug('gqlQuery::value ', value);
+      console.debug('gqlQuery::type ', type);
+    }
+
     builderInput[key] = {
-      list: value.isList,
-      required: value.isRequired && value.isList,
+      list: false,
+      required: false,
       type,
       value: variables[key],
     };
