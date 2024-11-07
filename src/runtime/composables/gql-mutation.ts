@@ -88,7 +88,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
 
     if (value.isList) {
       type = value.isItemRequired ? `${value.type}!` : value.type;
-      type = value.isRequired ? `[${value.type}]!` : `[${value.type}]`;
+      type = value.isRequired ? `[${type}]!` : `[${type}]`;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
     }

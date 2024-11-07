@@ -87,7 +87,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
 
     if (value.isList) {
       type = value.isItemRequired ? `${value.type}!` : value.type;
-      type = value.isRequired ? `[${value.type}]!` : `[${value.type}]`;
+      type = value.isRequired ? `[${type}]!` : `[${type}]`;
     } else {
       type = value.isRequired ? `${value.type}!` : value.type;
     }
