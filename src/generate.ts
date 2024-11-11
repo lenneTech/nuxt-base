@@ -86,8 +86,9 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const defaultTypes = ['boolean', 'string', 'date', 'int', 'number', 'float'];
   let customTypes = [];
   template.push('import type { InputFields } from \'#base-types/fields\';');
-  template.push('import { gqlQuery, gqlAsyncQuery, gqlMutation, gqlSubscription, type ReturnTypeOfSubscription, type GraphqlError } from \'#imports\';');
+  template.push('import { gqlQuery, gqlAsyncQuery, gqlMutation, gqlSubscription } from \'#imports\';');
   template.push('import type { AsyncData, AsyncDataOptions } from \'nuxt/app\';\n');
+  template.push('import type { ReturnTypeOfSubscription, GraphqlError } from \'@lenne.tech/nuxt-base\';\n');
 
   if (methods?.query) {
     for (const query of methods.query) {
