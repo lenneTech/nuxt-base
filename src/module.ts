@@ -104,6 +104,8 @@ export default defineNuxtModule<ModuleOptions>({
     });
     nuxt.options.alias['#base-types'] = resolver.resolve(nuxt.options.buildDir, 'base-types');
     nuxt.options.alias['#base-types/*'] = resolver.resolve(nuxt.options.buildDir, 'base-types', '*');
+    nuxt.options.alias['#base-interfaces'] = resolver.resolve('runtime/interfaces');
+    nuxt.options.alias['#base-interfaces/*'] = resolver.resolve('runtime/interfaces', '*');
 
     addImportsDir(resolver.resolve('runtime/classes'));
     addImportsDir(resolver.resolve('runtime/composables'));
