@@ -132,7 +132,7 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
 
     if (data) {
       // check if data[method] is boolean value
-      if (typeof data[method] === 'boolean') {
+      if (typeof data[method] === 'boolean' || typeof data[method] === 'number') {
         data = data[method];
       } else {
         data = data[method] ? data[method] : data;
