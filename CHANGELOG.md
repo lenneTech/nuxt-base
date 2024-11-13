@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.21.2](https://github.com/lenneTech/nuxt-base/compare/v3.21.1...v3.21.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* fix wrong export of subscription type ([9858d08](https://github.com/lenneTech/nuxt-base/commit/9858d08de9ac66d1d95dce3c3f7f1748ba843e04))
+* fix wrong export of subscription type ([8b8b60c](https://github.com/lenneTech/nuxt-base/commit/8b8b60c3386a8e7ff480ec8bcb50859a6fa97958))
+* fix wrong export of subscription type ([9a5481b](https://github.com/lenneTech/nuxt-base/commit/9a5481bb3d3bba112a7fd479efdfff013121fa97))
+* fix wrong export of subscription type ([e6c5117](https://github.com/lenneTech/nuxt-base/commit/e6c5117128ff762c819b3f7e20c337f874f4804e))
+* fix wrong export of subscription type ([599368a](https://github.com/lenneTech/nuxt-base/commit/599368abea3c0f01b706151a6c55c0038afced2c))
+* fix ws client dispose ([e7d5d41](https://github.com/lenneTech/nuxt-base/commit/e7d5d4196bfa91af5c82660b7a74cf52e3cba6eb))
+* fix ws client dispose ([b7f3807](https://github.com/lenneTech/nuxt-base/commit/b7f380771908577bdd48bbcc2e3199e48f019213))
+* fix ws client dispose ([86d9553](https://github.com/lenneTech/nuxt-base/commit/86d95539f30e5f962549160325caef2f12675178))
+
 ### [3.21.1](https://github.com/lenneTech/nuxt-base/compare/v3.21.0...v3.21.1) (2024-11-07)
 
 
