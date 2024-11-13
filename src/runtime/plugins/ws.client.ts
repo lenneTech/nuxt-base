@@ -20,13 +20,13 @@ export default defineNuxtPlugin({
         closed: async (event) => {
           const { checkTokenAndRenew } = useAuth();
 
-          if (event.code === 4500) {
+          if (event?.code === 4500) {
             await checkTokenAndRenew();
           }
         },
       },
       retryAttempts: 5,
-      url: wsUrl,
+      url: wsUrl as string,
     });
 
     nuxtApp._wsClient = client;

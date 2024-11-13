@@ -1,3 +1,5 @@
+import type { Client } from 'graphql-ws';
+
 import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { useNuxtApp } from 'nuxt/app';
@@ -137,13 +139,13 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   const data = ref(null);
   const error = ref(null);
   const loading = ref(true);
-  let subscriptionState = null;
+  let subscriptionState: Client | null = null;
 
   const start = () => {
     loading.value = true;
     error.value = null;
 
-    subscriptionState = _wsClient.subscribe(
+    subscriptionState = (_wsClient as any).subscribe(
       { query: queryBody.query, variables: variables },
       {
         complete: () => {
@@ -168,7 +170,7 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
 
   const stop = () => {
     if (subscriptionState) {
-      subscriptionState.unsubscribe();
+      subscriptionState.dispose();
       subscriptionState = null;
     }
   };
