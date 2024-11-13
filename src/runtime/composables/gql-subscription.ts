@@ -170,7 +170,8 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
 
   const stop = () => {
     if (subscriptionState) {
-      subscriptionState.dispose();
+      console.debug('gqlSubscription::stop', subscriptionState);
+      subscriptionState.terminate();
       subscriptionState = null;
     }
   };
