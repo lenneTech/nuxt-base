@@ -136,23 +136,22 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
     console.debug('gqlSubscription::documentNode ', documentNode);
   }
 
-  const data = ref(null);
-  const error = ref(null);
+  const data = ref<any>(null);
+  const error = ref<null | string>(null);
   const loading = ref(true);
-  let subscriptionState: Client | null = null;
 
   const start = () => {
     loading.value = true;
     error.value = null;
 
-    subscriptionState = (_wsClient as any).subscribe(
+    (_wsClient as Client).subscribe(
       { query: queryBody.query, variables: variables },
       {
         complete: () => {
           loading.value = false;
         },
         error: (err) => {
-          error.value = err;
+          error.value = err as string;
           loading.value = false;
         },
         next: (result) => {
@@ -169,10 +168,12 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   const stop = () => {
-    if (subscriptionState) {
-      console.debug('gqlSubscription::stop', subscriptionState);
-      subscriptionState.terminate();
-      subscriptionState = null;
+    const client = _wsClient as Client;
+    console.debug('gqlSubscription::stop', client);
+    if (client) {
+      if (client.dispose) {
+        client.dispose();
+      }
     }
   };
 
