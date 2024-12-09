@@ -45,12 +45,20 @@ export function useHelper() {
   }
 
   function groupBy<T>(arr: T[], fn: (item: T) => any) {
-    return arr.reduce<Record<string, T[]>>((prev, curr) => {
+    const result = arr.reduce<Record<string, T[]>>((prev, curr) => {
       const groupKey = fn(curr);
       const group = prev[groupKey] || [];
       group.push(curr);
       return { ...prev, [groupKey]: group };
     }, {});
+
+    // sort alphabetically
+    return Object.keys(result)
+      .sort()
+      .reduce<Record<string, T[]>>((prev, curr) => {
+        prev[curr] = result[curr];
+        return prev;
+      }, {});
   }
 
   function getDifferences(obj1: any, obj2: any): any {
