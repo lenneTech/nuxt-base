@@ -136,7 +136,8 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
       if (typeof result[method] === 'boolean') {
         result = result[method];
       } else {
-        result = result[method] ? result[method] : result;
+        // check if data has key method
+        result = Object.keys(result)?.find((key) => key === method) ? result[method] : result;
       }
 
       return result;

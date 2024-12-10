@@ -146,7 +146,8 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
       if (typeof data[method] === 'boolean' || typeof data[method] === 'number') {
         data = data[method];
       } else {
-        data = data[method] ? data[method] : data;
+        // check if data has key method
+        data = Object.keys(data)?.find((key) => key === method) ? data[method] : data;
       }
     }
   } catch (err) {
