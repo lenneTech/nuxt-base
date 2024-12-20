@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.24.1](https://github.com/lenneTech/nuxt-base/compare/v3.24.0...v3.24.1) (2024-12-20)
+
+
+### Bug Fixes
+
+* fix sha import ([b5d8927](https://github.com/lenneTech/nuxt-base/commit/b5d8927cffded43dcd344dc819e2eaa638e1c209))
+
 ## [3.24.0](https://github.com/lenneTech/nuxt-base/compare/v3.23.1...v3.24.0) (2024-12-20)
 
 
