@@ -128,12 +128,15 @@ export default defineNuxtModule<ModuleOptions>({
       // TODO: Remove when package fixed with valid ESM exports
       nuxt.options.build.transpile.push(({ isServer }) => !isServer && 'gql-query-builder');
     }
+
+    nuxt.options.build.transpile.push(({ isServer }) => !isServer && 'js-sha256');
     // TODO: Remove when package fixed with valid ESM exports
     extendViteConfig((config) => {
       config.optimizeDeps = config.optimizeDeps || {};
       config.optimizeDeps.include = config.optimizeDeps.include || [];
       config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
       config.optimizeDeps.include.push('gql-query-builder');
+      config.optimizeDeps.include.push('js-sha256');
     });
 
     nuxt.hook('nitro:config', (nitro) => {
