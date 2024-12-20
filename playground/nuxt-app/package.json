@@ -9,18 +9,18 @@
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "6.12.2",
-    "nuxi": "3.15.0",
-    "pinia": "2.2.6",
-    "vue": "3.5.12"
+    "nuxi": "3.17.1",
+    "pinia": "2.3.0",
+    "vue": "3.5.13"
   },
   "devDependencies": {
     "@lenne.tech/eslint-config-vue": "0.0.16",
-    "@nuxt/schema": "3.14.159",
-    "@types/node": "22.9.0",
+    "@nuxt/schema": "3.14.1592",
+    "@types/node": "22.10.2",
     "eslint": "8.57.1",
-    "nuxt": "3.14.159",
-    "prettier": "3.3.3",
-    "typescript": "5.6.3",
-    "vitest": "2.1.4"
+    "nuxt": "3.14.1592",
+    "prettier": "3.4.2",
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
   }
 }
