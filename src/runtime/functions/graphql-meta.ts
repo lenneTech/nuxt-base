@@ -1,4 +1,5 @@
 import { buildClientSchema, getIntrospectionQuery } from 'graphql';
+import { sha256 } from 'js-sha256';
 import { ofetch } from 'ofetch';
 
 import type { GraphQLMeta } from '../../generate';
@@ -10,7 +11,7 @@ export async function loadMeta(config: Partial<{ public: { host: string; schema?
   setTimeout(() => controller.abort(), 5000);
 
   return new Promise(async (resolve, reject) => {
-    const { data: result } = await ofetch(config.public.gqlHost, {
+    const { data: result } = await ofetch(config.public?.gqlHost, {
       body: JSON.stringify({
         query: getIntrospectionQuery({ descriptions: false }),
         variables: {},
@@ -30,14 +31,9 @@ export async function loadMeta(config: Partial<{ public: { host: string; schema?
 
 /**
  * Hash a string with SHA-256
- * see https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#converting_a_digest_to_a_hex_string
  */
 export async function hash(string: string): Promise<string> {
-  const utf8 = new TextEncoder().encode(string);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((bytes) => bytes.toString(16).padStart(2, '0')).join('');
-  return hashHex;
+  return sha256(string);
 }
 
 /**
