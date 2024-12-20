@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.24.0](https://github.com/lenneTech/nuxt-base/compare/v3.23.1...v3.24.0) (2024-12-20)
+
+
+### Features
+
+* replace crypto api with sha-js ([79a8fd1](https://github.com/lenneTech/nuxt-base/commit/79a8fd1d3dfd3cde2cd38b879ac47049c8651490))
+* replace crypto api with sha-js ([6f462ba](https://github.com/lenneTech/nuxt-base/commit/6f462babb861784496f0046b40296f4a57df1889))
+
 ### [3.23.1](https://github.com/lenneTech/nuxt-base/compare/v3.23.0...v3.23.1) (2024-12-10)
 
 
