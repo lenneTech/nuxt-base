@@ -1,6 +1,6 @@
 {
   "name": "@lenne.tech/nuxt-base",
-  "version": "3.24.1",
+  "version": "3.24.2-dev.0",
   "description": "Nuxt base module of @lenne.tech",
   "repository": "https://github.com/lenneTech/nuxt-base",
   "license": "MIT",
@@ -51,7 +51,6 @@
     "vue": "3.5.13"
   },
   "devDependencies": {
-
     "@lenne.tech/eslint-config-vue": "1.0.4",
     "@nuxt/module-builder": "0.8.4",
     "@nuxt/schema": "3.15.1",
