@@ -31,16 +31,13 @@
     "lint": "eslint '**/*.{ts,js,vue}'",
     "lint:fix": "eslint '**/*.{ts,js,vue}' --fix",
     "test": "vitest run",
-    "test:watch": "vitest watch",
-    "unlink:link": "npx yalc remove @lenne.tech/eslint-config-vue@1.0.3 && npm install",
-    "link:link": "npx yalc add @lenne.tech/eslint-config-vue@1.0.3 && npx yalc link @lenne.tech/eslint-config-vue@1.0.3 && npm install"
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@babel/core": "7.26.0",
     "@graphql-codegen/cli": "5.0.3",
     "@graphql-codegen/client-preset": "4.5.1",
     "@graphql-codegen/typescript": "4.1.2",
-    "@nuxtjs/tailwindcss": "^6.12.2",
     "@pinia/nuxt": "0.9.0",
     "gql-query-builder": "3.8.0",
     "graphql": "16.10.0",
@@ -54,16 +51,13 @@
     "vue": "3.5.13"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.18.0",
+
     "@lenne.tech/eslint-config-vue": "1.0.4",
-    "@nuxt/kit": "^3.15.1",
     "@nuxt/module-builder": "0.8.4",
-    "@nuxt/schema": "^3.15.1",
+    "@nuxt/schema": "3.15.1",
     "@nuxt/test-utils": "3.15.1",
     "@types/node": "22.10.2",
     "eslint": "9.17.0",
-    "nuxt": "^3.15.1",
     "standard-version": "9.5.0",
     "typescript": "5.7.2",
     "vitest": "2.1.8"
