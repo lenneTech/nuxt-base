@@ -1,20 +1,22 @@
-import {assignPlain, ConfigService, CrudService, ServiceOptions} from '@lenne.tech/nest-server';
-import {Inject, Injectable, NotFoundException} from '@nestjs/common';
-import {InjectModel} from '@nestjs/mongoose';
-import {PubSub} from 'graphql-subscriptions';
-import {Model} from 'mongoose';
+import type { ConfigService, ServiceOptions } from '@lenne.tech/nest-server';
+import type { PubSub } from 'graphql-subscriptions';
+import type { Model } from 'mongoose';
 
-import {TodoInput} from './inputs/todo.input';
-import {TodoCreateInput} from './inputs/todo-create.input';
-import {Todo, TodoDocument} from './todo.model';
+import { CrudService, assignPlain } from '@lenne.tech/nest-server';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
+import type { TodoInput } from './inputs/todo.input';
+import type { TodoCreateInput } from './inputs/todo-create.input';
+import type { TodoDocument } from './todo.model';
+
+import { Todo } from './todo.model';
 
 /**
  * Todo service
  */
 @Injectable()
 export class TodoService extends CrudService<Todo, TodoCreateInput, TodoInput> {
-
   // ===================================================================================================================
   // Properties
   // ===================================================================================================================
@@ -62,7 +64,6 @@ export class TodoService extends CrudService<Todo, TodoCreateInput, TodoInput> {
    * Extends the CrudService
    */
   async exampleMethod(id: string, input: Record<string, any>, serviceOptions?: ServiceOptions): Promise<Todo> {
-
     // Get and check Todo
     const todo = await this.mainDbModel.findById(id).exec();
     if (!todo) {
@@ -70,11 +71,12 @@ export class TodoService extends CrudService<Todo, TodoCreateInput, TodoInput> {
     }
 
     // Process input and output
-    return await this.process(async (data) => {
-
-      // Update, save and return Todo
-      return await assignPlain(todo, data.input).save();
-
-    }, { input, serviceOptions });
+    return await this.process(
+      async (data) => {
+        // Update, save and return Todo
+        return await assignPlain(todo, data.input).save();
+      },
+      { input, serviceOptions },
+    );
   }
 }

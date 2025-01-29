@@ -1,7 +1,9 @@
+import type { Document } from 'mongoose';
+
 import { Restricted, RoleEnum, equalIds, mapClasses } from '@lenne.tech/nest-server';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Schema as MongooseSchema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
 import { PersistenceModel } from '../../common/models/persistence.model';
 import { User } from '../user/user.model';
@@ -15,11 +17,10 @@ export type TodoDocument = Todo & Document;
 @ObjectType({ description: 'Todo' })
 @MongooseSchema({ timestamps: true })
 export class Todo extends PersistenceModel {
-
   // ===================================================================================================================
   // Properties
   // ===================================================================================================================
-    
+
   /**
    * Name of Todo
    */
@@ -30,7 +31,7 @@ export class Todo extends PersistenceModel {
   })
   @Prop()
   name: string = undefined;
-    
+
   /**
    * Description of Todo
    */
@@ -41,7 +42,7 @@ export class Todo extends PersistenceModel {
   })
   @Prop()
   description: string = undefined;
-    
+
   /**
    * Assigne of Todo
    */
@@ -52,7 +53,7 @@ export class Todo extends PersistenceModel {
   })
   @Prop({ ref: 'User', type: Schema.Types.ObjectId })
   assigne: User = undefined;
-    
+
   /**
    * Deadline of Todo
    */
@@ -63,7 +64,6 @@ export class Todo extends PersistenceModel {
   })
   @Prop()
   deadline: Date = undefined;
-  
 
   // ===================================================================================================================
   // Methods

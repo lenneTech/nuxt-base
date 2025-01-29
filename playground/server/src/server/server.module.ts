@@ -1,4 +1,3 @@
-import { TodoModule } from './modules/todo/todo.module';
 import { Any, CoreAuthService, CoreModule, DateScalar, JSON } from '@lenne.tech/nest-server';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -8,6 +7,7 @@ import { CronJobs } from './common/services/cron-jobs.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { FileModule } from './modules/file/file.module';
 import { MetaModule } from './modules/meta/meta.module';
+import { TodoModule } from './modules/todo/todo.module';
 import { ServerController } from './server.controller';
 
 /**
@@ -44,11 +44,6 @@ import { ServerController } from './server.controller';
   ],
 
   // Include services and scalars
-  providers: [
-    Any,
-    CronJobs,
-    DateScalar,
-    JSON,
-  ],
+  providers: [Any, CronJobs, DateScalar, JSON],
 })
 export class ServerModule {}

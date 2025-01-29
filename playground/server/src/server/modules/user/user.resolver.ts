@@ -1,13 +1,16 @@
-import { FilterArgs, GraphQLServiceOptions, RoleEnum, Roles, ServiceOptions } from '@lenne.tech/nest-server';
+import type { ServiceOptions } from '@lenne.tech/nest-server';
+import type { PubSub } from 'graphql-subscriptions';
+
+import { FilterArgs, GraphQLServiceOptions, RoleEnum, Roles } from '@lenne.tech/nest-server';
 import { Inject } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { PubSub } from 'graphql-subscriptions';
+
+import type { UserService } from './user.service';
 
 import { UserInput } from './inputs/user.input';
 import { UserCreateInput } from './inputs/user-create.input';
 import { FindAndCountUsersResult } from './outputs/find-and-count-users-result.output';
 import { User } from './user.model';
-import { UserService } from './user.service';
 
 /**
  * Resolver to process with user data
@@ -18,7 +21,10 @@ export class UserResolver {
   /**
    * Import services
    */
-  constructor(protected readonly userService: UserService, @Inject('PUB_SUB') protected readonly pubSub: PubSub) {}
+  constructor(
+    protected readonly userService: UserService,
+    @Inject('PUB_SUB') protected readonly pubSub: PubSub,
+  ) {}
 
   // ===========================================================================
   // Queries
@@ -159,7 +165,7 @@ export class UserResolver {
     filter(this: UserResolver, payload, variables, context) {
       return context?.user?.hasRole?.(RoleEnum.ADMIN);
     },
-    resolve: user => user,
+    resolve: (user) => user,
   })
   async userCreated() {
     return this.pubSub.asyncIterator('userCreated');

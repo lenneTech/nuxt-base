@@ -6,7 +6,6 @@ import { User } from '../user.model';
 @Restricted(RoleEnum.ADMIN)
 @ObjectType({ description: 'Result of find and count' })
 export class FindAndCountUsersResult {
-
   @Restricted(RoleEnum.S_EVERYONE)
   @Field(() => [User], { description: 'Found users' })
   items: User[];

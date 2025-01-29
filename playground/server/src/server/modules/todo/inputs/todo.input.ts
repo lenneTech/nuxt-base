@@ -8,11 +8,12 @@ import { IsOptional } from 'class-validator';
 @Restricted(RoleEnum.ADMIN)
 @InputType({ description: 'Input data to update an existing Todo' })
 export class TodoInput extends CoreInput {
-
   // ===================================================================================================================
   // Properties
   // ===================================================================================================================
-      
+
+  test = 'GOLDGOLDGOLDGOLD';
+
   /**
    * Name of Todo
    */
@@ -23,7 +24,7 @@ export class TodoInput extends CoreInput {
   })
   @IsOptional()
   name?: string = undefined;
-      
+
   /**
    * Description of Todo
    */
@@ -34,7 +35,7 @@ export class TodoInput extends CoreInput {
   })
   @IsOptional()
   description?: string = undefined;
-      
+
   /**
    * AssigneId of Todo
    */
@@ -45,7 +46,7 @@ export class TodoInput extends CoreInput {
   })
   @IsOptional()
   assigne?: string = undefined;
-      
+
   /**
    * Deadline of Todo
    */
@@ -56,5 +57,4 @@ export class TodoInput extends CoreInput {
   })
   @IsOptional()
   deadline?: Date = undefined;
-  
 }

@@ -13,15 +13,19 @@ class SingleLanguageServiceHost {
     this.getCompilationSettings = ts.getDefaultCompilerOptions;
     this.getDefaultLibFileName = ts.getDefaultLibFilePath;
   }
+
   getScriptFileNames() {
     return [this.name];
   }
+
   getScriptVersion() {
     return ts.version;
   }
+
   getScriptSnapshot() {
     return ts.ScriptSnapshot.fromString(this.content);
   }
+
   getCurrentDirectory() {
     return '';
   }
@@ -40,12 +44,8 @@ function organizeImports(text) {
   const host = new SingleLanguageServiceHost(fileName, text);
   const languageService = ts.createLanguageService(host);
   const formatOptions = ts.getDefaultFormatCodeSettings();
-  const fileChanges = languageService.organizeImports(
-    { type: 'file', fileName },
-    formatOptions,
-    {},
-  );
-  const textChanges = [...fileChanges.map(change => change.textChanges)];
+  const fileChanges = languageService.organizeImports({ fileName, type: 'file' }, formatOptions, {});
+  const textChanges = [...fileChanges.map((change) => change.textChanges)];
   return applyChanges(text, textChanges);
 }
 

@@ -8,6 +8,6 @@ const COLLECTION_NAME = 'migrations';
 
 module.exports = class MyMongoStateStore extends MongoStateStore {
   constructor() {
-    super({ uri: MONGO_URL, collectionName: COLLECTION_NAME });
+    super({ collectionName: COLLECTION_NAME, uri: MONGO_URL });
   }
 };

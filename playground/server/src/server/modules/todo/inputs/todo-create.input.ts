@@ -4,18 +4,16 @@ import { IsOptional } from 'class-validator';
 
 import { TodoInput } from './todo.input';
 
-
 /**
  * Todo create input
  */
 @Restricted(RoleEnum.ADMIN)
 @InputType({ description: 'Input data to create a new Todo' })
 export class TodoCreateInput extends TodoInput {
-
   // ===================================================================================================================
   // Properties
   // ===================================================================================================================
-      
+
   /**
    * Name of Todo
    */
@@ -25,7 +23,7 @@ export class TodoCreateInput extends TodoInput {
     nullable: false,
   })
   override name: string = undefined;
-      
+
   /**
    * Description of Todo
    */
@@ -36,7 +34,7 @@ export class TodoCreateInput extends TodoInput {
   })
   @IsOptional()
   override description?: string = undefined;
-      
+
   /**
    * AssigneId of Todo
    */
@@ -47,7 +45,7 @@ export class TodoCreateInput extends TodoInput {
   })
   @IsOptional()
   override assigne?: string = undefined;
-      
+
   /**
    * Deadline of Todo
    */
@@ -58,5 +56,4 @@ export class TodoCreateInput extends TodoInput {
   })
   @IsOptional()
   override deadline?: Date = undefined;
-  
 }

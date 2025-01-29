@@ -1,8 +1,11 @@
-import { FileUpload, RoleEnum, Roles } from '@lenne.tech/nest-server';
+import type { FileUpload } from '@lenne.tech/nest-server';
+
+import { RoleEnum, Roles } from '@lenne.tech/nest-server';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { createWriteStream } from 'fs';
 
-import { FileService } from './file.service';
+import type { FileService } from './file.service';
+
 import { FileInfo } from './file-info.model';
 
 import fs = require('fs');
@@ -70,7 +73,7 @@ export class FileResolver {
           createReadStream()
             .pipe(createWriteStream(`./uploads/${filename}`))
             .on('finish', () => resolve(true))
-            .on('error', error => reject(error)),
+            .on('error', (error) => reject(error)),
         ),
       );
     }

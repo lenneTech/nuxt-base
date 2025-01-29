@@ -1,7 +1,8 @@
+import type { Types } from 'mongoose';
+
 import { CorePersistenceModel, Restricted, RoleEnum } from '@lenne.tech/nest-server';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Prop } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
 
 import { User } from '../../modules/user/user.model';
 

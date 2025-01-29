@@ -1,9 +1,9 @@
-import http from 'k6/http';
 import { sleep } from 'k6';
+import http from 'k6/http';
 
 export const options = {
-  vus: 10,
   duration: '30s',
+  vus: 10,
 };
 
 export default function () {
@@ -14,10 +14,6 @@ export default function () {
   const headers = {
     'Content-Type': 'application/json',
   };
-  http.post(
-    'http://localhost:3000/graphql/test',
-    JSON.stringify({ query }),
-    { headers },
-  );
+  http.post('http://localhost:3000/graphql/test', JSON.stringify({ query }), { headers });
   sleep(1);
 }

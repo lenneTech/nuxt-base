@@ -1,18 +1,16 @@
-import {
-  ConfigService,
-  CoreModelConstructor,
-  CoreUserService,
-  EmailService,
-  ServiceOptions,
-} from '@lenne.tech/nest-server';
+import type { ConfigService, CoreModelConstructor, EmailService, ServiceOptions } from '@lenne.tech/nest-server';
+import type { PubSub } from 'graphql-subscriptions';
+import type { Model } from 'mongoose';
+
+import { CoreUserService } from '@lenne.tech/nest-server';
 import { Inject, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { PubSub } from 'graphql-subscriptions';
-import { Model } from 'mongoose';
 
-import { UserInput } from './inputs/user.input';
-import { UserCreateInput } from './inputs/user-create.input';
-import { User, UserDocument } from './user.model';
+import type { UserInput } from './inputs/user.input';
+import type { UserCreateInput } from './inputs/user-create.input';
+import type { UserDocument } from './user.model';
+
+import { User } from './user.model';
 
 import fs = require('fs');
 

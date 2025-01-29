@@ -1,9 +1,11 @@
+import type { Document } from 'mongoose';
+
 import { CoreUserModel, Restricted, RoleEnum } from '@lenne.tech/nest-server';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Schema as MongooseSchema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
-import { PersistenceModel } from '../../common/models/persistence.model';
+import type { PersistenceModel } from '../../common/models/persistence.model';
 
 export type UserDocument = Document & User;
 

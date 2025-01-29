@@ -4,22 +4,22 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Incremental<T> = { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never } | T;
 /** All built-in and custom scalars, mapped to their actual values */
 export interface Scalars {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
   /** Any scalar type */
-  Any: { input: any; output: any; }
+  Any: { input: any; output: any };
+  Boolean: { input: boolean; output: boolean };
   /** Date custom scalar type */
-  Date: { input: any; output: any; }
+  Date: { input: any; output: any };
+  Float: { input: number; output: number };
+  ID: { input: string; output: string };
+  Int: { input: number; output: number };
   /** JSON scalar type. Information on the exact schema of the JSON object is contained in the description of the field. */
-  JSON: { input: any; output: any; }
+  JSON: { input: any; output: any };
+  String: { input: string; output: string };
   /** The `Upload` scalar type represents a file upload. */
-  Upload: { input: any; output: any; }
+  Upload: { input: any; output: any };
 }
 
 /** Authentication data */
@@ -78,7 +78,7 @@ export enum ComparisonOperatorEnum {
   LTE = 'LTE',
   NE = 'NE',
   NIN = 'NIN',
-  REGEX = 'REGEX'
+  REGEX = 'REGEX',
 }
 
 /** CoreAuth */
@@ -175,7 +175,7 @@ export interface FindAndCountUsersResult {
 export enum LogicalOperatorEnum {
   AND = 'AND',
   NOR = 'NOR',
-  OR = 'OR'
+  OR = 'OR',
 }
 
 /** Metadata of API */
@@ -222,79 +222,64 @@ export interface Mutation {
   verifyUser: Scalars['Boolean']['output'];
 }
 
-
 export interface MutationCreateTodoArgs {
   input: TodoCreateInput;
 }
-
 
 export interface MutationCreateUserArgs {
   input: UserCreateInput;
 }
 
-
 export interface MutationDeleteFileArgs {
   filename: Scalars['String']['input'];
 }
-
 
 export interface MutationDeleteTodoArgs {
   id: Scalars['String']['input'];
 }
 
-
 export interface MutationDeleteUserArgs {
   id: Scalars['String']['input'];
 }
-
 
 export interface MutationErrorTodoArgs {
   id: Scalars['String']['input'];
 }
 
-
 export interface MutationLogoutArgs {
   allDevices?: InputMaybe<Scalars['Boolean']['input']>;
 }
-
 
 export interface MutationResetPasswordArgs {
   password: Scalars['String']['input'];
   token: Scalars['String']['input'];
 }
 
-
 export interface MutationSignInArgs {
   input: AuthSignInInput;
 }
 
-
 export interface MutationSignUpArgs {
   input: AuthSignUpInput;
 }
-
 
 export interface MutationUpdateTodoArgs {
   id: Scalars['String']['input'];
   input: TodoInput;
 }
 
-
 export interface MutationUpdateUserArgs {
   id: Scalars['String']['input'];
   input: UserInput;
 }
 
-
 export interface MutationUploadFileArgs {
   file: Scalars['Upload']['input'];
 }
 
-
 export interface MutationUploadFilesArgs {
   files: Array<Scalars['Upload']['input']>;
 }
-
 
 export interface MutationVerifyUserArgs {
   token: Scalars['String']['input'];
@@ -324,7 +309,6 @@ export interface Query {
   requestPasswordResetMail: Scalars['Boolean']['output'];
 }
 
-
 export interface QueryFindAndCountTodosArgs {
   filter?: InputMaybe<FilterInput>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -334,7 +318,6 @@ export interface QueryFindAndCountTodosArgs {
   sort?: InputMaybe<Array<SortInput>>;
   take?: InputMaybe<Scalars['Int']['input']>;
 }
-
 
 export interface QueryFindAndCountUsersArgs {
   filter?: InputMaybe<FilterInput>;
@@ -346,7 +329,6 @@ export interface QueryFindAndCountUsersArgs {
   take?: InputMaybe<Scalars['Int']['input']>;
 }
 
-
 export interface QueryFindTodosArgs {
   filter?: InputMaybe<FilterInput>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -356,7 +338,6 @@ export interface QueryFindTodosArgs {
   sort?: InputMaybe<Array<SortInput>>;
   take?: InputMaybe<Scalars['Int']['input']>;
 }
-
 
 export interface QueryFindUsersArgs {
   filter?: InputMaybe<FilterInput>;
@@ -368,26 +349,21 @@ export interface QueryFindUsersArgs {
   take?: InputMaybe<Scalars['Int']['input']>;
 }
 
-
 export interface QueryGetFileInfoArgs {
   filename: Scalars['String']['input'];
 }
-
 
 export interface QueryGetTodoArgs {
   id: Scalars['String']['input'];
 }
 
-
 export interface QueryGetUserArgs {
   id: Scalars['String']['input'];
 }
 
-
 export interface QueryGetVerifiedStateArgs {
   token: Scalars['String']['input'];
 }
-
 
 export interface QueryRequestPasswordResetMailArgs {
   email: Scalars['String']['input'];
@@ -422,7 +398,7 @@ export interface SortInput {
 /** SortInput order of items */
 export enum SortOrderEnum {
   ASC = 'ASC',
-  DESC = 'DESC'
+  DESC = 'DESC',
 }
 
 export interface Subscription {

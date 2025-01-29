@@ -1,17 +1,14 @@
-import {
-  ConfigService,
-  CoreAuthResolver,
-  GraphQLServiceOptions,
-  RoleEnum, Roles,
-  ServiceOptions,
-} from '@lenne.tech/nest-server';
+import type { ConfigService, ServiceOptions } from '@lenne.tech/nest-server';
+import type { Response as ResponseType } from 'express';
+
+import { CoreAuthResolver, GraphQLServiceOptions, RoleEnum, Roles } from '@lenne.tech/nest-server';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { Response as ResponseType } from 'express';
+
+import type { AuthService } from './auth.service';
+import type { AuthSignUpInput } from './inputs/auth-sign-up.input';
 
 import { Auth } from './auth.model';
-import { AuthService } from './auth.service';
 import { AuthSignInInput } from './inputs/auth-sign-in.input';
-import { AuthSignUpInput } from './inputs/auth-sign-up.input';
 
 /**
  * Authentication resolver for the sign in

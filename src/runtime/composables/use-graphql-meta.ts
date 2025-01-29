@@ -1,9 +1,12 @@
 import type { GraphQLSchema } from 'graphql';
+
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLScalarType } from 'graphql';
-import { GraphQLType } from '../classes/graphql-type.class';
-import { Helper } from '../classes/helper.class';
+
 import type { GraphQLRequestType } from '../enums/graphql-request-type.enum';
 import type { GraphqlCrudType } from '../interfaces/graphql-crud-type.interface';
+
+import { GraphQLType } from '../classes/graphql-type.class';
+import { Helper } from '../classes/helper.class';
 
 /**
  * GraphQL meta
@@ -498,13 +501,13 @@ export function useGraphQLMeta(schema: GraphQLSchema) {
   }
 
   return {
-    getMethodNames,
-    getTypesForMethod,
     checkCustomTyp,
-    parseVariables,
-    getRequestTypesViaMethod,
-    getTypes,
     getArgs,
     getFields,
+    getMethodNames,
+    getRequestTypesViaMethod,
+    getTypes,
+    getTypesForMethod,
+    parseVariables,
   };
 }
