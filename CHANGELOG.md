@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.25.0](https://github.com/lenneTech/nuxt-base/compare/v3.24.1...v3.25.0) (2025-01-29)
+
+
+### Features
+
+* **TEC-33:** bump eslint/vue to 1.0.4 ([#12](https://github.com/lenneTech/nuxt-base/issues/12)) ([e3320c7](https://github.com/lenneTech/nuxt-base/commit/e3320c7f75d1233ba82910705c135c9c91d76a1d))
+
 ### [3.24.1](https://github.com/lenneTech/nuxt-base/compare/v3.24.0...v3.24.1) (2024-12-20)
 
 
