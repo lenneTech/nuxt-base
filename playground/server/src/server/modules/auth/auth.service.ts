@@ -1,11 +1,14 @@
-import { ConfigService, CoreAuthService, EmailService, RoleEnum, Roles, ServiceOptions } from '@lenne.tech/nest-server';
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import type { ConfigService, EmailService, ServiceOptions } from '@lenne.tech/nest-server';
+import type { JwtService } from '@nestjs/jwt';
 
-import { UserService } from '../user/user.service';
+import { CoreAuthService, RoleEnum, Roles } from '@lenne.tech/nest-server';
+import { Injectable } from '@nestjs/common';
+
+import type { UserService } from '../user/user.service';
+import type { AuthSignInInput } from './inputs/auth-sign-in.input';
+import type { AuthSignUpInput } from './inputs/auth-sign-up.input';
+
 import { Auth } from './auth.model';
-import { AuthSignInInput } from './inputs/auth-sign-in.input';
-import { AuthSignUpInput } from './inputs/auth-sign-up.input';
 
 @Injectable()
 @Roles(RoleEnum.ADMIN)

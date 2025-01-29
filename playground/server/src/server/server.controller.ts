@@ -1,14 +1,19 @@
-import { ConfigService, RoleEnum, Roles } from '@lenne.tech/nest-server';
+import type { ConfigService } from '@lenne.tech/nest-server';
+
+import { RoleEnum, Roles } from '@lenne.tech/nest-server';
 import { Controller, Get, Render } from '@nestjs/common';
 
-import { MetaService } from './modules/meta/meta.service';
+import type { MetaService } from './modules/meta/meta.service';
 
 import metaData = require('../meta.json');
 
 @Roles(RoleEnum.ADMIN)
 @Controller()
 export class ServerController {
-  constructor(protected configService: ConfigService, protected metaService: MetaService) {}
+  constructor(
+    protected configService: ConfigService,
+    protected metaService: MetaService,
+  ) {}
 
   @Roles(RoleEnum.S_EVERYONE)
   @Get()

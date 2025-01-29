@@ -1,13 +1,16 @@
-import {FilterArgs, GraphQLServiceOptions, RoleEnum, Roles, ServiceOptions} from '@lenne.tech/nest-server';
-import {Inject, NotFoundException} from '@nestjs/common';
-import {Args, Mutation, Query, Resolver, Subscription} from '@nestjs/graphql';
-import {PubSub} from 'graphql-subscriptions';
+import type { ServiceOptions } from '@lenne.tech/nest-server';
+import type { PubSub } from 'graphql-subscriptions';
 
-import {TodoInput} from './inputs/todo.input';
-import {TodoCreateInput} from './inputs/todo-create.input';
-import {FindAndCountTodosResult} from './outputs/find-and-count-todos-result.output';
-import {Todo} from './todo.model';
-import {TodoService} from './todo.service';
+import { FilterArgs, GraphQLServiceOptions, RoleEnum, Roles } from '@lenne.tech/nest-server';
+import { Inject, NotFoundException } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+
+import type { TodoService } from './todo.service';
+
+import { TodoInput } from './inputs/todo.input';
+import { TodoCreateInput } from './inputs/todo-create.input';
+import { FindAndCountTodosResult } from './outputs/find-and-count-todos-result.output';
+import { Todo } from './todo.model';
 
 /**
  * Resolver to process with Todo data
@@ -15,7 +18,6 @@ import {TodoService} from './todo.service';
 @Roles(RoleEnum.ADMIN)
 @Resolver(() => Todo)
 export class TodoResolver {
-
   /**
    * Import services
    */
@@ -46,27 +48,21 @@ export class TodoResolver {
   /**
    * Get Todos (via filter)
    */
-   @Roles(RoleEnum.S_USER)
-   @Query(() => [Todo], { description: 'Find Todos (via filter)' })
-   async findTodos(
-     @GraphQLServiceOptions() serviceOptions: ServiceOptions,
-     @Args() args?: FilterArgs,
-   ) {
-     return await this.todoService.find(args, {
-       ...serviceOptions,
-       inputType: FilterArgs,
-     });
-   }
+  @Roles(RoleEnum.S_USER)
+  @Query(() => [Todo], { description: 'Find Todos (via filter)' })
+  async findTodos(@GraphQLServiceOptions() serviceOptions: ServiceOptions, @Args() args?: FilterArgs) {
+    return await this.todoService.find(args, {
+      ...serviceOptions,
+      inputType: FilterArgs,
+    });
+  }
 
   /**
    * Get Todo via ID
    */
   @Roles(RoleEnum.S_USER)
   @Query(() => Todo, { description: 'Get Todo with specified ID' })
-  async getTodo(
-    @GraphQLServiceOptions() serviceOptions: ServiceOptions,
-    @Args('id') id: string,
-  ): Promise<Todo> {
+  async getTodo(@GraphQLServiceOptions() serviceOptions: ServiceOptions, @Args('id') id: string): Promise<Todo> {
     return await this.todoService.get(id, serviceOptions);
   }
 
@@ -94,10 +90,7 @@ export class TodoResolver {
    */
   @Roles(RoleEnum.S_USER)
   @Mutation(() => Todo, { description: 'Delete existing Todo' })
-  async deleteTodo(
-    @GraphQLServiceOptions() serviceOptions: ServiceOptions,
-    @Args('id') id: string,
-  ): Promise<Todo> {
+  async deleteTodo(@GraphQLServiceOptions() serviceOptions: ServiceOptions, @Args('id') id: string): Promise<Todo> {
     return await this.todoService.delete(id, {
       ...serviceOptions,
       roles: [RoleEnum.ADMIN, RoleEnum.S_CREATOR],
@@ -123,10 +116,7 @@ export class TodoResolver {
 
   @Roles(RoleEnum.S_USER)
   @Mutation(() => Todo, { description: 'error Todo' })
-  async errorTodo(
-    @GraphQLServiceOptions() serviceOptions: ServiceOptions,
-    @Args('id') id: string,
-  ): Promise<Todo> {
+  async errorTodo(@GraphQLServiceOptions() serviceOptions: ServiceOptions, @Args('id') id: string): Promise<Todo> {
     throw new NotFoundException('Error Todo');
   }
 

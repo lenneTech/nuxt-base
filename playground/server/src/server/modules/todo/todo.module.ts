@@ -14,10 +14,7 @@ import { TodoService } from './todo.service';
 @Module({
   controllers: [],
   exports: [MongooseModule, TodoResolver, TodoService],
-  imports: [
-    MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }]),
-    forwardRef(() => UserModule),
-  ],
+  imports: [MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }]), forwardRef(() => UserModule)],
   providers: [
     ConfigService,
     TodoResolver,

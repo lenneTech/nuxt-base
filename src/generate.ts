@@ -9,9 +9,9 @@ import { ofetch } from 'ofetch';
 import { useGraphQLMeta } from './runtime/composables/use-graphql-meta';
 
 export type GraphQLMeta = ReturnType<typeof useGraphQLMeta>;
-// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+
 const { loadSchema } = require('@graphql-tools/load');
-// eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+
 const { GraphQLFileLoader } = require('@graphql-tools/graphql-file-loader');
 
 export async function loadMetaServer(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {

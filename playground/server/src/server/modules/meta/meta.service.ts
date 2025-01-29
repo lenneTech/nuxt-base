@@ -1,4 +1,5 @@
-import { ConfigService } from '@lenne.tech/nest-server';
+import type { ConfigService } from '@lenne.tech/nest-server';
+
 import { Injectable } from '@nestjs/common';
 
 import { Meta } from './meta.model';

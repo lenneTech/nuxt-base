@@ -1,16 +1,20 @@
-import {getDb} from '../migrations-utils/db';
-import {Db} from 'mongodb';
-import {sha256} from 'js-sha256';
+import type { Db } from 'mongodb';
+
+import { sha256 } from 'js-sha256';
+
+import { getDb } from '../migrations-utils/db';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import bcrypt = require('bcrypt');
 
 export const up = async () => {
   const db: Db = await getDb();
   const user = {
-    email: 'todo_user@lenne.tech',
-    password: (await bcrypt.hash(sha256('asdasd'), 10)),
     createdAt: new Date(),
+    email: 'todo_user@lenne.tech',
+    password: await bcrypt.hash(sha256('asdasd'), 10),
     updatedAt: new Date(),
-  }
+  };
   await db.collection('users').insertOne(user);
 };
 

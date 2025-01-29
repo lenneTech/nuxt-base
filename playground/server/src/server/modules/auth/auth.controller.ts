@@ -1,7 +1,9 @@
-import { ConfigService, CoreAuthController, RoleEnum, Roles } from '@lenne.tech/nest-server';
+import type { ConfigService } from '@lenne.tech/nest-server';
+
+import { CoreAuthController, RoleEnum, Roles } from '@lenne.tech/nest-server';
 import { Controller } from '@nestjs/common';
 
-import { AuthService } from './auth.service';
+import type { AuthService } from './auth.service';
 
 @Roles(RoleEnum.ADMIN)
 @Controller('auth')

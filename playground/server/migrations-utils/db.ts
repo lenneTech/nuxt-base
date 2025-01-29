@@ -1,6 +1,9 @@
-import { MongoClient, GridFSBucket, ObjectId } from 'mongodb';
+import type { ObjectId } from 'mongodb';
+
 import * as fs from 'fs';
+import { GridFSBucket, MongoClient } from 'mongodb';
 import * as path from 'path';
+
 import config from '../src/config.env';
 
 const MONGO_URL = config.mongoose.uri;

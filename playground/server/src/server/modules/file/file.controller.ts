@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { FileService } from './file.service';
+import type { FileService } from './file.service';
 
 /**
  * File controller for

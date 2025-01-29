@@ -19,17 +19,17 @@
     "dist"
   ],
   "scripts": {
-    "reinit": "rm -rf node_modules && rm -rf package-lock.json && yes | npx nuxt cleanup && npm cache clean --force && npm i",
+    "reinit": "npx rimraf package-lock.json && npx nuxt cleanup && npx rimraf node_modules && npm cache clean --force && npm i",
     "build": "nuxt-module-build build",
     "dev": "nuxi dev playground/nuxt-app",
-    "dev:generate-types": "GENERATE_TYPES=1 nuxi dev playground/nuxt-app",
+    "dev:generate-types": "npx cross-env GENERATE_TYPES=1 nuxi dev playground/nuxt-app",
     "dev:build": "nuxi build playground/nuxt-app",
     "dev:prepare": "nuxt-module-build --stub && cd ./playground/nuxt-app && npm i && nuxi prepare",
     "release": "standard-version && git push --follow-tags origin main",
     "release:minor": "standard-version --release-as minor && git push --follow-tags origin main",
     "release:major": "standard-version --release-as major && git push --follow-tags origin main",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint '**/*.{ts,js,vue}'",
+    "lint:fix": "eslint '**/*.{ts,js,vue}' --fix",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
@@ -38,7 +38,6 @@
     "@graphql-codegen/cli": "5.0.3",
     "@graphql-codegen/client-preset": "4.5.1",
     "@graphql-codegen/typescript": "4.1.2",
-    "@nuxt/kit": "3.14.1592",
     "@pinia/nuxt": "0.9.0",
     "gql-query-builder": "3.8.0",
     "graphql": "16.10.0",
@@ -52,14 +51,13 @@
     "vue": "3.5.13"
   },
   "devDependencies": {
-    "@lenne.tech/eslint-config-vue": "0.0.16",
+
+    "@lenne.tech/eslint-config-vue": "1.0.4",
     "@nuxt/module-builder": "0.8.4",
-    "@nuxt/schema": "3.14.1592",
+    "@nuxt/schema": "3.15.1",
     "@nuxt/test-utils": "3.15.1",
     "@types/node": "22.10.2",
-    "eslint": "8.57.1",
-    "nuxt": "3.14.1592",
-    "prettier": "3.4.2",
+    "eslint": "9.17.0",
     "standard-version": "9.5.0",
     "typescript": "5.7.2",
     "vitest": "2.1.8"

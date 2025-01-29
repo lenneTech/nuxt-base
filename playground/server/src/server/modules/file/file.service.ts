@@ -1,7 +1,8 @@
+import type { Connection } from 'mongoose';
+
 import { CoreFileService } from '@lenne.tech/nest-server';
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
-import { Connection } from 'mongoose';
 
 /**
  * File service

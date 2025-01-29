@@ -7,59 +7,59 @@ module.exports = function (grunt) {
 
   // Init Config
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-
-    // CleanUp build
-    clean: {
-      buildFolder: ['dist'],
-    },
-
-    // Copy files
-    sync: {
-      assets: {
-        files: [{ cwd: 'src/assets', src: ['**'], dest: 'dist/assets/' }],
-        verbose: true,
-        failOnError: true,
-        updateAndDelete: true,
-      },
-      meta: {
-        files: [{ src: './package.json', dest: 'dist/meta.json' }],
-      },
-      templates: {
-        files: [{ cwd: 'src/assets/templates', src: ['**'], dest: 'dist/assets/templates/' }],
-        verbose: true,
-        failOnError: true,
-        updateAndDelete: true,
-      },
-    },
-
     // NonGrunt watcher
     bgShell: {
       _defaults: {
         bg: true,
       },
 
+      // Restart server
+      pm2: {
+        bg: false,
+        cmd: 'npx pm2 startOrRestart pm2.config.js',
+      },
+
+      // Restart server
+      pm2Prod: {
+        bg: false,
+        cmd: 'npx pm2 startOrRestart pm2.config.js --env production',
+      },
+
       // Typescript compiler
       tsc: {
-        cmd: 'npx tsc -p tsconfig.build.json',
         bg: false,
+        cmd: 'npx tsc -p tsconfig.build.json',
       },
 
       // Typescript compiler + watch
       tscWatch: {
         cmd: 'npx tsc -w -p tsconfig.build.json',
       },
+    },
 
-      // Restart server
-      pm2: {
-        cmd: 'npx pm2 startOrRestart pm2.config.js',
-        bg: false,
+    // CleanUp build
+    clean: {
+      buildFolder: ['dist'],
+    },
+
+    pkg: grunt.file.readJSON('package.json'),
+
+    // Copy files
+    sync: {
+      assets: {
+        failOnError: true,
+        files: [{ cwd: 'src/assets', dest: 'dist/assets/', src: ['**'] }],
+        updateAndDelete: true,
+        verbose: true,
       },
-
-      // Restart server
-      pm2Prod: {
-        cmd: 'npx pm2 startOrRestart pm2.config.js --env production',
-        bg: false,
+      meta: {
+        files: [{ dest: 'dist/meta.json', src: './package.json' }],
+      },
+      templates: {
+        failOnError: true,
+        files: [{ cwd: 'src/assets/templates', dest: 'dist/assets/templates/', src: ['**'] }],
+        updateAndDelete: true,
+        verbose: true,
       },
     },
 
