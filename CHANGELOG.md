@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.26.0](https://github.com/lenneTech/nuxt-base/compare/v3.25.0...v3.26.0) (2025-02-17)
+
+
+### Features
+
+* change workflow to pnpm ([f0cab1c](https://github.com/lenneTech/nuxt-base/commit/f0cab1c9cec742449e62953821d4eb7b42387002))
+* change workflow to pnpm ([871cb46](https://github.com/lenneTech/nuxt-base/commit/871cb46bc504942921e45224d2eff87005d0b46a))
+
 ## [3.25.0](https://github.com/lenneTech/nuxt-base/compare/v3.24.1...v3.25.0) (2025-01-29)
 
 
