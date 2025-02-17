@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.26.1](https://github.com/lenneTech/nuxt-base/compare/v3.26.0...v3.26.1) (2025-02-17)
+
+
+### Bug Fixes
+
+* fix error in workflow ([74b820c](https://github.com/lenneTech/nuxt-base/commit/74b820c76822a9bb1e564ceb022eabd381c81c68))
+
 ## [3.26.0](https://github.com/lenneTech/nuxt-base/compare/v3.25.0...v3.26.0) (2025-02-17)
 
 
