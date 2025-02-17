@@ -1,6 +1,10 @@
 {
   "private": true,
   "name": "my-module-playground",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
   "scripts": {
     "start": "nuxt dev",
     "dev": "nuxt dev",
@@ -8,19 +12,19 @@
     "generate-types": "rm -rf ./src/base && GENERATE_TYPES=1 nuxt dev"
   },
   "dependencies": {
-    "@nuxtjs/tailwindcss": "6.12.2",
-    "nuxi": "3.17.1",
-    "pinia": "2.3.0",
+    "@nuxtjs/tailwindcss": "6.13.1",
+    "nuxi": "3.21.1",
+    "pinia": "3.0.1",
     "vue": "3.5.13"
   },
   "devDependencies": {
-    "@lenne.tech/eslint-config-vue": "0.0.16",
-    "@nuxt/schema": "3.14.1592",
-    "@types/node": "22.10.2",
-    "eslint": "8.57.1",
-    "nuxt": "3.14.1592",
-    "prettier": "3.4.2",
-    "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "@lenne.tech/eslint-config-vue": "1.0.5",
+    "@nuxt/schema": "3.15.4",
+    "@types/node": "22.13.4",
+    "eslint": "9.20.1",
+    "nuxt": "3.15.4",
+    "prettier": "3.5.1",
+    "typescript": "5.7.3",
+    "vitest": "3.0.5"
   }
 }

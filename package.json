@@ -18,6 +18,10 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
   "scripts": {
     "reinit": "npx rimraf package-lock.json && npx nuxt cleanup && npx rimraf node_modules && npm cache clean --force && npm i",
     "build": "nuxt-module-build build",
@@ -42,8 +46,8 @@
     "gql-query-builder": "3.8.0",
     "graphql": "16.10.0",
     "graphql-tag": "2.12.6",
-    "graphql-tools": "9.0.8",
-    "graphql-ws": "5.16.0",
+    "graphql-tools": "9.0.13",
+    "graphql-ws": "6.0.4",
     "js-sha256": "0.11.0",
     "jwt-decode": "4.0.0",
     "nuxi": "3.17.1",
@@ -58,8 +62,8 @@
     "@types/node": "22.10.2",
     "eslint": "9.17.0",
     "standard-version": "9.5.0",
-    "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "typescript": "5.7.3",
+    "vitest": "3.0.5"
   },
   "overrides": {
     "@nuxt/test-utils": {

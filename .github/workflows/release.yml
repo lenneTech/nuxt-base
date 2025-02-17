@@ -11,43 +11,39 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node: [21]
-        os: [ubuntu-latest]
-
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
         with:
-          fetch-depth: 0
-      - run: corepack enable
+          version: 10
+
+      - name: Use Node LTS ✨
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+
       - run: npx changelogithub
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Setup Node
-        uses: actions/setup-node@v3
+
+      - name: Install dependencies 📦️
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - uses: simenandre/publish-with-pnpm@v2
         with:
-          cache: "npm"
-          node-version: ${{ matrix.node }}
-          registry-url: "https://registry.npmjs.org/"
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 3
-      - name: Install dependencies
-        run: npm install
-      - name: Install dependencies
-        run: cd playground/nuxt-app && npm install && npm run build
-      - run: npm run build
-      - name: Publish Package
-        run: npm publish --access public --tag latest --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm-auth-token: ${{ secrets.NPM_TOKEN }}
+
       - name: Deploy notification
         if: always()
         uses: adamkdean/simple-slack-notify@master

@@ -10,30 +10,26 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node: [21]
-        os: [ubuntu-latest]
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - run: corepack enable
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v4
         with:
-          cache: "npm"
-          node-version: ${{ matrix.node }}
+          version: 10
 
-      - name: Install dependencies
-        run: npm install
+      - name: Use Node LTS ✨
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
 
-      - name: Install dependencies
-        run: cd playground/nuxt-app && npm install && npm run build
+      - name: Install dependencies 📦️
+        run: pnpm install --frozen-lockfile
+
+      - name: Build playground
+        run: cd playground/nuxt-app && pnpm install && pnpm build
 
       - name: Build
-        run: npm run build
+        run: pnpm build
