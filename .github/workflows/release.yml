@@ -38,7 +38,11 @@ jobs:
       - name: Install dependencies 📦️
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm build
+      - name: Build playground
+        run: cd playground/nuxt-app && pnpm install && pnpm build
+
+      - name: Build
+        run: pnpm build
 
       - uses: simenandre/publish-with-pnpm@v2
         with:
