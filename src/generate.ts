@@ -103,13 +103,13 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<{data: ${types.returnType}; error: GraphqlError | null}> => gqlQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, options})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<{data: ${types.returnType}; error: GraphqlError | null}> => gqlQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
 
       template.push(
         `export const useAsync${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<AsyncData<${types.returnType}, Error>> => gqlAsyncQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, options})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<AsyncData<${types.returnType}, Error>> => gqlAsyncQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
     }
   }
@@ -124,7 +124,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<{data: ${types.returnType}; error: GraphqlError}> => gqlMutation<${types.returnType}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, options})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<{data: ${types.returnType}; error: GraphqlError}> => gqlMutation<${types.returnType}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
     }
   }
@@ -139,7 +139,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(subscription)}Subscription = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<ReturnTypeOfSubscription<${types.returnType}>> => gqlSubscription<${types.returnType}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, options})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: IGraphQLOptions): Promise<ReturnTypeOfSubscription<${types.returnType}>> => gqlSubscription<${types.returnType}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
     }
   }
