@@ -132,8 +132,9 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
     await callWithNuxt(_nuxtApp, checkTokenAndRenew);
   }
 
-  const requestHeaders = {
+  const requestHeaders: Record<string, string> = {
     authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
+    ...(options.headers || {}),
   };
 
   let data;
