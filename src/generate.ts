@@ -1,4 +1,5 @@
 import type { Types } from '@graphql-codegen/plugin-helpers';
+import type { AsyncDataOptions } from 'nuxt/app';
 import type { Import } from 'unimport';
 
 import { generate } from '@graphql-codegen/cli';
@@ -7,6 +8,12 @@ import { buildClientSchema, getIntrospectionQuery } from 'graphql';
 import { ofetch } from 'ofetch';
 
 import { useGraphQLMeta } from './runtime/composables/use-graphql-meta';
+
+interface GraphQLOptions {
+  asyncDataOptions?: AsyncDataOptions;
+  headers?: Record<string, string>;
+  log?: boolean;
+}
 
 export type GraphQLMeta = ReturnType<typeof useGraphQLMeta>;
 
@@ -101,13 +108,13 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<{data: ${types.returnType}; error: GraphqlError | null}> => gqlQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: GraphQLOptions): Promise<{data: ${types.returnType}; error: GraphqlError | null}> => gqlQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
 
       template.push(
         `export const useAsync${capitalizeFirstLetter(query)}Query = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean, asyncDataOptions?: AsyncDataOptions): Promise<AsyncData<${types.returnType}, Error>> => gqlAsyncQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, asyncDataOptions, log})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: GraphQLOptions): Promise<AsyncData<${types.returnType}, Error>> => gqlAsyncQuery<${types.returnType}>('${query}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
     }
   }
@@ -122,7 +129,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(mutation)}Mutation = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<{data: ${types.returnType}; error: GraphqlError}> => gqlMutation<${types.returnType}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: GraphQLOptions): Promise<{data: ${types.returnType}; error: GraphqlError}> => gqlMutation<${types.returnType}>('${mutation}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
     }
   }
@@ -137,7 +144,7 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
       template.push(
         `export const use${capitalizeFirstLetter(subscription)}Subscription = (${
           types.argType ? 'variables: { ' + types.argType + ' },' : ''
-        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} log?: boolean): Promise<ReturnTypeOfSubscription<${types.returnType}>> => gqlSubscription<${types.returnType}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, log})`,
+        } ${returnTypeIsDefaultType ? '' : `fields?: InputFields<${inputFieldsType}>[] | null,`} options?: GraphQLOptions): Promise<ReturnTypeOfSubscription<${types.returnType}>> => gqlSubscription<${types.returnType}>('${subscription}', {${types.argType ? 'variables,' : ''} ${returnTypeIsDefaultType ? 'fields: null' : 'fields'}, ...options})`,
       );
     }
   }
