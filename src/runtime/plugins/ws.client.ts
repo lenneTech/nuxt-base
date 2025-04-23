@@ -1,6 +1,9 @@
 import { useAuth, useAuthState } from '#imports';
 import { createClient } from 'graphql-ws';
 import { defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
+import { reactive } from 'vue';
+
+export const wsHeaders = reactive<Record<string, string>>({});
 
 export default defineNuxtPlugin({
   name: 'ws',
@@ -13,6 +16,7 @@ export default defineNuxtPlugin({
         const { accessTokenState } = useAuthState();
         return {
           Authorization: 'Bearer ' + accessTokenState.value,
+          ...wsHeaders,
         };
       },
       lazy: true,

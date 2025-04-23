@@ -9,6 +9,7 @@ export interface IGraphQLOptions {
   disableTokenCheck?: boolean;
   fields?: any;
   hashPasswords?: boolean;
+  headers?: Record<string, string>;
   lazy?: boolean;
   log?: boolean;
   variables?: any;
