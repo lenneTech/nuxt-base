@@ -4,6 +4,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
+import { useRequestOptions } from './use-request-options';
 
 export function useAuthFetch<
   DefaultT = unknown,
@@ -14,6 +15,7 @@ export function useAuthFetch<
 >(request: R, opts?: O): Promise<TypedInternalResponse<R, T, ExtractedRouteMethod<R, O>>> {
   const { requestNewToken } = useAuth();
   const { accessTokenState } = useAuthState();
+  const { getHeaders } = useRequestOptions();
   const config = useRuntimeConfig();
 
   // @ts-expect-error - because of nice types from ofetch <3
@@ -23,6 +25,7 @@ export function useAuthFetch<
     async onRequest(data: any) {
       if (accessTokenState.value) {
         data.options.headers = {
+          ...getHeaders(),
           ...data.options.headers,
           Authorization: `Bearer ${accessTokenState.value}`,
         };
