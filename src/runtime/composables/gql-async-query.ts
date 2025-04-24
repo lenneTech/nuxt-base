@@ -8,6 +8,7 @@ import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 import { useHelper } from './use-helper';
+import { useRequestOptions } from './use-request-options';
 
 export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<AsyncData<T, Error>> {
   const { $graphql, _meta } = useNuxtApp();
@@ -15,6 +16,7 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
   const { generateUniqueHash } = useHelper();
+  const { getHeaders } = useRequestOptions();
 
   // Check parameters
   if (!method) {
@@ -123,8 +125,9 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
       await callWithNuxt(_nuxtApp, checkTokenAndRenew);
 
       const requestHeaders: Record<string, string> = {
-        authorization: `Bearer ${accessTokenState.value}`,
+        ...getHeaders(),
         ...(options.headers || {}),
+        authorization: `Bearer ${accessTokenState.value}`,
       };
 
       let result = await $graphql.default.request(documentNode, variables, requestHeaders);

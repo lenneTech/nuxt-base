@@ -3,6 +3,8 @@ import { createClient } from 'graphql-ws';
 import { defineNuxtPlugin, useNuxtApp, useRuntimeConfig } from 'nuxt/app';
 import { reactive } from 'vue';
 
+import { useRequestOptions } from '../composables/use-request-options';
+
 export const wsHeaders = reactive<Record<string, string>>({});
 
 export default defineNuxtPlugin({
@@ -10,12 +12,14 @@ export default defineNuxtPlugin({
   async setup() {
     const nuxtApp = useNuxtApp();
     const { wsUrl } = useRuntimeConfig().public;
+    const { getHeaders } = useRequestOptions();
 
     const client = createClient({
       connectionParams: async () => {
         const { accessTokenState } = useAuthState();
         return {
           Authorization: 'Bearer ' + accessTokenState.value,
+          ...getHeaders(),
           ...wsHeaders,
         };
       },

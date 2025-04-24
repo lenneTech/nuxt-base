@@ -8,12 +8,14 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import { hashPasswords } from '../functions/graphql-meta';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
+import { useRequestOptions } from './use-request-options';
 
 export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions = {}): Promise<{ data: T; error: GraphqlError | null }> {
   const { $graphql, _meta } = useNuxtApp();
   const _nuxtApp = useNuxtApp();
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
+  const { getHeaders } = useRequestOptions();
 
   // Check parameters
   if (!method) {
@@ -122,8 +124,9 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
   await callWithNuxt(_nuxtApp, checkTokenAndRenew);
 
   const requestHeaders: Record<string, string> = {
-    authorization: `Bearer ${accessTokenState.value}`,
+    ...getHeaders(),
     ...(options.headers || {}),
+    authorization: `Bearer ${accessTokenState.value}`,
   };
 
   let data = null;
