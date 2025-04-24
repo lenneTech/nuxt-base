@@ -9,6 +9,7 @@ export function useRequestOptions() {
 
   return {
     getHeaders,
+    headers,
     setHeaders,
   };
 }
