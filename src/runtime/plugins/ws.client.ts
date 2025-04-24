@@ -19,7 +19,7 @@ export default defineNuxtPlugin({
         const { accessTokenState } = useAuthState();
         return {
           Authorization: 'Bearer ' + accessTokenState.value,
-          ...headers,
+          ...headers.value,
           ...wsHeaders,
         };
       },

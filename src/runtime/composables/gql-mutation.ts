@@ -135,7 +135,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   }
 
   const requestHeaders: Record<string, string> = {
-    ...headers,
+    ...headers.value,
     ...(options.headers || {}),
     authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
   };

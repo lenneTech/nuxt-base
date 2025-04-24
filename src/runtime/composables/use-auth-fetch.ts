@@ -25,7 +25,7 @@ export function useAuthFetch<
     async onRequest(data: any) {
       if (accessTokenState.value) {
         data.options.headers = {
-          ...headers,
+          ...headers.value,
           ...data.options.headers,
           Authorization: `Bearer ${accessTokenState.value}`,
         };

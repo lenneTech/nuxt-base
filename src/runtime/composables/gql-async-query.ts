@@ -125,7 +125,7 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
       await callWithNuxt(_nuxtApp, checkTokenAndRenew);
 
       const requestHeaders: Record<string, string> = {
-        ...headers,
+        ...headers.value,
         ...(options.headers || {}),
         authorization: `Bearer ${accessTokenState.value}`,
       };
