@@ -16,7 +16,7 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
   const { accessTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
   const { generateUniqueHash } = useHelper();
-  const { getHeaders } = useRequestOptions();
+  const { headers } = useRequestOptions();
 
   // Check parameters
   if (!method) {
@@ -125,7 +125,7 @@ export async function gqlAsyncQuery<T = any>(method: string, options: IGraphQLOp
       await callWithNuxt(_nuxtApp, checkTokenAndRenew);
 
       const requestHeaders: Record<string, string> = {
-        ...getHeaders(),
+        ...headers,
         ...(options.headers || {}),
         authorization: `Bearer ${accessTokenState.value}`,
       };

@@ -1,14 +1,13 @@
+import { ref } from 'vue';
+
+const headers = ref<Record<string, string>>({});
+
 export function useRequestOptions() {
-  let headers: Record<string, string> = {};
   const setHeaders = (newHeaders: Record<string, string>) => {
-    headers = newHeaders;
-  };
-  const getHeaders = () => {
-    return headers;
+    headers.value = newHeaders;
   };
 
   return {
-    getHeaders,
     headers,
     setHeaders,
   };

@@ -15,7 +15,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   const _nuxtApp = useNuxtApp();
   const { accessTokenState, refreshTokenState } = useAuthState();
   const { checkTokenAndRenew } = useAuth();
-  const { getHeaders } = useRequestOptions();
+  const { headers } = useRequestOptions();
 
   // Check parameters
   if (!method) {
@@ -135,7 +135,7 @@ export async function gqlMutation<T = any>(method: string, options: IGraphQLOpti
   }
 
   const requestHeaders: Record<string, string> = {
-    ...getHeaders(),
+    ...headers,
     ...(options.headers || {}),
     authorization: `Bearer ${method === 'refreshToken' ? refreshTokenState.value : accessTokenState.value}`,
   };

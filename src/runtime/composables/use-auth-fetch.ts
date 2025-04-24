@@ -15,7 +15,7 @@ export function useAuthFetch<
 >(request: R, opts?: O): Promise<TypedInternalResponse<R, T, ExtractedRouteMethod<R, O>>> {
   const { requestNewToken } = useAuth();
   const { accessTokenState } = useAuthState();
-  const { getHeaders } = useRequestOptions();
+  const { headers } = useRequestOptions();
   const config = useRuntimeConfig();
 
   // @ts-expect-error - because of nice types from ofetch <3
@@ -25,7 +25,7 @@ export function useAuthFetch<
     async onRequest(data: any) {
       if (accessTokenState.value) {
         data.options.headers = {
-          ...getHeaders(),
+          ...headers,
           ...data.options.headers,
           Authorization: `Bearer ${accessTokenState.value}`,
         };

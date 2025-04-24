@@ -12,14 +12,14 @@ export default defineNuxtPlugin({
   async setup() {
     const nuxtApp = useNuxtApp();
     const { wsUrl } = useRuntimeConfig().public;
-    const { getHeaders } = useRequestOptions();
+    const { headers } = useRequestOptions();
 
     const client = createClient({
       connectionParams: async () => {
         const { accessTokenState } = useAuthState();
         return {
           Authorization: 'Bearer ' + accessTokenState.value,
-          ...getHeaders(),
+          ...headers,
           ...wsHeaders,
         };
       },
