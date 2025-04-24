@@ -129,6 +129,10 @@ export async function gqlQuery<T = any>(method: string, options: IGraphQLOptions
     authorization: `Bearer ${accessTokenState.value}`,
   };
 
+  if (config.log) {
+    console.debug(requestHeaders);
+  }
+
   let data = null;
   let error = null;
   try {
