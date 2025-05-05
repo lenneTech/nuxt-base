@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.28.0](https://github.com/lenneTech/nuxt-base/compare/v3.27.0...v3.28.0) (2025-05-05)
+
+
+### Features
+
+* added log ([035c42b](https://github.com/lenneTech/nuxt-base/commit/035c42b48fd8042e15903f00f0d4e17401807868))
+* **DEV-248:** added dynamic headers ([#13](https://github.com/lenneTech/nuxt-base/issues/13)) ([e462134](https://github.com/lenneTech/nuxt-base/commit/e4621344a190242fe1baa3fb6701a8f97745563c))
+* **DEV-248:** added dynamic headers as options in template generation ([#14](https://github.com/lenneTech/nuxt-base/issues/14)) ([116f1b6](https://github.com/lenneTech/nuxt-base/commit/116f1b69f7a67739da3f0e62f03e28365265e50d))
+* **DEV-248:** added RequestOptions composable to set headers globally ([#16](https://github.com/lenneTech/nuxt-base/issues/16)) ([3525f57](https://github.com/lenneTech/nuxt-base/commit/3525f57dd4f2e7b749476f9cca202e0fbfc8bc34))
+* **DEV-248:** added spread ([#15](https://github.com/lenneTech/nuxt-base/issues/15)) ([c3fe40c](https://github.com/lenneTech/nuxt-base/commit/c3fe40c4c669dd8c368116c0484818deb50855eb))
+
+
+### Bug Fixes
+
+* made headers reactive ([4550e9b](https://github.com/lenneTech/nuxt-base/commit/4550e9ba9a6040c4d7c22a4bf5e25f49a5e033cd))
+* made headers reactive ([bb7186a](https://github.com/lenneTech/nuxt-base/commit/bb7186a9e91fc34664045cf965e8daa8cfe18eb0))
+* removed getHeader ([16012b5](https://github.com/lenneTech/nuxt-base/commit/16012b524fd6d1251a9e3088bf16b961b77cdca7))
+* update module and type definitions to use .mjs and .mts extensions ([d8b7d8c](https://github.com/lenneTech/nuxt-base/commit/d8b7d8ca346e23ae26809a583c72e63f751f77d3))
+
 ## [3.27.0](https://github.com/lenneTech/nuxt-base/compare/v3.26.1...v3.27.0) (2025-02-17)
 
 
