@@ -1,6 +1,15 @@
-import { addImportsDir, addPlugin, addTemplate, createResolver, defineNuxtModule, extendViteConfig, installModule, useLogger } from '@nuxt/kit';
+import {
+  addImportsDir,
+  addPlugin,
+  addTemplate,
+  createResolver,
+  defineNuxtModule,
+  extendViteConfig,
+  installModule,
+  useLogger
+} from '@nuxt/kit';
 
-import { generateFiles } from './generate';
+import {generateFiles} from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
@@ -116,7 +125,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     logger.success('[@lenne.tech/nuxt-base] Added imports');
 
-    if (options.generateTypes) {
+    if (options.generateTypes && !options.disableGraphql) {
       await generateFiles(options, logger, nuxt, resolver);
       setTimeout(() => {
         logger.info('[@lenne.tech/nuxt-base] Exit after generation');
