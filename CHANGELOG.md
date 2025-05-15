@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.28.1](https://github.com/lenneTech/nuxt-base/compare/v3.28.0...v3.28.1) (2025-05-15)
+
+
+### Bug Fixes
+
+* improve import formatting and update condition for type generation ([fde0049](https://github.com/lenneTech/nuxt-base/commit/fde00490137c7872539798dde7bb00d0f9eba523))
+
 ## [3.28.0](https://github.com/lenneTech/nuxt-base/compare/v3.27.0...v3.28.0) (2025-05-05)
 
 
