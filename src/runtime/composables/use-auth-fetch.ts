@@ -23,12 +23,13 @@ export function useAuthFetch<
     ...opts,
     baseURL: config.public.host,
     async onRequest(data: any) {
+      data.options.headers = {
+        ...headers.value,
+        ...data.options.headers,
+      };
+
       if (accessTokenState.value) {
-        data.options.headers = {
-          ...headers.value,
-          ...data.options.headers,
-          Authorization: `Bearer ${accessTokenState.value}`,
-        };
+        data.options.headers.Authorization = `Bearer ${accessTokenState.value}`;
       }
     },
     onResponseError: async () => {
