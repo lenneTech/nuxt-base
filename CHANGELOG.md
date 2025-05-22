@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.28.2](https://github.com/lenneTech/nuxt-base/compare/v3.28.1...v3.28.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* fixed headers on authFetch ([#17](https://github.com/lenneTech/nuxt-base/issues/17)) ([b653695](https://github.com/lenneTech/nuxt-base/commit/b653695dfb9dc666f2c7c5cfda5072ffb4272d75))
+
 ### [3.28.1](https://github.com/lenneTech/nuxt-base/compare/v3.28.0...v3.28.1) (2025-05-15)
 
 
