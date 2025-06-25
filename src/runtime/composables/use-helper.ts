@@ -104,7 +104,7 @@ export function useHelper() {
     const b = 'aaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnooooooooprrssssttuuuuuuuuwxyyzzz------';
     const p = new RegExp(a.split('').join('|'), 'g');
   
-    const result = input
+    let result = input
       .toString()
       .toLowerCase()
       .replace(/[äöüß]/gi, (matched) => specialChars[matched.toLowerCase()]) // German special chars
