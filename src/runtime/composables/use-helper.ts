@@ -111,7 +111,7 @@ export function useHelper() {
       .replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
       .replace(/&/g, '-') // Replace & with -
-      .replace(new RegExp(allowDots ? `[^\w.-]+` : `[^\w-]+`, 'g'), '') // Allow dots if requested
+      .replace(new RegExp(allowDots ? `[^\w\-.]+` : `[^\w-]+`, 'g'), '') // Allow dots if requested
       .replace(/\-\-+/g, '-') // Collapse multiple -
       .replace(/^-+/, '') // Trim leading -
       .replace(/-+$/, ''); // Trim trailing -
