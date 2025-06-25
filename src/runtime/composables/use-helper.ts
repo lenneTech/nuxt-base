@@ -93,7 +93,7 @@ export function useHelper() {
     return Object.keys(diff).length ? diff : undefined;
   }
 
-  function slugifyDomain(input: string) {
+  function slugifyDomain(input: string, allowDots = false) {
     const specialChars = {
       ß: 'ss',
       ä: 'ae',
@@ -103,19 +103,18 @@ export function useHelper() {
     const a = 'àáâæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôòóœøōõőṕŕřśšşșťțûùúūǘůűųẃẍÿýžźż·/_,:;';
     const b = 'aaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnooooooooprrssssttuuuuuuuuwxyyzzz------';
     const p = new RegExp(a.split('').join('|'), 'g');
+  
     return input
       .toString()
       .toLowerCase()
-      .replace(/[äöüß]/gi, (matched) => {
-        return specialChars[matched.toLowerCase()];
-      }) // Replace german special characters
+      .replace(/[äöüß]/gi, (matched) => specialChars[matched.toLowerCase()]) // German special chars
       .replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
-      .replace(/&/g, '-') // Replace & with '-'
-      .replace(/[^\w\-]+/g, '') // Remove all non-word characters
-      .replace(/\-\-+/g, '-') // Replace multiple - with single -
-      .replace(/^-+/, '') // Trim - from start of text
-      .replace(/-+$/, ''); // Trim - from end of text
+      .replace(/&/g, '-') // Replace & with -
+      .replace(new RegExp(allowDots ? `[^\w\-.]+` : `[^\w\-]+`, 'g'), '') // Allow dots if requested
+      .replace(/\-\-+/g, '-') // Collapse multiple -
+      .replace(/^-+/, '') // Trim leading -
+      .replace(/-+$/, ''); // Trim trailing -
   }
 
   function hashCode(input: any) {
