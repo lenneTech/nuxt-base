@@ -104,17 +104,24 @@ export function useHelper() {
     const b = 'aaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnooooooooprrssssttuuuuuuuuwxyyzzz------';
     const p = new RegExp(a.split('').join('|'), 'g');
   
-    return input
+    const result = input
       .toString()
       .toLowerCase()
       .replace(/[äöüß]/gi, (matched) => specialChars[matched.toLowerCase()]) // German special chars
       .replace(/\s+/g, '-') // Replace spaces with -
       .replace(p, (c) => b.charAt(a.indexOf(c))) // Replace special characters
       .replace(/&/g, '-') // Replace & with -
-      .replace(new RegExp(allowDots ? `[^\w\-.]+` : `[^\w-]+`, 'g'), '') // Allow dots if requested
       .replace(/\-\-+/g, '-') // Collapse multiple -
       .replace(/^-+/, '') // Trim leading -
       .replace(/-+$/, ''); // Trim trailing -
+
+    if (allowDots) {
+      result = result.replace(/[^\w\-.]+/g, '') // Removes all non-word characters except for dots
+    } else {
+      result = result.replace(/[^\w\-]+/g, ''); // Remove all non-word characters
+    }
+
+    return result;
   }
 
   function hashCode(input: any) {
