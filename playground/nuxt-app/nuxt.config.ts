@@ -20,7 +20,5 @@ export default defineNuxtConfig({
     storagePrefix: 'playground',
   },
 
-  srcDir: './src',
-
   ssr: true,
 });
