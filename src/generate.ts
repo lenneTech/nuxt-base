@@ -11,75 +11,8 @@ import { useGraphQLMeta } from './runtime/composables/use-graphql-meta';
 
 export type GraphQLMeta = ReturnType<typeof useGraphQLMeta>;
 
-const { loadSchema } = require('@graphql-tools/load');
-
 const { GraphQLFileLoader } = require('@graphql-tools/graphql-file-loader');
-
-export async function loadMetaServer(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {
-  if (!config || !config.public) {
-    throw new Error('Invalid configuration object');
-  }
-
-  let schema;
-
-  if (!config.public.schema) {
-    if (!config.public.gqlHost) {
-      throw new Error('Gpql Host is not defined in the configuration');
-    }
-
-    const { data: result } = await ofetch(config.public.gqlHost, {
-      body: JSON.stringify({
-        query: getIntrospectionQuery({ descriptions: false }),
-        variables: {},
-      }),
-      method: 'POST',
-    });
-
-    schema = buildClientSchema(result);
-  } else {
-    schema = await loadSchema(config.public.schema, {
-      loaders: [new GraphQLFileLoader()],
-    });
-  }
-
-  return useGraphQLMeta(schema);
-}
-
-export default async function generateGraphQLTypes(schema: string) {
-  const config: Types.Config = {
-    config: {
-      declarationKind: 'interface',
-      maybeValue: 'T',
-      namingConvention: {
-        enumValues: 'change-case-all#upperCase',
-      },
-      primitives: {
-        Any: 'any',
-        Boolean: 'boolean',
-        Date: 'Date',
-        DateTime: 'Date',
-        Float: 'number',
-        ID: 'string',
-        Int: 'number',
-        JSON: '{ [key: string]: any }',
-        String: 'string',
-        Upload: 'File',
-      },
-      scalars: {},
-      skipTypename: true,
-      useTypeImports: true,
-    },
-    generates: {
-      [process.cwd() + '/src/types/schema.d.ts']: {
-        plugins: ['typescript'],
-      },
-    },
-    ignoreNoDocuments: true,
-    schema,
-  };
-
-  return await generate(config, false);
-}
+const { loadSchema } = require('@graphql-tools/load');
 
 export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   const methods = meta.getMethodNames();
@@ -156,48 +89,6 @@ export async function generateComposables(meta: GraphQLMeta): Promise<string> {
   return template.join('\n');
 }
 
-export async function getAllImports(meta: GraphQLMeta) {
-  const methods = meta.getMethodNames();
-  let customTypes = [];
-
-  for (const method of methods.query) {
-    const types = meta.getTypesForMethod(method, 'Query');
-    customTypes = [...customTypes, ...types.customTypes];
-  }
-
-  for (const method of methods.mutation) {
-    const types = meta.getTypesForMethod(method, 'Mutation');
-    customTypes = [...customTypes, ...types.customTypes];
-  }
-
-  for (const method of methods.subscription) {
-    const types = meta.getTypesForMethod(method, 'Subscription');
-    customTypes = [...customTypes, ...types.customTypes];
-  }
-
-  customTypes = [...new Set([].concat(...customTypes))];
-
-  return [
-    ...customTypes.map((type): Import => ({ from: '#base/default', name: type })),
-    ...methods.query.map((fn): Import => ({ from: '#base', name: getMethodName(fn, 'Query') })),
-    ...methods.mutation.map((fn): Import => ({ from: '#base', name: getMethodName(fn, 'Mutation') })),
-    ...methods.subscription.map(
-      (fn): Import => ({
-        from: '#base',
-        name: getMethodName(fn, 'Subscription'),
-      }),
-    ),
-  ];
-}
-
-function getMethodName(method: string, type: string) {
-  return 'use' + capitalizeFirstLetter(method) + type;
-}
-
-function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 export async function generateFiles(options: any, logger: any, nuxt: any, resolver: any) {
   try {
     const meta = await loadMetaServer({ public: options });
@@ -236,4 +127,112 @@ export async function generateFiles(options: any, logger: any, nuxt: any, resolv
     console.error(e);
     logger.warn('[@lenne.tech/nuxt-base] Generated failed. Please check your host.');
   }
+}
+
+export default async function generateGraphQLTypes(schema: string) {
+  const config: Types.Config = {
+    config: {
+      declarationKind: 'interface',
+      maybeValue: 'T',
+      namingConvention: {
+        enumValues: 'change-case-all#upperCase',
+      },
+      primitives: {
+        Any: 'any',
+        Boolean: 'boolean',
+        Date: 'Date',
+        DateTime: 'Date',
+        Float: 'number',
+        ID: 'string',
+        Int: 'number',
+        JSON: '{ [key: string]: any }',
+        String: 'string',
+        Upload: 'File',
+      },
+      scalars: {},
+      skipTypename: true,
+      useTypeImports: true,
+    },
+    generates: {
+      [process.cwd() + '/src/types/schema.d.ts']: {
+        plugins: ['typescript'],
+      },
+    },
+    ignoreNoDocuments: true,
+    schema,
+  };
+
+  return await generate(config, false);
+}
+
+export async function getAllImports(meta: GraphQLMeta) {
+  const methods = meta.getMethodNames();
+  let customTypes = [];
+
+  for (const method of methods.query) {
+    const types = meta.getTypesForMethod(method, 'Query');
+    customTypes = [...customTypes, ...types.customTypes];
+  }
+
+  for (const method of methods.mutation) {
+    const types = meta.getTypesForMethod(method, 'Mutation');
+    customTypes = [...customTypes, ...types.customTypes];
+  }
+
+  for (const method of methods.subscription) {
+    const types = meta.getTypesForMethod(method, 'Subscription');
+    customTypes = [...customTypes, ...types.customTypes];
+  }
+
+  customTypes = [...new Set([].concat(...customTypes))];
+
+  return [
+    ...customTypes.map((type): Import => ({ from: '#base/default', name: type })),
+    ...methods.query.map((fn): Import => ({ from: '#base', name: getMethodName(fn, 'Query') })),
+    ...methods.mutation.map((fn): Import => ({ from: '#base', name: getMethodName(fn, 'Mutation') })),
+    ...methods.subscription.map(
+      (fn): Import => ({
+        from: '#base',
+        name: getMethodName(fn, 'Subscription'),
+      }),
+    ),
+  ];
+}
+
+export async function loadMetaServer(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {
+  if (!config || !config.public) {
+    throw new Error('Invalid configuration object');
+  }
+
+  let schema;
+
+  if (!config.public.schema) {
+    if (!config.public.gqlHost) {
+      throw new Error('Gpql Host is not defined in the configuration');
+    }
+
+    const { data: result } = await ofetch(config.public.gqlHost, {
+      body: JSON.stringify({
+        query: getIntrospectionQuery({ descriptions: false }),
+        variables: {},
+      }),
+      method: 'POST',
+    });
+
+    schema = buildClientSchema(result);
+  } else {
+    schema = await loadSchema(config.public.schema, {
+      loaders: [new GraphQLFileLoader()],
+    });
+  }
+
+  return useGraphQLMeta(schema);
+}
+
+function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getMethodName(method: string, type: string) {
+  return 'use' + capitalizeFirstLetter(method) + type;
 }

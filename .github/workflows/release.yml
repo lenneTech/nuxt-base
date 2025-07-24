@@ -15,16 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Use Node LTS ✨
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org
-          cache: pnpm
+          cache: npm
 
       - run: |
           git config user.name github-actions
@@ -36,17 +32,18 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Install dependencies 📦️
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build playground
-        run: cd playground/nuxt-app && pnpm install && pnpm build
+        run: cd playground/nuxt-app && npm ci && npm run build
 
       - name: Build
-        run: pnpm build
+        run: npm run build
 
-      - uses: simenandre/publish-with-pnpm@v2
-        with:
-          npm-auth-token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish 🚀
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Deploy notification
         if: always()

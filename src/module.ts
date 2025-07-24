@@ -6,10 +6,10 @@ import {
   defineNuxtModule,
   extendViteConfig,
   installModule,
-  useLogger
+  useLogger,
 } from '@nuxt/kit';
 
-import {generateFiles} from './generate';
+import { generateFiles } from './generate';
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {

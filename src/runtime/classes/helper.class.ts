@@ -72,7 +72,7 @@ export class Helper {
    * Simple map function
    */
   public static map<T = { [key: string]: any }>(
-    source: { [key: string]: any } | Partial<T>,
+    source: Partial<T> | { [key: string]: any },
     target: T,
     options: { dateStringToDate?: boolean | string[]; funcAllowed?: boolean } = {},
   ): T {
@@ -112,7 +112,7 @@ export class Helper {
   /**
    * Create Object or Objects of specified type with specified data
    */
-  public static maps<T extends Standard>(data: { [key: string]: any } | { [key: string]: any }[] | Partial<T> | Partial<T>[], targetClass: new (...args: any[]) => T): T[] {
+  public static maps<T extends Standard>(data: Partial<T> | Partial<T>[] | { [key: string]: any } | { [key: string]: any }[], targetClass: new (...args: any[]) => T): T[] {
     // Check data
     if (!data || typeof data !== 'object') {
       return undefined;

@@ -22,8 +22,8 @@
 1. Add `@lenne.tech/nuxt-base` dependency to your project
 
 ```bash
-# Using pnpm
-pnpm add -D @lenne.tech/nuxt-base
+# Using npm
+npm install -D @lenne.tech/nuxt-base
 
 # Using yarn
 yarn add --dev @lenne.tech/nuxt-base

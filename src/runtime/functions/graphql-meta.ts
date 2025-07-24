@@ -6,29 +6,6 @@ import type { GraphQLMeta } from '../../generate';
 
 import { useGraphQLMeta } from '../composables/use-graphql-meta';
 
-export async function loadMeta(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), 5000);
-
-  return new Promise(async (resolve, reject) => {
-    const { data: result } = await ofetch(config.public?.gqlHost, {
-      body: JSON.stringify({
-        query: getIntrospectionQuery({ descriptions: false }),
-        variables: {},
-      }),
-      method: 'POST',
-      onRequestError: (e) => {
-        reject(e);
-      },
-      signal: controller.signal,
-    });
-
-    const schema = buildClientSchema(result);
-
-    resolve(useGraphQLMeta(schema));
-  });
-}
-
 /**
  * Hash a string with SHA-256
  */
@@ -55,4 +32,27 @@ export async function hashPasswords<T = unknown>(element: T): Promise<T> {
     }
   }
   return element;
+}
+
+export async function loadMeta(config: Partial<{ public: { host: string; schema?: string } }>): Promise<GraphQLMeta> {
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), 5000);
+
+  return new Promise(async (resolve, reject) => {
+    const { data: result } = await ofetch(config.public?.gqlHost, {
+      body: JSON.stringify({
+        query: getIntrospectionQuery({ descriptions: false }),
+        variables: {},
+      }),
+      method: 'POST',
+      onRequestError: (e) => {
+        reject(e);
+      },
+      signal: controller.signal,
+    });
+
+    const schema = buildClientSchema(result);
+
+    resolve(useGraphQLMeta(schema));
+  });
 }

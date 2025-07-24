@@ -95,9 +95,9 @@ export function useHelper() {
 
   function slugifyDomain(input: string, allowDots = false) {
     const specialChars = {
-      ß: 'ss',
       ä: 'ae',
       ö: 'oe',
+      ß: 'ss',
       ü: 'ue',
     };
     const a = 'àáâæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôòóœøōõőṕŕřśšşșťțûùúūǘůűųẃẍÿýžźż·/_,:;';
@@ -116,7 +116,7 @@ export function useHelper() {
       .replace(/-+$/, ''); // Trim trailing -
 
     if (allowDots) {
-      result = result.replace(/[^\w\-.]+/g, '') // Removes all non-word characters except for dots
+      result = result.replace(/[^\w\-.]+/g, ''); // Removes all non-word characters except for dots
     } else {
       result = result.replace(/[^\w\-]+/g, ''); // Remove all non-word characters
     }

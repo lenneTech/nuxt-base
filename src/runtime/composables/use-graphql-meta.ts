@@ -109,11 +109,11 @@ export function useGraphQLMeta(schema: GraphQLSchema) {
         }
 
         switch (fields[key]?.type) {
-          case 'String':
-            result[key] = value;
+          case 'Boolean':
+            result[key] = Boolean(value);
             break;
-          case 'Number':
-            result[key] = parseFloat(value as any);
+          case 'Date':
+            result[key] = new Date(value as any);
             break;
           case 'Float':
             result[key] = parseFloat(value as any);
@@ -121,11 +121,11 @@ export function useGraphQLMeta(schema: GraphQLSchema) {
           case 'Int':
             result[key] = parseInt(value as any, 10);
             break;
-          case 'Boolean':
-            result[key] = Boolean(value);
+          case 'Number':
+            result[key] = parseFloat(value as any);
             break;
-          case 'Date':
-            result[key] = new Date(value as any);
+          case 'String':
+            result[key] = value;
             break;
           default:
             if (typeof value === 'object' && Object.keys(fields[key].fields)?.length) {
