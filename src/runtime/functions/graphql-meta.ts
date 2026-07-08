@@ -4,7 +4,7 @@ import { ofetch } from 'ofetch';
 import type { GraphQLMeta } from '../../generate';
 
 import { useGraphQLMeta } from '../composables/use-graphql-meta';
-import { sha256 } from '../helpers/js-sha256-interop';
+import { sha256 } from '../helpers/sha256';
 
 /**
  * Hash a string with SHA-256

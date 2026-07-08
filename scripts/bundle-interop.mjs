@@ -50,9 +50,11 @@ await build({
   allowOverwrite: true,
 });
 
-// Post-build assertion: no file in dist/runtime may import the CJS-only packages bare.
+// Post-build assertion: no file in dist/runtime may reference the CJS-only packages bare —
+// including subpath imports (pkg/build/...), dynamic import(), side-effect imports and require().
 const CJS_ONLY = ['gql-query-builder', 'js-sha256'];
-const barePattern = new RegExp(`(from\\s*["'](${CJS_ONLY.join('|')})["'])|(require\\(["'](${CJS_ONLY.join('|')})["']\\))`);
+const pkgRef = `["'](${CJS_ONLY.join('|')})(/[^"']*)?["']`;
+const barePattern = new RegExp(`(from\\s*${pkgRef})|(import\\s*\\(\\s*${pkgRef})|(^\\s*import\\s+${pkgRef})|(require\\s*\\(\\s*${pkgRef})`, 'm');
 
 function scan(dir) {
   const offenders = [];

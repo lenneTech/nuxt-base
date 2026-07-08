@@ -115,7 +115,10 @@ export async function gqlSubscription<T = any>(method: string, options: IGraphQL
   };
 
   if (fields?.length || availableFields?.length) {
-    subOptions.fields = fields !== null ? fields : availableFields;
+    // Fall back to availableFields for null, undefined AND empty arrays — an explicitly
+    // passed `fields: undefined` previously produced an empty selection set ("{ }") and
+    // made gql() throw instead of using the auto-derived fields.
+    subOptions.fields = fields?.length ? fields : availableFields;
   }
 
   if (config.log) {

@@ -8,6 +8,7 @@ import {
   installModule,
   useLogger,
 } from '@nuxt/kit';
+import { existsSync } from 'node:fs';
 
 import { generateFiles } from './generate';
 
@@ -136,10 +137,14 @@ export default defineNuxtModule<ModuleOptions>({
     // gql-query-builder (CJS-only) is consumed exclusively through
     // runtime/helpers/gql-query-builder-interop.ts, which the build step pre-bundles into
     // self-contained ESM (see scripts/bundle-interop.mjs). Consumers of the published package
-    // therefore never import the raw CJS and need no workaround. The optimizeDeps entry below
-    // is defense-in-depth for source-served setups only (playground dev via --stub, linked
-    // module), where the un-bundled src/ helper with its bare import is served directly.
-    if (!options.disableGraphql) {
+    // therefore never import the raw CJS and need no workaround — for them the optimizeDeps
+    // entry below must NOT be added: the package is only a transitive dependency, so under
+    // pnpm's strict layout Vite cannot resolve it from the app root and warns on every dev
+    // start. Source-served setups (playground dev via --stub, linked module) are detected by
+    // the presence of the un-bundled .ts helper; only there the bare import exists and needs
+    // esbuild pre-bundling. Applied regardless of disableGraphql, because the gql composables
+    // are auto-import-registered unconditionally and may be referenced either way.
+    if (existsSync(resolver.resolve('runtime/helpers/gql-query-builder-interop.ts'))) {
       extendViteConfig((config) => {
         config.optimizeDeps = config.optimizeDeps || {};
         config.optimizeDeps.include = config.optimizeDeps.include || [];
