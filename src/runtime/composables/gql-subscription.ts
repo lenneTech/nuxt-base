@@ -1,6 +1,5 @@
 import type { Client } from 'graphql-ws';
 
-import { subscription } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { useNuxtApp } from 'nuxt/app';
 import { ref } from 'vue';
@@ -9,6 +8,7 @@ import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 import type { ReturnTypeOfSubscription } from '../interfaces/return-type-of-subscription.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
+import { subscription } from '../helpers/gql-query-builder-interop';
 
 export async function gqlSubscription<T = any>(method: string, options: IGraphQLOptions = {}): Promise<ReturnTypeOfSubscription<T>> {
   const { _meta, _wsClient } = useNuxtApp();

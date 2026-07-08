@@ -1,10 +1,10 @@
-import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { type AsyncData, callWithNuxt, useAsyncData, useNuxtApp } from 'nuxt/app';
 
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
+import { query } from '../helpers/gql-query-builder-interop';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 import { useHelper } from './use-helper';
