@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.4](https://github.com/lenneTech/nuxt-base/compare/v4.0.3...v4.0.4) (2026-07-08)
+
+
+### Bug Fixes
+
+* eliminate raw CJS from published runtime (js-sha256 → @noble/hashes, bundle gql-query-builder) ([83b9da7](https://github.com/lenneTech/nuxt-base/commit/83b9da74b5dce40f29b32258736b56a3a3e5faad))
+* harden CJS-interop fix after review ([893d7ee](https://github.com/lenneTech/nuxt-base/commit/893d7eeccbe7843aaf590a24d821548830888599))
+* pnpm-safe optimizeDeps gating + exports condition order (2nd review round) ([a7e633a](https://github.com/lenneTech/nuxt-base/commit/a7e633a361e06c9f334650647564c6f6fd509a64))
+* resolve CJS/ESM named-export interop for js-sha256 & gql-query-builder under Nuxt 4 / Vite 7 ([52973b6](https://github.com/lenneTech/nuxt-base/commit/52973b6d28c1f2dc5cb18ed1813a9db9b4f60cd3))
+
 ### [4.0.3](https://github.com/lenneTech/nuxt-base/compare/v4.0.1...v4.0.3) (2025-09-05)
 
 ### [4.0.2](https://github.com/lenneTech/nuxt-base/compare/v4.0.1...v4.0.2) (2025-09-05)
