@@ -1,20 +1,17 @@
-// Interop layer for js-sha256 (UMD/CJS, no ESM entry point).
+// SHA-256 helper backing the password hashing.
 //
-// `js-sha256` exposes its members as named exports that Vite 7 / Nuxt 4 cannot
-// statically detect from the raw UMD output, so a direct `import { sha256 } from
-// 'js-sha256'` breaks the client bundle (no hydration). Importing the whole
-// namespace and resolving the member at runtime works for both CJS shapes:
-//  - __esModule (exports.sha256 = ...) → member sits directly on the namespace
-//  - module.exports = {...}            → member sits under `.default`
-// The package must stay out of `build.transpile` and be pre-bundled via
-// optimizeDeps (dev) / handled by the commonjs plugin (build) for the interop
-// wrapper to be produced (see module.ts).
+// Previously this used `js-sha256` (UMD/CJS with no ESM entry point), which Vite 7 /
+// Nuxt 4 served as raw CJS in consuming apps ("ReferenceError: exports is not defined",
+// no hydration). `@noble/hashes` is a pure-ESM, dependency-free implementation, so the
+// import resolves natively in every consumer with no bundling or interop workaround.
 //
-// This file deliberately lives outside the auto-imported runtime dirs so its
-// generic `sha256` export is NOT registered as a global Nuxt auto-import.
+// This file deliberately lives outside the auto-imported runtime dirs so its generic
+// `sha256` export is NOT registered as a global Nuxt auto-import.
 
-import * as jsSha256 from 'js-sha256';
+import { sha256 as nobleSha256 } from '@noble/hashes/sha2.js';
+import { bytesToHex, utf8ToBytes } from '@noble/hashes/utils.js';
 
-const mod = (jsSha256 as any).sha256 ? (jsSha256 as any) : ((jsSha256 as any).default ?? jsSha256);
-
-export const sha256: typeof import('js-sha256').sha256 = mod.sha256;
+// Hex digest of the UTF-8 bytes of `message` — identical output to `js-sha256`'s sha256(string).
+export function sha256(message: string): string {
+  return bytesToHex(nobleSha256(utf8ToBytes(message)));
+}

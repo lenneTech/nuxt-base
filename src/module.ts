@@ -4,7 +4,6 @@ import {
   addTemplate,
   createResolver,
   defineNuxtModule,
-  extendViteConfig,
   installModule,
   useLogger,
 } from '@nuxt/kit';
@@ -133,22 +132,10 @@ export default defineNuxtModule<ModuleOptions>({
       }, 5000);
     }
 
-    // gql-query-builder (CJS) and js-sha256 (UMD) expose named exports that Vite 7 /
-    // Nuxt 4 cannot statically detect from the raw package output. They must NOT be
-    // added to build.transpile (which would serve them raw, breaking the named imports
-    // and the client bundle → no hydration). Instead they are pre-bundled via
-    // optimizeDeps so esbuild produces a proper interop wrapper, and the runtime reads
-    // the members through the runtime/helpers/*-interop.ts modules.
-    extendViteConfig((config) => {
-      config.optimizeDeps = config.optimizeDeps || {};
-      config.optimizeDeps.include = config.optimizeDeps.include || [];
-      // js-sha256 backs password hashing and is used regardless of GraphQL.
-      config.optimizeDeps.include.push('js-sha256');
-      // gql-query-builder is only reached through the GraphQL composables.
-      if (!options.disableGraphql) {
-        config.optimizeDeps.include.push('gql-query-builder');
-      }
-    });
+    // js-sha256 (UMD) and gql-query-builder (CJS) ship no ESM entry point. They are consumed
+    // exclusively through runtime/helpers/*-interop.ts, which the build step pre-bundles into
+    // self-contained ESM (see scripts/bundle-interop.mjs). The consuming app therefore never
+    // imports the raw CJS, so no optimizeDeps/build.transpile/alias workaround is required.
 
     nuxt.hook('nitro:config', (nitro) => {
       if (nitro.imports === false) {

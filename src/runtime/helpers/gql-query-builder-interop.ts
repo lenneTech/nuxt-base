@@ -7,9 +7,9 @@
 // runtime works for both CJS shapes:
 //  - __esModule (exports.query = ...) → member sits directly on the namespace
 //  - module.exports = {...}           → member sits under `.default`
-// The package must stay out of `build.transpile` and be pre-bundled via
-// optimizeDeps (dev) / handled by the commonjs plugin (build) for the interop
-// wrapper to be produced (see module.ts).
+// This interop is pre-bundled into self-contained ESM at build time (see
+// scripts/bundle-interop.mjs), so `gql-query-builder` is inlined here and the
+// consuming app never resolves the raw CJS package.
 //
 // This file deliberately lives outside the auto-imported runtime dirs so its
 // generic `query`/`mutation`/`subscription` exports are NOT registered as global
