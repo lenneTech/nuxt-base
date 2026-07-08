@@ -142,7 +142,6 @@ export default defineNuxtModule<ModuleOptions>({
     extendViteConfig((config) => {
       config.optimizeDeps = config.optimizeDeps || {};
       config.optimizeDeps.include = config.optimizeDeps.include || [];
-      config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
       // js-sha256 backs password hashing and is used regardless of GraphQL.
       config.optimizeDeps.include.push('js-sha256');
       // gql-query-builder is only reached through the GraphQL composables.
