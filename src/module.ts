@@ -4,6 +4,7 @@ import {
   addTemplate,
   createResolver,
   defineNuxtModule,
+  extendViteConfig,
   installModule,
   useLogger,
 } from '@nuxt/kit';
@@ -132,10 +133,19 @@ export default defineNuxtModule<ModuleOptions>({
       }, 5000);
     }
 
-    // js-sha256 (UMD) and gql-query-builder (CJS) ship no ESM entry point. They are consumed
-    // exclusively through runtime/helpers/*-interop.ts, which the build step pre-bundles into
-    // self-contained ESM (see scripts/bundle-interop.mjs). The consuming app therefore never
-    // imports the raw CJS, so no optimizeDeps/build.transpile/alias workaround is required.
+    // gql-query-builder (CJS-only) is consumed exclusively through
+    // runtime/helpers/gql-query-builder-interop.ts, which the build step pre-bundles into
+    // self-contained ESM (see scripts/bundle-interop.mjs). Consumers of the published package
+    // therefore never import the raw CJS and need no workaround. The optimizeDeps entry below
+    // is defense-in-depth for source-served setups only (playground dev via --stub, linked
+    // module), where the un-bundled src/ helper with its bare import is served directly.
+    if (!options.disableGraphql) {
+      extendViteConfig((config) => {
+        config.optimizeDeps = config.optimizeDeps || {};
+        config.optimizeDeps.include = config.optimizeDeps.include || [];
+        config.optimizeDeps.include.push('gql-query-builder');
+      });
+    }
 
     nuxt.hook('nitro:config', (nitro) => {
       if (nitro.imports === false) {

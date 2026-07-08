@@ -93,4 +93,4 @@ When `generateTypes: true` or `GENERATE_TYPES=1`:
 - Node.js >= 22 and npm >= 10 required
 - The module exits after type generation (5 second timeout) when `generateTypes` is enabled
 - WebSocket URL is automatically derived from `gqlHost` (https → wss, http → ws)
-- Built for ESM environments with proper transpilation handling for problematic dependencies
+- Pure-ESM runtime: CJS-only dependencies never reach consumers — gql-query-builder is pre-bundled into the published interop helper at build time (scripts/bundle-interop.mjs), and hashing uses the pure-ESM @noble/hashes

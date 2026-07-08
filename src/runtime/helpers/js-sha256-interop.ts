@@ -11,7 +11,11 @@
 import { sha256 as nobleSha256 } from '@noble/hashes/sha2.js';
 import { bytesToHex, utf8ToBytes } from '@noble/hashes/utils.js';
 
-// Hex digest of the UTF-8 bytes of `message` — identical output to `js-sha256`'s sha256(string).
+// Hex digest of the UTF-8 bytes of `message` — identical output to `js-sha256`'s
+// sha256(string) for all well-formed strings. (Edge case: strings containing lone/unpaired
+// UTF-16 surrogates encode differently — TextEncoder emits U+FFFD where js-sha256's manual
+// encoder produced other bytes. Unlike js-sha256, non-string input throws instead of being
+// hashed; the only caller, hashPasswords, always passes strings.)
 export function sha256(message: string): string {
   return bytesToHex(nobleSha256(utf8ToBytes(message)));
 }
