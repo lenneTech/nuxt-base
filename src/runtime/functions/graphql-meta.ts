@@ -1,10 +1,10 @@
 import { buildClientSchema, getIntrospectionQuery } from 'graphql';
-import { sha256 } from 'js-sha256';
 import { ofetch } from 'ofetch';
 
 import type { GraphQLMeta } from '../../generate';
 
 import { useGraphQLMeta } from '../composables/use-graphql-meta';
+import { sha256 } from '../helpers/js-sha256-interop';
 
 /**
  * Hash a string with SHA-256

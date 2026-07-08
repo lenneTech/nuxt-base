@@ -1,4 +1,3 @@
-import { query } from 'gql-query-builder';
 import gql from 'graphql-tag';
 import { callWithNuxt, useNuxtApp } from 'nuxt/app';
 
@@ -6,6 +5,7 @@ import type { GraphqlError } from '../interfaces/graphql-error.interface';
 import type { IGraphQLOptions } from '../interfaces/graphql-options.interface';
 
 import { hashPasswords } from '../functions/graphql-meta';
+import { query } from '../helpers/gql-query-builder-interop';
 import { useAuthState } from '../states/auth';
 import { useAuth } from './use-auth';
 import { useRequestOptions } from './use-request-options';
