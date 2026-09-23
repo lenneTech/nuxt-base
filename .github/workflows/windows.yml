@@ -1,0 +1,55 @@
+name: Windows
+
+# Non-blocking Windows check. Separate workflow on purpose: next.yml and
+# release.yml do not wait on it, so a red Windows run never holds up a release.
+
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    continue-on-error: true # non-blocking until Windows support is declared stable
+    timeout-minutes: 45
+    steps:
+      # Reproduce the Git for Windows default before checkout
+      - run: git config --global core.autocrlf true
+
+      - uses: actions/checkout@v4
+
+      - name: Use Node LTS ✨
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Check line endings
+        shell: bash
+        run: |
+          # Only *.cmd and *.bat may be checked out with CRLF (covers *.sh, Dockerfile and hooks)
+          crlf=$(git ls-files --eol | grep 'w/crlf' | grep -vE '\.(cmd|bat)$' || true)
+          if [ -n "$crlf" ]; then
+            echo "Files checked out with CRLF:"
+            echo "$crlf"
+            exit 1
+          fi
+
+      - name: Install dependencies 📦️
+        if: ${{ !cancelled() }}
+        run: npm ci
+
+      # The module tsconfig extends playground/nuxt-app/.nuxt/tsconfig.json
+      - name: Build playground
+        if: ${{ !cancelled() }}
+        run: cd playground/nuxt-app && npm ci && npm run build
+
+      - name: Build
+        if: ${{ !cancelled() }}
+        run: npm run build
+
+      - name: Lint
+        if: ${{ !cancelled() }}
+        run: npm run lint
