@@ -1,17 +1,122 @@
 name: Release
 
+# Both npm releases of @lenne.tech/nuxt-base in one workflow file, because npm accepts only one
+# Trusted Publisher per package: lenneTech / nuxt-base / release.yml, no environment. Renaming this
+# file breaks publishing until that entry is changed too.
+#
+# - `next`: every push to main (except the `chore(release):` commit) publishes a prerelease
+#   (`npm version prerelease --preid=dev`) on the dist-tag `next`. This was next.yml.
+# - `release`: a pushed `v*` tag publishes that version on `latest`.
+# - workflow_dispatch runs one of the two, chosen by the `channel` input.
+#
+# Trusted Publishing (OIDC): npm exchanges the run's GitHub OIDC token for a publish token that
+# expires within minutes, instead of a long-lived NPM_TOKEN, and signs a provenance statement,
+# because the repository is public. No NPM_TOKEN fallback: npm would use it silently whenever the
+# exchange fails and publish without provenance. A failed exchange now fails the publish (rerun with
+# `gh run rerun --failed`).
+
 on:
   push:
+    branches:
+      - "main"
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      channel:
+        description: "next = prerelease from the selected branch, latest = publish the version in package.json"
+        type: choice
+        options:
+          - next
+          - latest
+        default: next
 
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
-  build:
+  next:
+    name: Next release
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'chore(release):')) || (github.event_name == 'workflow_dispatch' && inputs.channel == 'next') }}
     runs-on: ubuntu-latest
+    # Job-level `permissions` replaces the default token permissions: `contents: write` for the
+    # version commit this job pushes, `id-token: write` to request the OIDC token.
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node LTS ✨
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      - name: Install dependencies 📦️
+        run: npm ci
+
+      - name: Install dependencies
+        run: cd playground/nuxt-app && npm ci && npm run build
+
+      - run: npm run build
+
+      # Trusted Publishing needs npm >= 11.5.1. npm 12 is the major the lenneTech base packages
+      # publish with through OIDC. Pinned to that major, not `@latest`, so a new npm major never
+      # reaches a release run without having been tried first. Installed before the version commit
+      # is pushed, so a failed install cannot leave main on a version that was never published.
+      - name: npm for Trusted Publishing
+        run: npm install -g npm@12
+
+      - name: Set git identity
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - run: npm version prerelease --preid=dev
+
+      - name: Push
+        run: |
+          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+          git push -o ci.skip
+
+      # Lifecycle scripts stay on here (no `--ignore-scripts`): `prepack` rebuilds after
+      # `npm version`, and only that build carries the prerelease version in dist/module.json.
+      - name: Publish 🚀
+        shell: bash
+        run: npm publish --tag next --access public
+
+      - name: Push version changes to main branch
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: release ${{ github.event.release.tag_name }}"
+          branch: ${{ github.event.repository.default_branch }}
+          file_pattern: package.json
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+      - name: Deploy notification
+        if: always()
+        uses: adamkdean/simple-slack-notify@master
+        with:
+          channel: "#deployments"
+          status: ${{ job.status }}
+          success_text: "Version (#${{ steps.package-version.outputs.current-version}}) von @lenne.tech/nuxt-base wurde erfolgreich released."
+          failure_text: "Release (#${{ steps.package-version.outputs.current-version}}) von @lenne.tech/nuxt-base ist fehlgeschlagen."
+          cancelled_text: "Release (#$${{ steps.package-version.outputs.current-version}}) von @lenne.tech/nuxt-base wurde abgebrochen."
+
+  release:
+    name: Release
+    if: ${{ (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && inputs.channel == 'latest') }}
+    runs-on: ubuntu-latest
+    # Job-level `permissions` replaces the default token permissions: `contents: write` for the
+    # GitHub release changelogithub creates, `id-token: write` to request the OIDC token.
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
@@ -40,10 +145,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Trusted Publishing needs npm >= 11.5.1. npm 12 is the major the lenneTech base packages
+      # publish with through OIDC. Pinned to that major, not `@latest`, so a new npm major never
+      # reaches a release run without having been tried first.
+      - name: npm for Trusted Publishing
+        run: npm install -g npm@12
+
+      # `--ignore-scripts`: the tag already carries the version, so the build above is the one to
+      # ship; without it `prepack` (= `npm run build`) would publish a second build.
       - name: Publish 🚀
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --ignore-scripts
 
       - name: Deploy notification
         if: always()

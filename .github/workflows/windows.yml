@@ -1,7 +1,7 @@
 name: Windows
 
-# Non-blocking Windows check. Separate workflow on purpose: next.yml and
-# release.yml do not wait on it, so a red Windows run never holds up a release.
+# Non-blocking Windows check. Separate workflow on purpose: the next and release
+# jobs in release.yml do not wait on it, so a red Windows run never holds up a release.
 
 on:
   push:
